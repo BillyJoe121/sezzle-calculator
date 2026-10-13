@@ -1,0 +1,1137 @@
+{
+  "schemaVersion": 1,
+  "taskId": "5a595807-e6d6-471e-825d-a3290a82481b",
+  "initialBase": {
+    "noGit": false,
+    "head": "d2b039e2b79018585e6c8da0a12d480d351168d8",
+    "branch": "feat/foundation",
+    "intent": "Task 1 of 4 (branch feat/foundation): lay the documentation and contract foundation for the Sezzle full-stack calculator so that backend (task 2) and frontend (task 3) can be built in parallel worktrees sharing only the API contract. No application code; backend/ and frontend/ are not created. Repository content in English.",
+    "scope": [
+      ".gitignore",
+      ".gitattributes",
+      ".editorconfig",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "README.md",
+      "THIRD_PARTY_NOTICES.md",
+      "docs/spec.md",
+      "docs/architecture.md",
+      "docs/ai/WORKFLOW.md",
+      "docs/api/openapi.yaml",
+      "docs/api/README.md",
+      "docs/api/examples/healthz.json",
+      "docs/api/examples/add-success.json",
+      "docs/api/examples/subtract-success.json",
+      "docs/api/examples/multiply-success.json",
+      "docs/api/examples/divide-success.json",
+      "docs/api/examples/power-success.json",
+      "docs/api/examples/sqrt-success.json",
+      "docs/api/examples/percentage-success.json",
+      "docs/api/examples/divide-by-zero.json",
+      "docs/api/examples/sqrt-negative.json",
+      "docs/api/examples/power-out-of-range.json",
+      "docs/api/examples/unsupported-operation.json",
+      "docs/api/examples/wrong-arity.json",
+      "docs/api/examples/null-operand.json",
+      "docs/api/examples/unknown-field.json",
+      "docs/api/examples/malformed-json.json",
+      "docs/api/examples/unsupported-media-type.json",
+      "docs/adr/0001-monorepo-and-contract-first.md",
+      "docs/adr/0002-single-calculations-endpoint-with-problem-json.md",
+      "docs/adr/0003-float64-numeric-model-with-client-formatting.md",
+      "docs/adr/0004-go-standard-library-without-framework.md",
+      "docs/adr/0005-explicit-operand-form-ui.md",
+      "docs/adr/0006-single-container-same-origin-no-cors.md",
+      ".claude/skills/README.md",
+      ".claude/skills/forge-core/SKILL.md",
+      ".claude/skills/ponytail/SKILL.md",
+      ".claude/skills/spec-driven-development/SKILL.md",
+      ".claude/skills/planning-and-task-breakdown/SKILL.md",
+      ".claude/skills/git-workflow-and-versioning/SKILL.md",
+      ".claude/skills/documentation-and-adrs/SKILL.md",
+      ".claude/skills/api-and-interface-design/SKILL.md",
+      ".claude/skills/test-driven-development/SKILL.md",
+      ".claude/skills/security-and-hardening/SKILL.md",
+      ".claude/skills/code-review-and-quality/SKILL.md",
+      ".claude/skills/frontend-ui-engineering/SKILL.md",
+      ".claude/skills/accessible-ui-engineering-wcag22/SKILL.md",
+      ".claude/skills/accessible-ui-engineering-wcag22/agents/openai.yaml",
+      ".claude/skills/accessible-ui-engineering-wcag22/references/official-sources.md",
+      ".claude/skills/accessible-ui-engineering-wcag22/references/wcag22-engineering-matrix.md",
+      ".claude/skills/antislop/SKILL.md",
+      ".claude/skills/antislop-ui/SKILL.md",
+      ".claude/skills/ci-cd-and-automation/SKILL.md",
+      ".forge/tmp/foundation/checks/openapi-lint.test.mjs",
+      ".forge/tmp/foundation/checks/examples-contract.test.mjs",
+      ".forge/tmp/foundation/checks/line-cap.test.mjs",
+      ".forge/tmp/foundation/checks/skills-copy.test.mjs"
+    ]
+  },
+  "mode": "none",
+  "specification": {
+    "goal": "Define a complete, unambiguous API contract and foundation documentation (spec, architecture, ADRs, agent rules, repository skills) so the Go backend (task 2) and React frontend (task 3) can be built in parallel worktrees sharing only docs/api.",
+    "risk": "medium",
+    "acceptanceCriteria": [
+      "docs/api/openapi.yaml is valid OpenAPI 3.1 and lints clean with @redocly/cli@2.54.2",
+      "17 example fixtures in docs/api/examples (healthz, 7 successes, 9 errors) are valid JSON with the agreed shape and status/code consistent with the error table; success results recompute exactly",
+      "Contract fixes deterministic validation order, edge classifications, title = Go http.StatusText, non-normative detail, charset=utf-8 only, -0 normalization in all numeric fields, domain rules (0^0=1, underflow 0, NaN -> DOMAIN_ERROR, percentage overflow fallback)",
+      "docs/spec.md contains all Forge spec fields with one verifiable acceptance criterion per assessment requirement",
+      "docs/architecture.md has Mermaid component and sequence diagrams, layers, target folder layouts, ports/env table, error and numeric models, test strategy with coverage targets and branch/worktree plan",
+      "Six short ADRs (Context, Decision, Alternatives considered, Consequences)",
+      "15 skills copied verbatim into .claude/skills with matching file counts and hashes; README table and THIRD_PARTY_NOTICES based only on Forge notices and license files",
+      "AGENTS.md, CLAUDE.md (@AGENTS.md), README skeleton and docs/ai/WORKFLOW.md exist; no invented commands",
+      "No hand-maintained file exceeds 500 lines; backend/ and frontend/ are not created",
+      ".forge/changes and .forge/workflow are versioned; git-workflow, graph files and tmp are ignored"
+    ],
+    "preservedBehaviors": [
+      "No application code; backend/ and frontend/ are not created in this task",
+      "Copied skills are byte-identical to the Forge source"
+    ],
+    "sourceDocuments": [
+      "docs/spec.md"
+    ],
+    "documentHashes": [
+      {
+        "path": "docs/spec.md",
+        "hash": "47d3d10edf14384fd4f5185566cf8c29cbba5a1ef93d5c0d5591085868c6a795"
+      }
+    ],
+    "decisions": [
+      "User approved the spec and plan as presented, including charset=utf-8 only (other values -> 415)",
+      "Version .forge/changes/ and .forge/workflow/ as evidence; ignore .forge/git-workflow/, .forge/graph-evidence.json, .forge/graphify-out/, .forge/tmp/",
+      "Agent mode none; branch feat/foundation created from main in the main folder",
+      "Addy Osmani copyright line taken from Forge vendor/addy-agent-skills/LICENSE as secondary written source",
+      "Example count corrected from 16 to 17 (healthz + 7 successes + 9 required errors); the file list was already in the approved scope",
+      "Vendored skills marked -text in .gitattributes because upstream files are CRLF and must stay byte-identical"
+    ],
+    "acceptedAt": "2026-10-13T17:04:59.230Z"
+  },
+  "plan": {
+    "scope": [
+      ".gitignore",
+      ".gitattributes",
+      ".editorconfig",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "README.md",
+      "THIRD_PARTY_NOTICES.md",
+      "docs/spec.md",
+      "docs/architecture.md",
+      "docs/ai/WORKFLOW.md",
+      "docs/api/openapi.yaml",
+      "docs/api/README.md",
+      "docs/api/examples/healthz.json",
+      "docs/api/examples/add-success.json",
+      "docs/api/examples/subtract-success.json",
+      "docs/api/examples/multiply-success.json",
+      "docs/api/examples/divide-success.json",
+      "docs/api/examples/power-success.json",
+      "docs/api/examples/sqrt-success.json",
+      "docs/api/examples/percentage-success.json",
+      "docs/api/examples/divide-by-zero.json",
+      "docs/api/examples/sqrt-negative.json",
+      "docs/api/examples/power-out-of-range.json",
+      "docs/api/examples/unsupported-operation.json",
+      "docs/api/examples/wrong-arity.json",
+      "docs/api/examples/null-operand.json",
+      "docs/api/examples/unknown-field.json",
+      "docs/api/examples/malformed-json.json",
+      "docs/api/examples/unsupported-media-type.json",
+      "docs/adr/0001-monorepo-and-contract-first.md",
+      "docs/adr/0002-single-calculations-endpoint-with-problem-json.md",
+      "docs/adr/0003-float64-numeric-model-with-client-formatting.md",
+      "docs/adr/0004-go-standard-library-without-framework.md",
+      "docs/adr/0005-explicit-operand-form-ui.md",
+      "docs/adr/0006-single-container-same-origin-no-cors.md",
+      ".claude/skills/README.md",
+      ".claude/skills/forge-core/SKILL.md",
+      ".claude/skills/ponytail/SKILL.md",
+      ".claude/skills/spec-driven-development/SKILL.md",
+      ".claude/skills/planning-and-task-breakdown/SKILL.md",
+      ".claude/skills/git-workflow-and-versioning/SKILL.md",
+      ".claude/skills/documentation-and-adrs/SKILL.md",
+      ".claude/skills/api-and-interface-design/SKILL.md",
+      ".claude/skills/test-driven-development/SKILL.md",
+      ".claude/skills/security-and-hardening/SKILL.md",
+      ".claude/skills/code-review-and-quality/SKILL.md",
+      ".claude/skills/frontend-ui-engineering/SKILL.md",
+      ".claude/skills/accessible-ui-engineering-wcag22/SKILL.md",
+      ".claude/skills/accessible-ui-engineering-wcag22/agents/openai.yaml",
+      ".claude/skills/accessible-ui-engineering-wcag22/references/official-sources.md",
+      ".claude/skills/accessible-ui-engineering-wcag22/references/wcag22-engineering-matrix.md",
+      ".claude/skills/antislop/SKILL.md",
+      ".claude/skills/antislop-ui/SKILL.md",
+      ".claude/skills/ci-cd-and-automation/SKILL.md",
+      ".forge/tmp/foundation/checks/openapi-lint.test.mjs",
+      ".forge/tmp/foundation/checks/examples-contract.test.mjs",
+      ".forge/tmp/foundation/checks/line-cap.test.mjs",
+      ".forge/tmp/foundation/checks/skills-copy.test.mjs"
+    ],
+    "steps": [
+      {
+        "id": "repo-config",
+        "title": "Create .gitignore, .gitattributes and .editorconfig",
+        "checks": [
+          "line-cap"
+        ]
+      },
+      {
+        "id": "contract",
+        "title": "Write openapi.yaml, 17 example fixtures and docs/api/README.md",
+        "checks": [
+          "openapi-lint",
+          "examples-contract"
+        ]
+      },
+      {
+        "id": "docs",
+        "title": "Write docs/spec.md, docs/architecture.md and ADRs 0001-0006",
+        "checks": [
+          "line-cap"
+        ]
+      },
+      {
+        "id": "agents-skills",
+        "title": "Write AGENTS.md, CLAUDE.md, copy 15 skills, skills README and THIRD_PARTY_NOTICES.md",
+        "checks": [
+          "skills-copy",
+          "line-cap"
+        ]
+      },
+      {
+        "id": "skeletons",
+        "title": "Write README.md skeleton and docs/ai/WORKFLOW.md",
+        "checks": [
+          "line-cap"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "id": "openapi-lint",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/foundation/checks/openapi-lint.test.mjs"
+        ]
+      },
+      {
+        "id": "examples-contract",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/foundation/checks/examples-contract.test.mjs"
+        ]
+      },
+      {
+        "id": "line-cap",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/foundation/checks/line-cap.test.mjs"
+        ]
+      },
+      {
+        "id": "skills-copy",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/foundation/checks/skills-copy.test.mjs"
+        ]
+      }
+    ],
+    "beforeImages": [
+      {
+        "path": ".gitignore",
+        "hash": "54c7bd5202015fbf4bda26be63119d5f147e8ee6e1a6a5cb2fd2c1719dc1414f",
+        "absent": false
+      },
+      {
+        "path": ".gitattributes",
+        "hash": "3ede17cc4520fcfe51e64ba2694a08c47dad5167d04b3eb2b806f9c3272fccf1",
+        "absent": false
+      },
+      {
+        "path": ".editorconfig",
+        "hash": "b450a88963f9387e9166341ae424827e33411b83a1e89f644ac02e99dca4c60b",
+        "absent": false
+      },
+      {
+        "path": "AGENTS.md",
+        "hash": "1ec6d2f4e76ff52b216e4926d20bc8ac908dfcef4b8edc0c454bc59c7d0c622e",
+        "absent": false
+      },
+      {
+        "path": "CLAUDE.md",
+        "hash": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+        "absent": false
+      },
+      {
+        "path": "README.md",
+        "hash": "19978831067de42f63afc6e74f5f33d2d44e6df8f1527df1dd783ec559aff3ba",
+        "absent": false
+      },
+      {
+        "path": "THIRD_PARTY_NOTICES.md",
+        "hash": "bae7277979940fe7bc446f5155db73a1270707d59d75ff87038593e65aae9825",
+        "absent": false
+      },
+      {
+        "path": "docs/spec.md",
+        "hash": "47d3d10edf14384fd4f5185566cf8c29cbba5a1ef93d5c0d5591085868c6a795",
+        "absent": false
+      },
+      {
+        "path": "docs/architecture.md",
+        "hash": "f00a96c5ec71c80ad1a7f566d0f901fa4c7e82b0cf9a588fa0c033b42b386ba0",
+        "absent": false
+      },
+      {
+        "path": "docs/ai/WORKFLOW.md",
+        "hash": "26c2c4993f0916cbbb943ae94a99fe84191ec2ff15bee1fb5bac72fa8051d44c",
+        "absent": false
+      },
+      {
+        "path": "docs/api/openapi.yaml",
+        "hash": "f213ce981afe5372bc965fd079c0d59e83d04bfd53f060f87e7f0a6150bc9440",
+        "absent": false
+      },
+      {
+        "path": "docs/api/README.md",
+        "hash": "a10ed0a31f7f0d8068a87b3eef76d086be184821ff648cbeb7185944db31c2f1",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/healthz.json",
+        "hash": "eaf23e36be42b0fb2e2dbfdf024a45032b3340e8a8421270c109f94fa79213e9",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/add-success.json",
+        "hash": "824123536daeafb46d338603df008a19fd0768257c282c369bbb0f112610e2b1",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/subtract-success.json",
+        "hash": "3a8c8063ed0b5fd7e7ffbe4a6739f56d4836fa77b261e435dde8d59633a245e5",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/multiply-success.json",
+        "hash": "ee94c10628ce1b692a7ff13024f86ff99dbd24159246ed01e8465967c6e39ed0",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/divide-success.json",
+        "hash": "707c94d4bba7eb93635d492a80e559a399fb8f7cf08d3f48d23a21412e666191",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/power-success.json",
+        "hash": "1938ced46faca1c0933f081db8dbfe221238e7bc9c7e2851f84d7d5523eae9f0",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/sqrt-success.json",
+        "hash": "db91e240ab2675dfb5a195baa34f8ac8f40db87a7a4f8527a502feb86b3ef84c",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/percentage-success.json",
+        "hash": "10216ba343c3d13720e787d72035487693408c4823486db423c5bf9d6a2797f2",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/divide-by-zero.json",
+        "hash": "f53a7efd42355f374ab1890c04833bc1f73a463762e9bf58f441d68902bd7af1",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/sqrt-negative.json",
+        "hash": "c246c98f1c025cc5317f8a8c5b0fad6e522c50406d5ca6bfb74a40f5768b104b",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/power-out-of-range.json",
+        "hash": "7888a55113952b3eeb699995c565bcf9fa93cfde461896d57c3ea767e463dec3",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/unsupported-operation.json",
+        "hash": "5c55d555ea1a85e0036f7f40fd89bcc59a93c1d9d8c1ac6a009272fb1f9df4f4",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/wrong-arity.json",
+        "hash": "26d78a6bcd110eb9a14eb197753a35c3b986c76dcbbcb003e04ece778ab634a2",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/null-operand.json",
+        "hash": "039f348f0a82f2960d7f5250c866c7791cba6b449e87059dd353fabf17dfe1ff",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/unknown-field.json",
+        "hash": "53cbc1da8396300ca455c9e776f5b358ba80d919ca3533a471ba09406a146a41",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/malformed-json.json",
+        "hash": "ada73760b99074c362568eabb0a204c6596e861b3ed2abb44fb56127690b5938",
+        "absent": false
+      },
+      {
+        "path": "docs/api/examples/unsupported-media-type.json",
+        "hash": "c73fd08912e28c062134a03f5be34f0e81aa6a1fc545010137e89d2fbb92ec6f",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0001-monorepo-and-contract-first.md",
+        "hash": "0c9f73b6a1d4f21397dde6154688eae1adbfc25c9e2e5cf991cf9e9e45e596eb",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0002-single-calculations-endpoint-with-problem-json.md",
+        "hash": "ad5e4b5076257e2f0b6869c5cd5d7eda898b0cdc910c185f428f97288e68f957",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0003-float64-numeric-model-with-client-formatting.md",
+        "hash": "a8705d25e937cda125be5e1bb0c36dafdec6056322d24639cad2add4d1905c2a",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0004-go-standard-library-without-framework.md",
+        "hash": "f8259d1dd8f6328829c2ba9741eb2ddc1b040eae67d202f8ffed7f43861d94dd",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0005-explicit-operand-form-ui.md",
+        "hash": "45c2ea3ff998896eacc957863af3e7523a1d8e84080832992c194a21e8d57aa6",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0006-single-container-same-origin-no-cors.md",
+        "hash": "5f48f56a01d6b4430402081d69683dc9c7ce0b082f6e682147b9e8fa5dfec7f8",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/README.md",
+        "hash": "53e1026ce7b962403ff92ca440f95b817096befa61bf0ad799d0f2c7657049ac",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/forge-core/SKILL.md",
+        "hash": "283b267f6d8eb96b93e365119fe29a318f269baa25e53bc352f859177b050d27",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/ponytail/SKILL.md",
+        "hash": "3f7f0dfb83c330888cead5ae696495d5ed6fd814bd53800df80388364ab7ef6f",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/spec-driven-development/SKILL.md",
+        "hash": "af5b873414a8b45b96b0d30d5297400f55eb3a56425161a088e470c14260a1e5",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/planning-and-task-breakdown/SKILL.md",
+        "hash": "c0bab92c05bf3ed67a7ba28b632daeb267eb530ac7aa5b17b49e02a9aa96e042",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/git-workflow-and-versioning/SKILL.md",
+        "hash": "51677cf03845dd29d08ea4d3125665057b720aea3dccc572f25d8b172409ece6",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/documentation-and-adrs/SKILL.md",
+        "hash": "b867bb80fb681257c7625ae59a0dfd849b1fc0f0a2f0338e7923f38030df9793",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/api-and-interface-design/SKILL.md",
+        "hash": "293db2903b41316a5109a1e0ce3e1740eeafae31735bc1f9143dafbfd1187363",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/test-driven-development/SKILL.md",
+        "hash": "24f5f59f5c600038bcce011487fd6b57c276c59315aa0559d0fdfd5de7ef3f8d",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/security-and-hardening/SKILL.md",
+        "hash": "73ef1f395ba2181cffae046c16186d8d1b1964c14b90d1060c9f37699227931d",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/code-review-and-quality/SKILL.md",
+        "hash": "d131d279f40f849eeae8249e39ce54c5c669564e6baa74f278f52a2ad36f82c8",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/frontend-ui-engineering/SKILL.md",
+        "hash": "47516545e3405373983c37f71ac2e09192b08c3f82004be3c4532a9ab3f8b1f7",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/accessible-ui-engineering-wcag22/SKILL.md",
+        "hash": "406801c6edf6b2e3c183c7e337c0dc7510c4830832af6e40b35db16cdd5ee1fe",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/accessible-ui-engineering-wcag22/agents/openai.yaml",
+        "hash": "f490256dc2fc2b15aecc140f32f8c989f0b12be9819823bc881c732dea5548c9",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/accessible-ui-engineering-wcag22/references/official-sources.md",
+        "hash": "d086fb6316ec6f319609aa0c60b75c9a23d21fbf5f62f3be5bfd967306b02870",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/accessible-ui-engineering-wcag22/references/wcag22-engineering-matrix.md",
+        "hash": "e0756722c5544a7be7e4fa3659951bbc8125b4f78ede3a7ca0b78a4a06727a77",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/antislop/SKILL.md",
+        "hash": "667db43ca4d4c3ce7eb7c0f3e9e81a7c9e881c3f517491aa1a55fb5fed6b9093",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/antislop-ui/SKILL.md",
+        "hash": "a76c524879bb6b922d2bdbe39594c6ed71f96f8ba12c9c52599fe55c8abbb8df",
+        "absent": false
+      },
+      {
+        "path": ".claude/skills/ci-cd-and-automation/SKILL.md",
+        "hash": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+        "absent": false
+      },
+      {
+        "path": ".forge/tmp/foundation/checks/openapi-lint.test.mjs",
+        "hash": "971860c697e08ce851baf36b214d85d69efeafdeb37d5088f86811afa80bbfaa",
+        "absent": false
+      },
+      {
+        "path": ".forge/tmp/foundation/checks/examples-contract.test.mjs",
+        "hash": "4c75967f5b88e013b7812e4236f84add37e7315997dbd3759d386f993a6827c6",
+        "absent": false
+      },
+      {
+        "path": ".forge/tmp/foundation/checks/line-cap.test.mjs",
+        "hash": "b2da6c48aaf2558f3b70371b9b408643667ee351802ca529cb3cb99a457cbd08",
+        "absent": false
+      },
+      {
+        "path": ".forge/tmp/foundation/checks/skills-copy.test.mjs",
+        "hash": "751c5a8bf2810d6f991b87319a241ec51b8f75adc33cc46d343975746d88e0ea",
+        "absent": false
+      }
+    ],
+    "acceptedAt": "2026-10-13T17:05:38.152Z"
+  },
+  "beforeImages": [
+    {
+      "path": ".forge/changes/5a595807-e6d6-471e-825d-a3290a82481b/CHANGE.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.forge\\changes\\5a595807-e6d6-471e-825d-a3290a82481b\\CHANGE.md",
+      "hash": "40adf4940c41d61916c6a7281ad8073f78e26ba5277fcdaefb6d28de57434c61",
+      "bytes": 686,
+      "kind": "project",
+      "observedAt": "2026-10-13T16:53:28.279Z"
+    },
+    {
+      "path": "docs/spec.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\spec.md",
+      "hash": "47d3d10edf14384fd4f5185566cf8c29cbba5a1ef93d5c0d5591085868c6a795",
+      "bytes": 12042,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:04:48.684Z"
+    },
+    {
+      "path": "docs/api/openapi.yaml",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\openapi.yaml",
+      "hash": "f213ce981afe5372bc965fd079c0d59e83d04bfd53f060f87e7f0a6150bc9440",
+      "bytes": 13460,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:04:48.687Z"
+    },
+    {
+      "path": "docs/architecture.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\architecture.md",
+      "hash": "f00a96c5ec71c80ad1a7f566d0f901fa4c7e82b0cf9a588fa0c033b42b386ba0",
+      "bytes": 12114,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:04:48.690Z"
+    },
+    {
+      "path": ".gitignore",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.gitignore",
+      "hash": "54c7bd5202015fbf4bda26be63119d5f147e8ee6e1a6a5cb2fd2c1719dc1414f",
+      "bytes": 436,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.131Z"
+    },
+    {
+      "path": ".gitattributes",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.gitattributes",
+      "hash": "3ede17cc4520fcfe51e64ba2694a08c47dad5167d04b3eb2b806f9c3272fccf1",
+      "bytes": 230,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.133Z"
+    },
+    {
+      "path": ".editorconfig",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.editorconfig",
+      "hash": "b450a88963f9387e9166341ae424827e33411b83a1e89f644ac02e99dca4c60b",
+      "bytes": 278,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.135Z"
+    },
+    {
+      "path": "AGENTS.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\AGENTS.md",
+      "hash": "1ec6d2f4e76ff52b216e4926d20bc8ac908dfcef4b8edc0c454bc59c7d0c622e",
+      "bytes": 6730,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.139Z"
+    },
+    {
+      "path": "CLAUDE.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\CLAUDE.md",
+      "hash": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+      "bytes": 11,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.140Z"
+    },
+    {
+      "path": "README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\README.md",
+      "hash": "19978831067de42f63afc6e74f5f33d2d44e6df8f1527df1dd783ec559aff3ba",
+      "bytes": 5239,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.142Z"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\THIRD_PARTY_NOTICES.md",
+      "hash": "bae7277979940fe7bc446f5155db73a1270707d59d75ff87038593e65aae9825",
+      "bytes": 3248,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.144Z"
+    },
+    {
+      "path": "docs/ai/WORKFLOW.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\ai\\WORKFLOW.md",
+      "hash": "26c2c4993f0916cbbb943ae94a99fe84191ec2ff15bee1fb5bac72fa8051d44c",
+      "bytes": 3868,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.146Z"
+    },
+    {
+      "path": "docs/api/README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\README.md",
+      "hash": "a10ed0a31f7f0d8068a87b3eef76d086be184821ff648cbeb7185944db31c2f1",
+      "bytes": 5413,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.148Z"
+    },
+    {
+      "path": "docs/api/examples/healthz.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\healthz.json",
+      "hash": "eaf23e36be42b0fb2e2dbfdf024a45032b3340e8a8421270c109f94fa79213e9",
+      "bytes": 261,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.150Z"
+    },
+    {
+      "path": "docs/api/examples/add-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\add-success.json",
+      "hash": "824123536daeafb46d338603df008a19fd0768257c282c369bbb0f112610e2b1",
+      "bytes": 505,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.152Z"
+    },
+    {
+      "path": "docs/api/examples/subtract-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\subtract-success.json",
+      "hash": "3a8c8063ed0b5fd7e7ffbe4a6739f56d4836fa77b261e435dde8d59633a245e5",
+      "bytes": 492,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.154Z"
+    },
+    {
+      "path": "docs/api/examples/multiply-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\multiply-success.json",
+      "hash": "ee94c10628ce1b692a7ff13024f86ff99dbd24159246ed01e8465967c6e39ed0",
+      "bytes": 488,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.156Z"
+    },
+    {
+      "path": "docs/api/examples/divide-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\divide-success.json",
+      "hash": "707c94d4bba7eb93635d492a80e559a399fb8f7cf08d3f48d23a21412e666191",
+      "bytes": 487,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.158Z"
+    },
+    {
+      "path": "docs/api/examples/power-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\power-success.json",
+      "hash": "1938ced46faca1c0933f081db8dbfe221238e7bc9c7e2851f84d7d5523eae9f0",
+      "bytes": 484,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.160Z"
+    },
+    {
+      "path": "docs/api/examples/sqrt-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\sqrt-success.json",
+      "hash": "db91e240ab2675dfb5a195baa34f8ac8f40db87a7a4f8527a502feb86b3ef84c",
+      "bytes": 463,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.162Z"
+    },
+    {
+      "path": "docs/api/examples/percentage-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\percentage-success.json",
+      "hash": "10216ba343c3d13720e787d72035487693408c4823486db423c5bf9d6a2797f2",
+      "bytes": 502,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.164Z"
+    },
+    {
+      "path": "docs/api/examples/divide-by-zero.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\divide-by-zero.json",
+      "hash": "f53a7efd42355f374ab1890c04833bc1f73a463762e9bf58f441d68902bd7af1",
+      "bytes": 564,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.166Z"
+    },
+    {
+      "path": "docs/api/examples/sqrt-negative.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\sqrt-negative.json",
+      "hash": "c246c98f1c025cc5317f8a8c5b0fad6e522c50406d5ca6bfb74a40f5768b104b",
+      "bytes": 580,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.168Z"
+    },
+    {
+      "path": "docs/api/examples/power-out-of-range.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\power-out-of-range.json",
+      "hash": "7888a55113952b3eeb699995c565bcf9fa93cfde461896d57c3ea767e463dec3",
+      "bytes": 619,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.170Z"
+    },
+    {
+      "path": "docs/api/examples/unsupported-operation.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\unsupported-operation.json",
+      "hash": "5c55d555ea1a85e0036f7f40fd89bcc59a93c1d9d8c1ac6a009272fb1f9df4f4",
+      "bytes": 635,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.172Z"
+    },
+    {
+      "path": "docs/api/examples/wrong-arity.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\wrong-arity.json",
+      "hash": "26d78a6bcd110eb9a14eb197753a35c3b986c76dcbbcb003e04ece778ab634a2",
+      "bytes": 564,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.175Z"
+    },
+    {
+      "path": "docs/api/examples/null-operand.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\null-operand.json",
+      "hash": "039f348f0a82f2960d7f5250c866c7791cba6b449e87059dd353fabf17dfe1ff",
+      "bytes": 559,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.177Z"
+    },
+    {
+      "path": "docs/api/examples/unknown-field.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\unknown-field.json",
+      "hash": "53cbc1da8396300ca455c9e776f5b358ba80d919ca3533a471ba09406a146a41",
+      "bytes": 632,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.179Z"
+    },
+    {
+      "path": "docs/api/examples/malformed-json.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\malformed-json.json",
+      "hash": "ada73760b99074c362568eabb0a204c6596e861b3ed2abb44fb56127690b5938",
+      "bytes": 509,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.181Z"
+    },
+    {
+      "path": "docs/api/examples/unsupported-media-type.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\api\\examples\\unsupported-media-type.json",
+      "hash": "c73fd08912e28c062134a03f5be34f0e81aa6a1fc545010137e89d2fbb92ec6f",
+      "bytes": 577,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.183Z"
+    },
+    {
+      "path": "docs/adr/0001-monorepo-and-contract-first.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0001-monorepo-and-contract-first.md",
+      "hash": "0c9f73b6a1d4f21397dde6154688eae1adbfc25c9e2e5cf991cf9e9e45e596eb",
+      "bytes": 1956,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.185Z"
+    },
+    {
+      "path": "docs/adr/0002-single-calculations-endpoint-with-problem-json.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0002-single-calculations-endpoint-with-problem-json.md",
+      "hash": "ad5e4b5076257e2f0b6869c5cd5d7eda898b0cdc910c185f428f97288e68f957",
+      "bytes": 2307,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.188Z"
+    },
+    {
+      "path": "docs/adr/0003-float64-numeric-model-with-client-formatting.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0003-float64-numeric-model-with-client-formatting.md",
+      "hash": "a8705d25e937cda125be5e1bb0c36dafdec6056322d24639cad2add4d1905c2a",
+      "bytes": 2945,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.192Z"
+    },
+    {
+      "path": "docs/adr/0004-go-standard-library-without-framework.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0004-go-standard-library-without-framework.md",
+      "hash": "f8259d1dd8f6328829c2ba9741eb2ddc1b040eae67d202f8ffed7f43861d94dd",
+      "bytes": 1865,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.194Z"
+    },
+    {
+      "path": "docs/adr/0005-explicit-operand-form-ui.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0005-explicit-operand-form-ui.md",
+      "hash": "45c2ea3ff998896eacc957863af3e7523a1d8e84080832992c194a21e8d57aa6",
+      "bytes": 2039,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.196Z"
+    },
+    {
+      "path": "docs/adr/0006-single-container-same-origin-no-cors.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0006-single-container-same-origin-no-cors.md",
+      "hash": "5f48f56a01d6b4430402081d69683dc9c7ce0b082f6e682147b9e8fa5dfec7f8",
+      "bytes": 1913,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.200Z"
+    },
+    {
+      "path": ".claude/skills/README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\README.md",
+      "hash": "53e1026ce7b962403ff92ca440f95b817096befa61bf0ad799d0f2c7657049ac",
+      "bytes": 6698,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.202Z"
+    },
+    {
+      "path": ".claude/skills/forge-core/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\forge-core\\SKILL.md",
+      "hash": "283b267f6d8eb96b93e365119fe29a318f269baa25e53bc352f859177b050d27",
+      "bytes": 7334,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.204Z"
+    },
+    {
+      "path": ".claude/skills/ponytail/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\ponytail\\SKILL.md",
+      "hash": "3f7f0dfb83c330888cead5ae696495d5ed6fd814bd53800df80388364ab7ef6f",
+      "bytes": 1656,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.206Z"
+    },
+    {
+      "path": ".claude/skills/spec-driven-development/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\spec-driven-development\\SKILL.md",
+      "hash": "af5b873414a8b45b96b0d30d5297400f55eb3a56425161a088e470c14260a1e5",
+      "bytes": 8527,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.208Z"
+    },
+    {
+      "path": ".claude/skills/planning-and-task-breakdown/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\planning-and-task-breakdown\\SKILL.md",
+      "hash": "c0bab92c05bf3ed67a7ba28b632daeb267eb530ac7aa5b17b49e02a9aa96e042",
+      "bytes": 7677,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.210Z"
+    },
+    {
+      "path": ".claude/skills/git-workflow-and-versioning/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\git-workflow-and-versioning\\SKILL.md",
+      "hash": "51677cf03845dd29d08ea4d3125665057b720aea3dccc572f25d8b172409ece6",
+      "bytes": 14000,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.212Z"
+    },
+    {
+      "path": ".claude/skills/documentation-and-adrs/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\documentation-and-adrs\\SKILL.md",
+      "hash": "b867bb80fb681257c7625ae59a0dfd849b1fc0f0a2f0338e7923f38030df9793",
+      "bytes": 9782,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.214Z"
+    },
+    {
+      "path": ".claude/skills/api-and-interface-design/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\api-and-interface-design\\SKILL.md",
+      "hash": "293db2903b41316a5109a1e0ce3e1740eeafae31735bc1f9143dafbfd1187363",
+      "bytes": 10307,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.216Z"
+    },
+    {
+      "path": ".claude/skills/test-driven-development/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\test-driven-development\\SKILL.md",
+      "hash": "24f5f59f5c600038bcce011487fd6b57c276c59315aa0559d0fdfd5de7ef3f8d",
+      "bytes": 16501,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.218Z"
+    },
+    {
+      "path": ".claude/skills/security-and-hardening/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\security-and-hardening\\SKILL.md",
+      "hash": "73ef1f395ba2181cffae046c16186d8d1b1964c14b90d1060c9f37699227931d",
+      "bytes": 20583,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.220Z"
+    },
+    {
+      "path": ".claude/skills/code-review-and-quality/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\code-review-and-quality\\SKILL.md",
+      "hash": "d131d279f40f849eeae8249e39ce54c5c669564e6baa74f278f52a2ad36f82c8",
+      "bytes": 20591,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.222Z"
+    },
+    {
+      "path": ".claude/skills/frontend-ui-engineering/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\frontend-ui-engineering\\SKILL.md",
+      "hash": "47516545e3405373983c37f71ac2e09192b08c3f82004be3c4532a9ab3f8b1f7",
+      "bytes": 10729,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.224Z"
+    },
+    {
+      "path": ".claude/skills/accessible-ui-engineering-wcag22/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\accessible-ui-engineering-wcag22\\SKILL.md",
+      "hash": "406801c6edf6b2e3c183c7e337c0dc7510c4830832af6e40b35db16cdd5ee1fe",
+      "bytes": 3888,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.227Z"
+    },
+    {
+      "path": ".claude/skills/accessible-ui-engineering-wcag22/agents/openai.yaml",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\accessible-ui-engineering-wcag22\\agents\\openai.yaml",
+      "hash": "f490256dc2fc2b15aecc140f32f8c989f0b12be9819823bc881c732dea5548c9",
+      "bytes": 254,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.229Z"
+    },
+    {
+      "path": ".claude/skills/accessible-ui-engineering-wcag22/references/official-sources.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\accessible-ui-engineering-wcag22\\references\\official-sources.md",
+      "hash": "d086fb6316ec6f319609aa0c60b75c9a23d21fbf5f62f3be5bfd967306b02870",
+      "bytes": 565,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.231Z"
+    },
+    {
+      "path": ".claude/skills/accessible-ui-engineering-wcag22/references/wcag22-engineering-matrix.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\accessible-ui-engineering-wcag22\\references\\wcag22-engineering-matrix.md",
+      "hash": "e0756722c5544a7be7e4fa3659951bbc8125b4f78ede3a7ca0b78a4a06727a77",
+      "bytes": 1539,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.233Z"
+    },
+    {
+      "path": ".claude/skills/antislop/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\antislop\\SKILL.md",
+      "hash": "667db43ca4d4c3ce7eb7c0f3e9e81a7c9e881c3f517491aa1a55fb5fed6b9093",
+      "bytes": 1765,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.236Z"
+    },
+    {
+      "path": ".claude/skills/antislop-ui/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\antislop-ui\\SKILL.md",
+      "hash": "a76c524879bb6b922d2bdbe39594c6ed71f96f8ba12c9c52599fe55c8abbb8df",
+      "bytes": 953,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.238Z"
+    },
+    {
+      "path": ".claude/skills/ci-cd-and-automation/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\ci-cd-and-automation\\SKILL.md",
+      "hash": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+      "bytes": 11332,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.243Z"
+    },
+    {
+      "path": ".forge/tmp/foundation/checks/openapi-lint.test.mjs",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.forge\\tmp\\foundation\\checks\\openapi-lint.test.mjs",
+      "hash": "971860c697e08ce851baf36b214d85d69efeafdeb37d5088f86811afa80bbfaa",
+      "bytes": 850,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.246Z"
+    },
+    {
+      "path": ".forge/tmp/foundation/checks/examples-contract.test.mjs",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.forge\\tmp\\foundation\\checks\\examples-contract.test.mjs",
+      "hash": "4c75967f5b88e013b7812e4236f84add37e7315997dbd3759d386f993a6827c6",
+      "bytes": 4937,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.249Z"
+    },
+    {
+      "path": ".forge/tmp/foundation/checks/line-cap.test.mjs",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.forge\\tmp\\foundation\\checks\\line-cap.test.mjs",
+      "hash": "b2da6c48aaf2558f3b70371b9b408643667ee351802ca529cb3cb99a457cbd08",
+      "bytes": 1220,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.251Z"
+    },
+    {
+      "path": ".forge/tmp/foundation/checks/skills-copy.test.mjs",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.forge\\tmp\\foundation\\checks\\skills-copy.test.mjs",
+      "hash": "751c5a8bf2810d6f991b87319a241ec51b8f75adc33cc46d343975746d88e0ea",
+      "bytes": 1653,
+      "kind": "project",
+      "observedAt": "2026-10-13T17:05:24.253Z"
+    }
+  ],
+  "implementation": {
+    "fingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+    "graphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+    "observedAt": "2026-10-13T17:05:44.881Z"
+  },
+  "verification": [
+    {
+      "receiptId": "d32cebdd-aa5b-4ae1-9b25-f9dc55f5b7f7",
+      "id": "openapi-lint",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T17:05:52.230Z",
+      "finishedAt": "2026-10-13T17:05:56.409Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "afterFingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "afterGraphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/foundation/checks/openapi-lint.test.mjs",
+          "hash": "971860c697e08ce851baf36b214d85d69efeafdeb37d5088f86811afa80bbfaa"
+        }
+      ],
+      "outputHash": "9f5205a0b9a6a113ae73b5bc60bcfe6bba4de1010ee5ec37b649e5a9c0b71068",
+      "outputBytes": 1314
+    },
+    {
+      "receiptId": "2e5c6b2c-6dbf-4d54-a8a4-4e8de5730a13",
+      "id": "examples-contract",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T17:05:56.939Z",
+      "finishedAt": "2026-10-13T17:05:57.219Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "afterFingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "afterGraphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/foundation/checks/examples-contract.test.mjs",
+          "hash": "4c75967f5b88e013b7812e4236f84add37e7315997dbd3759d386f993a6827c6"
+        }
+      ],
+      "outputHash": "cb547e9bdc8853187f77cf20bf9e158380da9a428615fdd03a41646a68b621fe",
+      "outputBytes": 1661
+    },
+    {
+      "receiptId": "cc91d4eb-6f3f-4079-a5e7-8dbe9e8ee6f4",
+      "id": "line-cap",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T17:05:57.763Z",
+      "finishedAt": "2026-10-13T17:05:58.126Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "afterFingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "afterGraphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/foundation/checks/line-cap.test.mjs",
+          "hash": "b2da6c48aaf2558f3b70371b9b408643667ee351802ca529cb3cb99a457cbd08"
+        }
+      ],
+      "outputHash": "a8554548e181d75c0d10d37cdcc58e9a5d602c873fdfbf244d6b69baf26f23fa",
+      "outputBytes": 1540
+    },
+    {
+      "receiptId": "0daecf3b-6a1d-4b63-a7be-89ec3ca11ab1",
+      "id": "skills-copy",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T17:05:58.712Z",
+      "finishedAt": "2026-10-13T17:05:59.056Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "afterFingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "afterGraphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/foundation/checks/skills-copy.test.mjs",
+          "hash": "751c5a8bf2810d6f991b87319a241ec51b8f75adc33cc46d343975746d88e0ea"
+        }
+      ],
+      "outputHash": "5f142aa7debbe6737412e984951eb9ca3cc76ad53937287c21a0deb16f939b9f",
+      "outputBytes": 2007
+    }
+  ],
+  "review": {
+    "summary": "Self-review (agent mode none) against docs/spec.md and the approved precisions. Correct: the error table, ErrorCode enum and 17 examples agree (examples-contract recomputes success results and asserts 422 cases are non-finite in float64); validation order, edge classifications, title=http.StatusText (verified with Go 1.27), non-normative detail, charset=utf-8 only, -0 normalization of operands and result, power(0,0)=1, underflow, NaN->DOMAIN_ERROR and the percentage fallback are written in openapi.yaml, spec and architecture consistently. Transport guidance covers the Go 1.22 mux pitfall (POST-only route plus /api/ catch-all yields 404 instead of 405). OpenAPI is valid with 2 known warnings (info-license: no project license chosen, recorded as debt doc-b17a3c61; operation-4xx-response on /healthz, which has no 4xx). Skills: 15 folders, 18 files, byte-identical; .gitattributes marks .claude/skills/** -text because upstream files are CRLF. Deviations from the request, all disclosed: example count is 17 not 16 (healthz added), servers url is relative '/' instead of localhost, the extra .gitattributes rule, Addy Osmani copyright taken from Forge vendor/addy-agent-skills/LICENSE. Not done by design: no backend/, frontend/, Dockerfile or CI; README sections marked 'Completed in task 4'; tasks/plan.md not created (plan lives in the Forge record). Residual risks: duplicate JSON keys are not specified (Go keeps the last value); frontend fixture import outside frontend/ may need server.fs.allow in dev, documented. No hand-maintained file exceeds 352 lines.",
+    "fingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+    "graphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+    "at": "2026-10-13T17:06:37.837Z",
+    "declaredJudgment": true
+  },
+  "delivery": {
+    "summary": "Foundation for the Sezzle calculator delivered on feat/foundation: OpenAPI 3.1 contract with 17 executable examples, spec, architecture, six ADRs, agent rules (AGENTS.md, CLAUDE.md), 15 vendored skills with README and third-party notices, README skeleton and AI workflow page. Checks openapi-lint, examples-contract, line-cap and skills-copy passed under Forge. One documentation debt recorded (no project license). No application code.",
+    "architecture": {
+      "dataModel": "Request {operation, operands[]} and response {operation, operands[], result} as JSON schemas; CalculationRequest is a oneOf of binary and unary variants so arity lives in the contract (docs/api/openapi.yaml:168). Error data model: RFC 9457 Problem {type, title, status, detail, code} with a closed ErrorCode enum (openapi.yaml:218, :232). No persistence.",
+      "dataStructures": "Planned operation registry: a hash map from id to {Arity, Apply} (docs/architecture.md:93). Example fixtures: one JSON document per case {name, request{method,path,headers,body}, response{status,contentType,body}} in docs/api/examples/. Frontend request lifecycle as a discriminated union idle|loading|success|error (docs/architecture.md:130).",
+      "patterns": "Contract-first with executable fixtures shared by both test suites (ADR 0001). Strategy pattern via the operation registry; sentinel errors mapped to HTTP codes with errors.Is (docs/architecture.md:76). Layered backend: domain without HTTP, transport, wiring (ADR 0004). Problem details for errors (ADR 0002).",
+      "flow": "Browser form -> client-side parse and arity check -> relative fetch POST /api/v1/calculations -> (Vite proxy in dev | same Go origin in container) -> middleware -> mux -> httpapi: Content-Type, 4096-byte limit, strict decode, operation, operands -> calculator.Evaluate -> normalized result or 422 -> JSON or problem+json -> UI maps code to message. Validation order is normative (openapi.yaml:54); sequence diagram in docs/architecture.md:42.",
+      "contracts": "New public contract docs/api/openapi.yaml: GET /healthz (line 75) and POST /api/v1/calculations (line 92); error table with 11 codes and statuses (line 33); numeric model (line 24). Normative examples in docs/api/examples/ (17 files), usage in docs/api/README.md. No CORS; same-origin by design (ADR 0006).",
+      "state": "Stateless service, no persistence or sessions. Repository state: .forge/changes and .forge/workflow versioned as evidence; .forge/git-workflow, graph files and .forge/tmp ignored (.gitignore). Debt register deuda tecnica/ created with doc-b17a3c61 (no project license)."
+    },
+    "fingerprint": "eb88053fc82522a428388c1932cab5203e8c34098e17bf7ef4e43d2b526aa3d8",
+    "graphFingerprint": "1f91e64c82c6a63a1915c0d341bfa7c062c1d17b29b13979fb3e26ca03986619",
+    "at": "2026-10-13T17:06:59.113Z",
+    "declaredJudgment": true
+  },
+  "evidenceBoundary": "Read hashes and runner receipts are observed; goals and review prose are declared judgments."
+}

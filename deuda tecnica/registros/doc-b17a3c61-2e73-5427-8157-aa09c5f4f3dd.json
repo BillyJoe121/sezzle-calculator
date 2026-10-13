@@ -1,0 +1,58 @@
+{
+  "category": "documentation",
+  "title": "No project license chosen; OpenAPI info.license missing",
+  "path": "docs/api/openapi.yaml",
+  "kind": "file",
+  "symbol": null,
+  "evidence": "Forge check openapi-lint (receipt d32cebdd-aa5b-4ae1-9b25-f9dc55f5b7f7) reports warning info-license at docs/api/openapi.yaml:2:1. The repository has no LICENSE file; docs/spec.md lists the license as an open question.",
+  "confidence": "verified",
+  "impact": "Reviewers and reusers cannot tell under which terms the project code may be used; the contract lint keeps one warning.",
+  "connections": [
+    "docs/spec.md",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "precautions": "Only the repository owner chooses a license. Vendored skills keep their own MIT notices regardless of the project license.",
+  "verification": "After a license is chosen: add LICENSE, set info.license in openapi.yaml and rerun npx --yes @redocly/cli@2.54.2 lint docs/api/openapi.yaml.",
+  "origin": {
+    "task": "Task 1 foundation",
+    "branch": "feat/foundation"
+  },
+  "priority": "low",
+  "status": "open",
+  "id": "doc-b17a3c61-2e73-5427-8157-aa09c5f4f3dd",
+  "createdAt": "2026-10-13T17:06:28.190Z",
+  "updatedAt": "2026-10-13T17:06:28.190Z",
+  "history": [
+    {
+      "action": "created",
+      "at": "2026-10-13T17:06:28.190Z",
+      "snapshot": {
+        "category": "documentation",
+        "title": "No project license chosen; OpenAPI info.license missing",
+        "path": "docs/api/openapi.yaml",
+        "kind": "file",
+        "symbol": null,
+        "evidence": "Forge check openapi-lint (receipt d32cebdd-aa5b-4ae1-9b25-f9dc55f5b7f7) reports warning info-license at docs/api/openapi.yaml:2:1. The repository has no LICENSE file; docs/spec.md lists the license as an open question.",
+        "confidence": "verified",
+        "impact": "Reviewers and reusers cannot tell under which terms the project code may be used; the contract lint keeps one warning.",
+        "connections": [
+          "docs/spec.md",
+          "README.md",
+          "THIRD_PARTY_NOTICES.md"
+        ],
+        "precautions": "Only the repository owner chooses a license. Vendored skills keep their own MIT notices regardless of the project license.",
+        "verification": "After a license is chosen: add LICENSE, set info.license in openapi.yaml and rerun npx --yes @redocly/cli@2.54.2 lint docs/api/openapi.yaml.",
+        "origin": {
+          "task": "Task 1 foundation",
+          "branch": "feat/foundation"
+        },
+        "priority": "low",
+        "status": "open",
+        "id": "doc-b17a3c61-2e73-5427-8157-aa09c5f4f3dd",
+        "createdAt": "2026-10-13T17:06:28.190Z",
+        "updatedAt": "2026-10-13T17:06:28.190Z"
+      }
+    }
+  ]
+}
