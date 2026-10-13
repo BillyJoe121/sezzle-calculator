@@ -1,0 +1,27 @@
+{
+  "name": "sqrt returns the square root of a",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "sqrt",
+      "operands": [
+        16
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "operation": "sqrt",
+      "operands": [
+        16
+      ],
+      "result": 4
+    }
+  }
+}

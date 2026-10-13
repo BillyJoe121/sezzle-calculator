@@ -1,0 +1,16 @@
+{
+  "name": "Health check reports ok",
+  "request": {
+    "method": "GET",
+    "path": "/healthz",
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "status": "ok"
+    }
+  }
+}

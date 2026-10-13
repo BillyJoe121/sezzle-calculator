@@ -1,0 +1,29 @@
+{
+  "name": "add returns the raw float64 sum",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "add",
+      "operands": [
+        0.1,
+        0.2
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "operation": "add",
+      "operands": [
+        0.1,
+        0.2
+      ],
+      "result": 0.30000000000000004
+    }
+  }
+}

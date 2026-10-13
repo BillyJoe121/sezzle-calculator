@@ -1,0 +1,28 @@
+{
+  "name": "non-JSON content type is rejected",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "text/plain"
+    },
+    "body": {
+      "operation": "add",
+      "operands": [
+        1,
+        2
+      ]
+    }
+  },
+  "response": {
+    "status": 415,
+    "contentType": "application/problem+json",
+    "body": {
+      "type": "about:blank",
+      "title": "Unsupported Media Type",
+      "status": 415,
+      "detail": "Content-Type must be application/json.",
+      "code": "UNSUPPORTED_MEDIA_TYPE"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "percentage returns a percent of b",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "percentage",
+      "operands": [
+        15,
+        200
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "operation": "percentage",
+      "operands": [
+        15,
+        200
+      ],
+      "result": 30
+    }
+  }
+}

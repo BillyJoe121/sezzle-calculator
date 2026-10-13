@@ -1,0 +1,28 @@
+{
+  "name": "divide by zero is rejected",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "divide",
+      "operands": [
+        10,
+        0
+      ]
+    }
+  },
+  "response": {
+    "status": 422,
+    "contentType": "application/problem+json",
+    "body": {
+      "type": "about:blank",
+      "title": "Unprocessable Entity",
+      "status": 422,
+      "detail": "Division by zero is undefined.",
+      "code": "DIVISION_BY_ZERO"
+    }
+  }
+}
