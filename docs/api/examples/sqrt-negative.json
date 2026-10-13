@@ -1,0 +1,27 @@
+{
+  "name": "sqrt of a negative number is a domain error",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "sqrt",
+      "operands": [
+        -9
+      ]
+    }
+  },
+  "response": {
+    "status": 422,
+    "contentType": "application/problem+json",
+    "body": {
+      "type": "about:blank",
+      "title": "Unprocessable Entity",
+      "status": 422,
+      "detail": "Square root of a negative number is undefined.",
+      "code": "DOMAIN_ERROR"
+    }
+  }
+}

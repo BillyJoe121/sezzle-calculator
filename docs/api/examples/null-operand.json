@@ -1,0 +1,28 @@
+{
+  "name": "null operand is rejected",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "add",
+      "operands": [
+        1,
+        null
+      ]
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "application/problem+json",
+    "body": {
+      "type": "about:blank",
+      "title": "Bad Request",
+      "status": 400,
+      "detail": "Operands must be finite JSON numbers.",
+      "code": "INVALID_OPERANDS"
+    }
+  }
+}

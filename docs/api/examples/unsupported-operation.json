@@ -1,0 +1,28 @@
+{
+  "name": "unknown operation is rejected",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "modulo",
+      "operands": [
+        10,
+        3
+      ]
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "application/problem+json",
+    "body": {
+      "type": "about:blank",
+      "title": "Bad Request",
+      "status": 400,
+      "detail": "Unsupported operation. Supported operations: add, subtract, multiply, divide, power, sqrt, percentage.",
+      "code": "UNSUPPORTED_OPERATION"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Accessible UI Engineering WCAG 2.2"
+  short_description: "Engineer and verify interfaces against WCAG 2.2"
+  default_prompt: "Use $accessible-ui-engineering-wcag22 to audit and fix this interface to a WCAG 2.2 AA target."

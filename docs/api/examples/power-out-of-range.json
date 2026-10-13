@@ -1,0 +1,28 @@
+{
+  "name": "power overflowing float64 is out of range",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "power",
+      "operands": [
+        10,
+        400
+      ]
+    }
+  },
+  "response": {
+    "status": 422,
+    "contentType": "application/problem+json",
+    "body": {
+      "type": "about:blank",
+      "title": "Unprocessable Entity",
+      "status": 422,
+      "detail": "The result is outside the range of a 64-bit floating-point number.",
+      "code": "RESULT_OUT_OF_RANGE"
+    }
+  }
+}

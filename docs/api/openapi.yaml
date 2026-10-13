@@ -1,0 +1,352 @@
+openapi: 3.1.0
+info:
+  title: Sezzle Calculator API
+  version: 1.0.0
+  summary: Stateless arithmetic calculations over IEEE-754 float64 numbers.
+  description: |
+    Single source of truth shared by the Go backend and the React frontend.
+    Executable examples live in `docs/api/examples/` and are used as test fixtures on both sides.
+
+    ## Operations
+
+    | id | arity | result |
+    |----|-------|--------|
+    | `add` | 2 | a + b |
+    | `subtract` | 2 | a − b |
+    | `multiply` | 2 | a × b |
+    | `divide` | 2 | a ÷ b |
+    | `power` | 2 | a raised to b |
+    | `sqrt` | 1 | square root of a |
+    | `percentage` | 2 | a percent of b, that is a × b / 100 |
+
+    Operation ids are case-sensitive.
+
+    ## Numeric model
+
+    - Operands and results are IEEE-754 binary64 (float64). Results are not rounded by the server.
+    - Responses never contain NaN or ±Infinity, which JSON cannot represent.
+    - Negative zero is normalized to `0` in every numeric field of a response (`operands` and `result`).
+    - `power(0, 0)` is `1`. A result that underflows to zero is returned as `0` and is not an error.
+    - `percentage` is computed as `a × b / 100`; when the intermediate product overflows it is computed as
+      `(a / 100) × b`, so `RESULT_OUT_OF_RANGE` only means the final result does not fit in float64.
+
+    ## Errors
+
+    Every error is an RFC 9457 `application/problem+json` document with exactly the members
+    `type` (always `about:blank`), `title` (the HTTP reason phrase, as returned by Go's `http.StatusText`),
+    `status`, `detail` and `code`. `code` is the stable, machine-readable value clients branch on.
+    `detail` is human-readable text and is not part of the contract. Clients must ignore unknown members.
+
+    | status | code | when |
+    |--------|------|------|
+    | 400 | `INVALID_JSON` | Empty or malformed body, body not a JSON object, unknown fields, more than one JSON value, `operation` not a string, `operands` not an array |
+    | 400 | `UNSUPPORTED_OPERATION` | `operation` missing, `null`, empty or not a registered id |
+    | 400 | `INVALID_OPERANDS` | `operands` missing or `null`, count different from the arity, an element that is `null`, not a number, or outside the float64 range |
+    | 404 | `NOT_FOUND` | No route under `/api/` matches the path |
+    | 405 | `METHOD_NOT_ALLOWED` | The path exists under `/api/` but not for that method; the response carries an `Allow` header (`Allow: POST` for `/api/v1/calculations`) |
+    | 413 | `PAYLOAD_TOO_LARGE` | Body larger than 4096 bytes |
+    | 415 | `UNSUPPORTED_MEDIA_TYPE` | `Content-Type` missing or not `application/json`; the only accepted parameter is `charset=utf-8` (case-insensitive) |
+    | 422 | `DIVISION_BY_ZERO` | `divide` with a divisor of `0` or `-0` |
+    | 422 | `DOMAIN_ERROR` | `sqrt` of a negative number, `power` with a negative base and a non-integer exponent, `power` with base `0` and a negative exponent |
+    | 422 | `RESULT_OUT_OF_RANGE` | The result would be ±Infinity although every operand is finite |
+    | 500 | `INTERNAL_ERROR` | Unexpected failure; details are logged, never returned |
+
+    ## Validation order
+
+    When a request has several problems, the first failing step decides the response:
+    route and method (404, 405) → `Content-Type` (415, checked before the body is read) → body size (413) →
+    JSON shape (`INVALID_JSON`) → operation (`UNSUPPORTED_OPERATION`) → operands (`INVALID_OPERANDS`) →
+    evaluation (422).
+
+    ## Transport
+
+    The frontend and the API are served from the same origin (Vite proxy in development, the Go server in the
+    container), so CORS is not enabled. There is no authentication and no state.
+servers:
+  - url: /
+    description: Same origin as the frontend (http://localhost:8080 for the backend or the container, http://localhost:5173 through the Vite proxy).
+security: []
+tags:
+  - name: Health
+    description: Process liveness.
+  - name: Calculations
+    description: Arithmetic evaluation.
+paths:
+  /healthz:
+    get:
+      tags: [Health]
+      operationId: getHealth
+      summary: Report that the process is alive
+      description: Also answers `HEAD`. Not under `/api/`, so unknown methods get Go's default plain-text 405.
+      responses:
+        '200':
+          description: The process is alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: ok
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/calculations:
+    post:
+      tags: [Calculations]
+      operationId: createCalculation
+      summary: Evaluate one operation
+      description: |
+        Evaluates `operation` over `operands` and echoes both next to the `result`.
+        Any other method on this path returns 405 `METHOD_NOT_ALLOWED` with `Allow: POST`.
+      requestBody:
+        required: true
+        description: At most 4096 bytes, `Content-Type` `application/json` (optionally `; charset=utf-8`).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationRequest'
+            examples:
+              divide:
+                summary: Binary operation
+                value:
+                  operation: divide
+                  operands: [10, 4]
+              sqrt:
+                summary: Unary operation
+                value:
+                  operation: sqrt
+                  operands: [16]
+      responses:
+        '200':
+          description: The operation was evaluated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResponse'
+              examples:
+                divide:
+                  summary: 10 ÷ 4
+                  value:
+                    operation: divide
+                    operands: [10, 4]
+                    result: 2.5
+                add:
+                  summary: Raw float64 result; the client formats it for display
+                  value:
+                    operation: add
+                    operands: [0.1, 0.2]
+                    result: 0.30000000000000004
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    Health:
+      type: object
+      required: [status]
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          const: ok
+    BinaryOperation:
+      type: string
+      enum: [add, subtract, multiply, divide, power, percentage]
+    UnaryOperation:
+      type: string
+      enum: [sqrt]
+    Operand:
+      type: number
+      format: double
+      description: A finite JSON number within the float64 range. `null`, strings and booleans are rejected.
+    CalculationRequest:
+      description: The operand count must equal the arity of the operation.
+      oneOf:
+        - $ref: '#/components/schemas/BinaryCalculationRequest'
+        - $ref: '#/components/schemas/UnaryCalculationRequest'
+    BinaryCalculationRequest:
+      type: object
+      required: [operation, operands]
+      additionalProperties: false
+      properties:
+        operation:
+          $ref: '#/components/schemas/BinaryOperation'
+        operands:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operand'
+          minItems: 2
+          maxItems: 2
+    UnaryCalculationRequest:
+      type: object
+      required: [operation, operands]
+      additionalProperties: false
+      properties:
+        operation:
+          $ref: '#/components/schemas/UnaryOperation'
+        operands:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operand'
+          minItems: 1
+          maxItems: 1
+    CalculationResponse:
+      type: object
+      required: [operation, operands, result]
+      additionalProperties: false
+      properties:
+        operation:
+          type: string
+          enum: [add, subtract, multiply, divide, power, sqrt, percentage]
+        operands:
+          type: array
+          description: The parsed operands, with negative zero normalized to 0.
+          items:
+            $ref: '#/components/schemas/Operand'
+          minItems: 1
+          maxItems: 2
+        result:
+          type: number
+          format: double
+          description: Finite float64 result, never NaN or ±Infinity, with negative zero normalized to 0.
+    ErrorCode:
+      type: string
+      enum:
+        - INVALID_JSON
+        - UNSUPPORTED_OPERATION
+        - INVALID_OPERANDS
+        - NOT_FOUND
+        - METHOD_NOT_ALLOWED
+        - PAYLOAD_TOO_LARGE
+        - UNSUPPORTED_MEDIA_TYPE
+        - DIVISION_BY_ZERO
+        - DOMAIN_ERROR
+        - RESULT_OUT_OF_RANGE
+        - INTERNAL_ERROR
+    Problem:
+      type: object
+      description: RFC 9457 problem details. The server emits exactly these members.
+      required: [type, title, status, detail, code]
+      properties:
+        type:
+          type: string
+          format: uri-reference
+          const: about:blank
+        title:
+          type: string
+          description: HTTP reason phrase for `status`, as returned by Go's `http.StatusText`.
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        detail:
+          type: string
+          minLength: 1
+          description: Human-readable explanation. Not stable; clients must not parse it.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+  responses:
+    BadRequest:
+      description: The request is malformed or names an unknown operation or invalid operands.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            invalidJson:
+              summary: Malformed body or unknown field
+              value:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: Request body is not valid JSON.
+                code: INVALID_JSON
+            unsupportedOperation:
+              summary: Operation not in the registry
+              value:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: 'Unsupported operation. Supported operations: add, subtract, multiply, divide, power, sqrt, percentage.'
+                code: UNSUPPORTED_OPERATION
+            invalidOperands:
+              summary: Wrong operand count, null or non-numeric operand
+              value:
+                type: about:blank
+                title: Bad Request
+                status: 400
+                detail: Operation "add" requires exactly 2 operands.
+                code: INVALID_OPERANDS
+    PayloadTooLarge:
+      description: The body exceeds 4096 bytes.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Request Entity Too Large
+            status: 413
+            detail: Request body must not exceed 4096 bytes.
+            code: PAYLOAD_TOO_LARGE
+    UnsupportedMediaType:
+      description: The `Content-Type` is missing or is not `application/json`.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Unsupported Media Type
+            status: 415
+            detail: Content-Type must be application/json.
+            code: UNSUPPORTED_MEDIA_TYPE
+    UnprocessableEntity:
+      description: The request is well formed but the operation is undefined for these operands.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            divisionByZero:
+              summary: Divisor is 0 or -0
+              value:
+                type: about:blank
+                title: Unprocessable Entity
+                status: 422
+                detail: Division by zero is undefined.
+                code: DIVISION_BY_ZERO
+            domainError:
+              summary: Square root of a negative number
+              value:
+                type: about:blank
+                title: Unprocessable Entity
+                status: 422
+                detail: Square root of a negative number is undefined.
+                code: DOMAIN_ERROR
+            resultOutOfRange:
+              summary: Finite operands, infinite result
+              value:
+                type: about:blank
+                title: Unprocessable Entity
+                status: 422
+                detail: The result is outside the range of a 64-bit floating-point number.
+                code: RESULT_OUT_OF_RANGE
+    InternalError:
+      description: Unexpected failure. The cause is logged and never returned.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Internal Server Error
+            status: 500
+            detail: An unexpected error occurred.
+            code: INTERNAL_ERROR

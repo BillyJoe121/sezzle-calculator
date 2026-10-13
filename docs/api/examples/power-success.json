@@ -1,0 +1,29 @@
+{
+  "name": "power returns a raised to b",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "power",
+      "operands": [
+        2,
+        10
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "operation": "power",
+      "operands": [
+        2,
+        10
+      ],
+      "result": 1024
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "multiply returns a times b",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "multiply",
+      "operands": [
+        -3,
+        4
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "operation": "multiply",
+      "operands": [
+        -3,
+        4
+      ],
+      "result": -12
+    }
+  }
+}

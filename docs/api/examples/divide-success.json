@@ -1,0 +1,29 @@
+{
+  "name": "divide returns a divided by b",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/calculations",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "divide",
+      "operands": [
+        10,
+        4
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "operation": "divide",
+      "operands": [
+        10,
+        4
+      ],
+      "result": 2.5
+    }
+  }
+}
