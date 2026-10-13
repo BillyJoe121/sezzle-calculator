@@ -1,0 +1,5 @@
+# Normalize line endings to LF in the repository and the working tree (gofmt and Prettier expect LF).
+* text=auto eol=lf
+
+# Third-party skills are verbatim copies (CRLF upstream); store them byte-for-byte.
+.claude/skills/** -text

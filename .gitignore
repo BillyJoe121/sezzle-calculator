@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+dist/
+
+# Coverage reports
+coverage/
+coverage.out
+
+# Go binaries
+/backend/bin/
+/backend/server
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Local environment
+.env
+.env.*
+
+# Forge: local state and regenerable artifacts.
+# .forge/changes/ and .forge/workflow/ are versioned as evidence of the AI-assisted workflow.
+.forge/tmp/
+.forge/git-workflow/
+.forge/graph-evidence.json
+.forge/graphify-out/
