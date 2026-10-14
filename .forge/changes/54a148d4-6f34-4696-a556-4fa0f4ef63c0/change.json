@@ -1,0 +1,956 @@
+{
+  "schemaVersion": 1,
+  "taskId": "54a148d4-6f34-4696-a556-4fa0f4ef63c0",
+  "initialBase": {
+    "noGit": false,
+    "head": "f155105e68169ba668e38762c24db81706edd2f3",
+    "branch": "feat/backend-api",
+    "intent": "Build the Go backend (backend/) for Sezzle Calculator against docs/api/openapi.yaml and docs/api/examples: stdlib-only module, cmd/server, internal/calculator (pure domain, strategy registry, sentinel errors), internal/httpapi (strict decoding, problem+json, middleware, static serving), contract test over the examples, README. docs/api is read-only.",
+    "scope": [
+      "backend/go.mod",
+      "backend/README.md",
+      "backend/cmd/server/main.go",
+      "backend/cmd/server/main_test.go",
+      "backend/internal/calculator/calculator.go",
+      "backend/internal/calculator/calculator_test.go",
+      "backend/internal/calculator/fuzz_test.go",
+      "backend/internal/httpapi/routes.go",
+      "backend/internal/httpapi/calculations.go",
+      "backend/internal/httpapi/decode.go",
+      "backend/internal/httpapi/problem.go",
+      "backend/internal/httpapi/middleware.go",
+      "backend/internal/httpapi/routes_test.go",
+      "backend/internal/httpapi/calculations_test.go",
+      "backend/internal/httpapi/decode_test.go",
+      "backend/internal/httpapi/middleware_test.go",
+      "backend/internal/httpapi/contract_test.go",
+      "docs/architecture.md",
+      "deuda tecnica/registry.json",
+      "deuda tecnica/index.md"
+    ]
+  },
+  "mode": "simple",
+  "specification": {
+    "goal": "A stdlib-only Go service in backend/ that implements docs/api/openapi.yaml exactly: GET /healthz, POST /api/v1/calculations with the 7 operations, RFC 9457 problem+json errors with the contract's status/code table and validation order, optional static file serving, and a contract test that replays every docs/api/examples/*.json against the full handler.",
+    "risk": "medium",
+    "acceptanceCriteria": [
+      "backend/go.mod declares module github.com/BillyJoe121/sezzle-calculator/backend, go 1.27 (the installed version, user decision), and no require block; docs/spec.md and docs/architecture.md state go 1.27.",
+      "internal/calculator never imports net/http; exposes type Operation (7 constants), Arity(op) (int, error), Operations() []Operation in contract order, Calculate(op, operands) (float64, error) and sentinels ErrUnsupportedOperation, ErrInvalidOperandCount, ErrDivisionByZero, ErrDomain, ErrOutOfRange.",
+      "Calculate: arity check; divide by 0 or -0 -> ErrDivisionByZero and power with base 0 and negative exponent -> ErrDomain, both before computing; NaN -> ErrDomain; +/-Inf -> ErrOutOfRange; -0 -> 0; power(0,0)=1; percentage falls back to (a/100)*b when a*b overflows.",
+      "FuzzCalculate proves Calculate never returns NaN or +/-Inf with a nil error.",
+      "httpapi.NewHandler(logger, staticDir) routes GET /healthz (also HEAD), POST /api/v1/calculations, any other method on that path -> 405 problem+json with Allow: POST, /api/ catch-all -> 404 problem+json, and / -> static files (GET and HEAD only, other methods plain 405, no directory listings) only when staticDir != \"\".",
+      "Validation order: route/method -> Content-Type (415 before reading the body; application/json with only charset=utf-8 case-insensitive) -> 4096-byte limit (413, whole body read before parsing) -> JSON shape (INVALID_JSON: empty, malformed, not an object, null body, unknown or wrongly-cased keys, trailing data, operation not a string, operands not an array) -> operation (UNSUPPORTED_OPERATION: missing, null, empty, unknown) -> operands (INVALID_OPERANDS: missing/null, wrong count, element null/non-number/out of float64 range) -> evaluation (422).",
+      "Every error is application/problem+json with exactly type=about:blank, title=http.StatusText(status), status, non-empty detail, code; written by a single writeProblem. 500 detail is generic and the cause is only logged.",
+      "Success responses are application/json without parameters and echo operation and operands (with -0 normalized to 0) plus result.",
+      "Middleware: recover -> 500 INTERNAL_ERROR problem and logs the panic; slog access log with method, path, status, duration; X-Content-Type-Options: nosniff on every response the handler writes.",
+      "cmd/server: thin main delegating to run(ctx, getenv, stdout) error; PORT default 8080; STATIC_DIR optional and must be an existing directory; slog JSON logger; http.Server with ReadHeaderTimeout, ReadTimeout, WriteTimeout, IdleTimeout; graceful shutdown on signal.NotifyContext with a shutdown timeout.",
+      "Contract test replays all 17 examples and compares status, Content-Type and parsed body (detail only non-empty).",
+      "Coverage observed: internal/calculator >= 95%, internal/httpapi >= 85% (lines).",
+      "gofmt -l empty, go vet clean, go test ./... passes, fuzz 20s finds nothing, smoke on :8080 succeeds, no hand-maintained file over 500 lines.",
+      "docs/api/ unchanged; docs/architecture.md backend section and ADR 0004 match the implementation; backend/README.md documents requirements, run, test, coverage and structure."
+    ],
+    "preservedBehaviors": [
+      "docs/api/ is not modified.",
+      "frontend/ and shared root files (README, .gitignore) are not touched."
+    ],
+    "sourceDocuments": [
+      "docs/spec.md",
+      "docs/architecture.md",
+      "docs/api/README.md"
+    ],
+    "documentHashes": [
+      {
+        "path": "docs/spec.md",
+        "hash": "752fdb0d856492188e7390e47b9f82e2fa7abb595ddcee01ca08b521b658a3c2"
+      },
+      {
+        "path": "docs/architecture.md",
+        "hash": "1456d807afac837e90539d88dd94c28c0d57674946206a3b2d0a5c338c5ca16e"
+      },
+      {
+        "path": "docs/api/README.md",
+        "hash": "a10ed0a31f7f0d8068a87b3eef76d086be184821ff648cbeb7185944db31c2f1"
+      }
+    ],
+    "decisions": [
+      "User-approved: operands are decoded as []json.RawMessage and parsed one by one into *float64 instead of []*float64: probed on Go 1.27, []*float64 turns 1e400 or \"1\" into the same decode error as a non-string operation, which breaks the operation-before-operands order.",
+      "User-approved: the body is decoded into map[string]json.RawMessage with an exact allowlist of keys {operation, operands} instead of struct + DisallowUnknownFields: probed on Go 1.27, encoding/json matches keys case-insensitively, so {\"OPERATION\":...} would be accepted despite additionalProperties:false.",
+      "User decision: go.mod declares go 1.27.0 (installed) instead of the spec's go 1.22; docs/spec.md Stack row, docs/architecture.md and ADR 0004 are updated in this branch; task 4 must use a Go >= 1.27 image.",
+      "The body is read fully through http.MaxBytesReader(4096) before parsing so 413 always wins over INVALID_JSON, per the validation order.",
+      "Static files are registered on / without a method (GET / conflicts with the /api/ patterns in the Go 1.22+ mux), wrapped so methods other than GET and HEAD get a plain-text 405 with Allow: GET, HEAD, and served through a noListing FileSystem so directories without index.html answer 404 (review finding: a misconfigured STATIC_DIR would expose its tree).",
+      "The error -> status/code mapping lives in one function, writeError in calculations.go; *problem is both the RFC 9457 document and the error type the decoder returns. Detail strings are fixed per code; only the arity detail names the operation and its arity. detail is not part of the contract.",
+      "problem.Error() and the writeJSON marshal fallback stay although tests do not reach them: the first is required by the error interface, the second is error handling that Ponytail forbids removing.",
+      "-race cannot run on this Windows host (CGO_ENABLED=0, no gcc): the test check runs without -race; CI on Linux (task 4) runs it.",
+      "GitHub user for the module path: BillyJoe121 (user answer).",
+      "Review nits left as is: generic DOMAIN_ERROR detail (detail is not contractual), unkeyed strategy literals, inline percentage closure, statusRecorder hiding io.ReaderFrom, no CSP/X-Frame-Options (not in spec), binding all interfaces (needed in the container).",
+      "Spec revision 2026-10-13 (second): docs/spec.md security bullet now says nosniff applies to responses the handler writes and that static files have no directory listings."
+    ],
+    "acceptedAt": "2026-10-13T19:56:41.436Z"
+  },
+  "plan": {
+    "scope": [
+      "backend/go.mod",
+      "backend/README.md",
+      "backend/cmd/server/main.go",
+      "backend/cmd/server/main_test.go",
+      "backend/internal/calculator/calculator.go",
+      "backend/internal/calculator/calculator_test.go",
+      "backend/internal/calculator/fuzz_test.go",
+      "backend/internal/httpapi/routes.go",
+      "backend/internal/httpapi/calculations.go",
+      "backend/internal/httpapi/decode.go",
+      "backend/internal/httpapi/problem.go",
+      "backend/internal/httpapi/middleware.go",
+      "backend/internal/httpapi/routes_test.go",
+      "backend/internal/httpapi/calculations_test.go",
+      "backend/internal/httpapi/decode_test.go",
+      "backend/internal/httpapi/middleware_test.go",
+      "backend/internal/httpapi/contract_test.go",
+      "docs/architecture.md",
+      "docs/spec.md",
+      "docs/adr/0004-go-standard-library-without-framework.md",
+      "deuda tecnica/registry.json",
+      "deuda tecnica/index.md",
+      "deuda tecnica/Documentacion.md",
+      "deuda tecnica/Pruebas y confiabilidad.md",
+      "deuda tecnica/paginas/documentation/001.md",
+      "deuda tecnica/paginas/testing/001.md",
+      "deuda tecnica/registros/doc-1d33fb61-5980-55dd-865f-2ad0755b5de4.json",
+      "deuda tecnica/registros/test-c472d4d1-dacd-5a1d-8714-643250d3df81.json"
+    ],
+    "steps": [
+      {
+        "id": "foundation",
+        "title": "Coordinator: go.mod (go 1.27, module github.com/BillyJoe121/sezzle-calculator/backend) and calculator.go skeleton with the fixed public signatures (stubs return errors) so both workers compile and start RED.",
+        "checks": [
+          "vet"
+        ]
+      },
+      {
+        "id": "calculator",
+        "title": "Worker 1 (forge-sonnet-high): TDD of internal/calculator: table-driven tests per operation and edge case, FuzzCalculate, then the strategy registry and Calculate.",
+        "checks": [
+          "test",
+          "coverage",
+          "fuzz"
+        ]
+      },
+      {
+        "id": "httpapi",
+        "title": "Worker 2 (forge-sonnet-high): TDD of internal/httpapi: decode, problem, middleware, routes, calculations, and contract_test over docs/api/examples.",
+        "checks": [
+          "test",
+          "coverage"
+        ]
+      },
+      {
+        "id": "server",
+        "title": "Coordinator: TDD of cmd/server (config from getenv, run with timeouts and graceful shutdown).",
+        "checks": [
+          "test",
+          "smoke"
+        ]
+      },
+      {
+        "id": "integrate-docs",
+        "title": "Coordinator: integrate workers, full suite green, backend/README.md, backend section of docs/architecture.md and the go line in docs/spec.md.",
+        "checks": [
+          "gofmt",
+          "vet",
+          "test",
+          "line-cap"
+        ]
+      },
+      {
+        "id": "verify-review",
+        "title": "Worker 3 (forge-haiku-high) runs section-6 checks natively (including the -race attempt and curl smoke) and reports; reviewer (forge-sonnet-max) reviews the full diff; coordinator resolves findings (no directory listings for static files, validation-order tests, order/registry invariant, non-hanging tests, errors.Is for io.EOF, ADR 0004 and doc accuracy, debt entries) and Forge runs every planned check.",
+        "checks": [
+          "gofmt",
+          "vet",
+          "test",
+          "coverage",
+          "fuzz",
+          "smoke",
+          "line-cap"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "id": "gofmt",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/backend-api/checks/gofmt.test.mjs"
+        ]
+      },
+      {
+        "id": "vet",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/backend-api/checks/vet.test.mjs"
+        ]
+      },
+      {
+        "id": "test",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/backend-api/checks/gotest.test.mjs"
+        ]
+      },
+      {
+        "id": "coverage",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/backend-api/checks/coverage.test.mjs"
+        ]
+      },
+      {
+        "id": "fuzz",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/backend-api/checks/fuzz.test.mjs"
+        ]
+      },
+      {
+        "id": "smoke",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/backend-api/checks/smoke.test.mjs"
+        ]
+      },
+      {
+        "id": "line-cap",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/backend-api/checks/line-cap.test.mjs"
+        ]
+      }
+    ],
+    "beforeImages": [
+      {
+        "path": "backend/go.mod",
+        "hash": "293bf741da3a8bfbd7e8a3097ac9506efd5401b0b98ef28b2ab536ed9cb3743e",
+        "absent": false
+      },
+      {
+        "path": "backend/README.md",
+        "hash": "73500052255649fb4f272bc91abece6df8058779bfb696966a0b9833ce535b42",
+        "absent": false
+      },
+      {
+        "path": "backend/cmd/server/main.go",
+        "hash": "b8f175fb06cdd0da3e43cfc93af2dd97b9e0099dd77d50992115e7711ac73866",
+        "absent": false
+      },
+      {
+        "path": "backend/cmd/server/main_test.go",
+        "hash": "050461dfa257546d8e533c3bcb48ef11ba75a47a549a4f50920c53fd6366500a",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/calculator/calculator.go",
+        "hash": "f3c5123a2eb88148770317a58608c5ed4228674db126889f1a3efa7d18d42668",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/calculator/calculator_test.go",
+        "hash": "61ad6ede3ac3f925d495e8074df1c73137431b7c101a90b8504faa9f5b59c7ef",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/calculator/fuzz_test.go",
+        "hash": "90115b09eade6723695ac40908da39a3b8771e1d21618613a52a9f0505aad862",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/routes.go",
+        "hash": "bdec415b87b262c46ef3c11217f26afa09e0d781e952856e99780bba8c72742d",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/calculations.go",
+        "hash": "370b2e73a79c6222c5970309d063059ee52afaa06ea71f48b72b2e0105a18cdd",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/decode.go",
+        "hash": "021b32bcc3d7ffc9acb4a4c6a165a65bb0fc1acbcd67b103effde3edec1678f3",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/problem.go",
+        "hash": "7deeab27b6037e298bd142d7a858d1a170dfe25e76c614e1f4c0b2e9865748fd",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/middleware.go",
+        "hash": "a1fd9878b14c68acde3b61a7ffa67c55c278dcad25f46f68d224aec9e149e804",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/routes_test.go",
+        "hash": "2e7856e55e99afc88dac449efe6ddb7670fa59c72612017516e43c0f0815d195",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/calculations_test.go",
+        "hash": "7fc7b2e853b355bbb97cb23b4cfdde3f8e3d94b8ba1b5cbdaec570b3aa01a2a5",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/decode_test.go",
+        "hash": "0af1581cf9aa0a1038ac1ba8d4a2869bb3085e960d86b5b3a8282e77c24512a2",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/middleware_test.go",
+        "hash": "e878143d8205eae5906c3938168bb0de47c8fbcb9fc951cde923ad23359a0ddf",
+        "absent": false
+      },
+      {
+        "path": "backend/internal/httpapi/contract_test.go",
+        "hash": "19c7e34ca3f4367cd4069f64707ab120be7c494938422ec07030021f91f9a372",
+        "absent": false
+      },
+      {
+        "path": "docs/architecture.md",
+        "hash": "1456d807afac837e90539d88dd94c28c0d57674946206a3b2d0a5c338c5ca16e",
+        "absent": false
+      },
+      {
+        "path": "docs/spec.md",
+        "hash": "752fdb0d856492188e7390e47b9f82e2fa7abb595ddcee01ca08b521b658a3c2",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0004-go-standard-library-without-framework.md",
+        "hash": "84714ac5a0cb8da7531639964c0fbc0b58bde8604c9432d08e96144c7fecf4c7",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registry.json",
+        "hash": "a562b04dcffb7b8413a4ad90aadb538d5bdae5262bbf2ca4605649ee20c57d0e",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/index.md",
+        "hash": "6bd895ce1ea381424879a78e7289d827e5653a09d78a547711171d2c94516e50",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/Documentacion.md",
+        "hash": "40cea8f40e904d6a124662d99b149f3f8d2a23bf1f8272583fe837381d05efbb",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/Pruebas y confiabilidad.md",
+        "hash": "9ae53194ef7d2fbf0535d590f173d23dcc9a7ecdfc4302ca6541582f9fdaa5cf",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/paginas/documentation/001.md",
+        "hash": "178ffc66bf16ca861b2c4340f22e3bac70f49736119dad3812ce42e501660ffd",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/paginas/testing/001.md",
+        "hash": "40304c4205e3aefb5b31904b9a5a8dce1e2683a7f5481c8ac794d269e1787360",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registros/doc-1d33fb61-5980-55dd-865f-2ad0755b5de4.json",
+        "hash": "b52b505bd04e447c24c18a6a72993eb51df3e380df8dbf946c35ea496f6298ba",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registros/test-c472d4d1-dacd-5a1d-8714-643250d3df81.json",
+        "hash": "b54766393f997e5f25a9be078f2824134dd8f37ff79da287f1e921d80da96c9d",
+        "absent": false
+      }
+    ],
+    "acceptedAt": "2026-10-13T19:56:55.135Z"
+  },
+  "beforeImages": [
+    {
+      "path": "AGENTS.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\AGENTS.md",
+      "hash": "1ec6d2f4e76ff52b216e4926d20bc8ac908dfcef4b8edc0c454bc59c7d0c622e",
+      "bytes": 6730,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.633Z"
+    },
+    {
+      "path": ".claude/skills/forge-core/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\.claude\\skills\\forge-core\\SKILL.md",
+      "hash": "283b267f6d8eb96b93e365119fe29a318f269baa25e53bc352f859177b050d27",
+      "bytes": 7334,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.636Z"
+    },
+    {
+      "path": ".claude/skills/ponytail/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\.claude\\skills\\ponytail\\SKILL.md",
+      "hash": "3f7f0dfb83c330888cead5ae696495d5ed6fd814bd53800df80388364ab7ef6f",
+      "bytes": 1656,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.640Z"
+    },
+    {
+      "path": ".claude/skills/api-and-interface-design/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\.claude\\skills\\api-and-interface-design\\SKILL.md",
+      "hash": "293db2903b41316a5109a1e0ce3e1740eeafae31735bc1f9143dafbfd1187363",
+      "bytes": 10307,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.643Z"
+    },
+    {
+      "path": ".claude/skills/test-driven-development/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\.claude\\skills\\test-driven-development\\SKILL.md",
+      "hash": "24f5f59f5c600038bcce011487fd6b57c276c59315aa0559d0fdfd5de7ef3f8d",
+      "bytes": 16501,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.646Z"
+    },
+    {
+      "path": ".claude/skills/security-and-hardening/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\.claude\\skills\\security-and-hardening\\SKILL.md",
+      "hash": "73ef1f395ba2181cffae046c16186d8d1b1964c14b90d1060c9f37699227931d",
+      "bytes": 20583,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.649Z"
+    },
+    {
+      "path": ".claude/skills/code-review-and-quality/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\.claude\\skills\\code-review-and-quality\\SKILL.md",
+      "hash": "d131d279f40f849eeae8249e39ce54c5c669564e6baa74f278f52a2ad36f82c8",
+      "bytes": 20591,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.653Z"
+    },
+    {
+      "path": ".claude/skills/planning-and-task-breakdown/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\.claude\\skills\\planning-and-task-breakdown\\SKILL.md",
+      "hash": "c0bab92c05bf3ed67a7ba28b632daeb267eb530ac7aa5b17b49e02a9aa96e042",
+      "bytes": 7677,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.655Z"
+    },
+    {
+      "path": "docs/api/openapi.yaml",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\openapi.yaml",
+      "hash": "f213ce981afe5372bc965fd079c0d59e83d04bfd53f060f87e7f0a6150bc9440",
+      "bytes": 13460,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.658Z"
+    },
+    {
+      "path": "docs/api/README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\README.md",
+      "hash": "a10ed0a31f7f0d8068a87b3eef76d086be184821ff648cbeb7185944db31c2f1",
+      "bytes": 5413,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.660Z"
+    },
+    {
+      "path": "docs/architecture.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\architecture.md",
+      "hash": "1456d807afac837e90539d88dd94c28c0d57674946206a3b2d0a5c338c5ca16e",
+      "bytes": 13464,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.346Z"
+    },
+    {
+      "path": "docs/adr/0002-single-calculations-endpoint-with-problem-json.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\adr\\0002-single-calculations-endpoint-with-problem-json.md",
+      "hash": "ad5e4b5076257e2f0b6869c5cd5d7eda898b0cdc910c185f428f97288e68f957",
+      "bytes": 2307,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.666Z"
+    },
+    {
+      "path": "docs/adr/0003-float64-numeric-model-with-client-formatting.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\adr\\0003-float64-numeric-model-with-client-formatting.md",
+      "hash": "a8705d25e937cda125be5e1bb0c36dafdec6056322d24639cad2add4d1905c2a",
+      "bytes": 2945,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.669Z"
+    },
+    {
+      "path": "docs/adr/0004-go-standard-library-without-framework.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\adr\\0004-go-standard-library-without-framework.md",
+      "hash": "84714ac5a0cb8da7531639964c0fbc0b58bde8604c9432d08e96144c7fecf4c7",
+      "bytes": 2101,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:23.190Z"
+    },
+    {
+      "path": "docs/adr/0006-single-container-same-origin-no-cors.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\adr\\0006-single-container-same-origin-no-cors.md",
+      "hash": "5f48f56a01d6b4430402081d69683dc9c7ce0b082f6e682147b9e8fa5dfec7f8",
+      "bytes": 1913,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.674Z"
+    },
+    {
+      "path": "docs/api/examples/add-success.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\examples\\add-success.json",
+      "hash": "824123536daeafb46d338603df008a19fd0768257c282c369bbb0f112610e2b1",
+      "bytes": 505,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.676Z"
+    },
+    {
+      "path": "docs/api/examples/divide-by-zero.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\examples\\divide-by-zero.json",
+      "hash": "f53a7efd42355f374ab1890c04833bc1f73a463762e9bf58f441d68902bd7af1",
+      "bytes": 564,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.679Z"
+    },
+    {
+      "path": "docs/api/examples/malformed-json.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\examples\\malformed-json.json",
+      "hash": "ada73760b99074c362568eabb0a204c6596e861b3ed2abb44fb56127690b5938",
+      "bytes": 509,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.682Z"
+    },
+    {
+      "path": "docs/api/examples/null-operand.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\examples\\null-operand.json",
+      "hash": "039f348f0a82f2960d7f5250c866c7791cba6b449e87059dd353fabf17dfe1ff",
+      "bytes": 559,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.684Z"
+    },
+    {
+      "path": "docs/api/examples/unknown-field.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\examples\\unknown-field.json",
+      "hash": "53cbc1da8396300ca455c9e776f5b358ba80d919ca3533a471ba09406a146a41",
+      "bytes": 632,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.687Z"
+    },
+    {
+      "path": "docs/api/examples/wrong-arity.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\api\\examples\\wrong-arity.json",
+      "hash": "26d78a6bcd110eb9a14eb197753a35c3b986c76dcbbcb003e04ece778ab634a2",
+      "bytes": 564,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:14:56.693Z"
+    },
+    {
+      "path": "docs/spec.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\docs\\spec.md",
+      "hash": "752fdb0d856492188e7390e47b9f82e2fa7abb595ddcee01ca08b521b658a3c2",
+      "bytes": 12202,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.344Z"
+    },
+    {
+      "path": "deuda tecnica/registry.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\registry.json",
+      "hash": "a562b04dcffb7b8413a4ad90aadb538d5bdae5262bbf2ca4605649ee20c57d0e",
+      "bytes": 12683,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:23.198Z"
+    },
+    {
+      "path": "deuda tecnica/index.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\index.md",
+      "hash": "6bd895ce1ea381424879a78e7289d827e5653a09d78a547711171d2c94516e50",
+      "bytes": 799,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:23.196Z"
+    },
+    {
+      "path": "backend/README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\README.md",
+      "hash": "73500052255649fb4f272bc91abece6df8058779bfb696966a0b9833ce535b42",
+      "bytes": 2808,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.329Z"
+    },
+    {
+      "path": "backend/go.mod",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\go.mod",
+      "hash": "293bf741da3a8bfbd7e8a3097ac9506efd5401b0b98ef28b2ab536ed9cb3743e",
+      "bytes": 67,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:32:17.856Z"
+    },
+    {
+      "path": "backend/cmd/server/main.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\cmd\\server\\main.go",
+      "hash": "b8f175fb06cdd0da3e43cfc93af2dd97b9e0099dd77d50992115e7711ac73866",
+      "bytes": 2598,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:32:17.858Z"
+    },
+    {
+      "path": "backend/internal/calculator/calculator.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\calculator\\calculator.go",
+      "hash": "f3c5123a2eb88148770317a58608c5ed4228674db126889f1a3efa7d18d42668",
+      "bytes": 3703,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:32:17.860Z"
+    },
+    {
+      "path": "backend/internal/httpapi/routes.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\routes.go",
+      "hash": "bdec415b87b262c46ef3c11217f26afa09e0d781e952856e99780bba8c72742d",
+      "bytes": 2386,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.331Z"
+    },
+    {
+      "path": "backend/internal/httpapi/calculations.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\calculations.go",
+      "hash": "370b2e73a79c6222c5970309d063059ee52afaa06ea71f48b72b2e0105a18cdd",
+      "bytes": 2319,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:32:17.862Z"
+    },
+    {
+      "path": "backend/internal/httpapi/decode.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\decode.go",
+      "hash": "021b32bcc3d7ffc9acb4a4c6a165a65bb0fc1acbcd67b103effde3edec1678f3",
+      "bytes": 4016,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.333Z"
+    },
+    {
+      "path": "backend/internal/httpapi/problem.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\problem.go",
+      "hash": "7deeab27b6037e298bd142d7a858d1a170dfe25e76c614e1f4c0b2e9865748fd",
+      "bytes": 1220,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:32:17.865Z"
+    },
+    {
+      "path": "backend/internal/httpapi/middleware.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\middleware.go",
+      "hash": "a1fd9878b14c68acde3b61a7ffa67c55c278dcad25f46f68d224aec9e149e804",
+      "bytes": 2176,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:32:17.867Z"
+    },
+    {
+      "path": "backend/cmd/server/main_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\cmd\\server\\main_test.go",
+      "hash": "050461dfa257546d8e533c3bcb48ef11ba75a47a549a4f50920c53fd6366500a",
+      "bytes": 3898,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.341Z"
+    },
+    {
+      "path": "backend/internal/calculator/calculator_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\calculator\\calculator_test.go",
+      "hash": "61ad6ede3ac3f925d495e8074df1c73137431b7c101a90b8504faa9f5b59c7ef",
+      "bytes": 7048,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.342Z"
+    },
+    {
+      "path": "backend/internal/calculator/fuzz_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\calculator\\fuzz_test.go",
+      "hash": "90115b09eade6723695ac40908da39a3b8771e1d21618613a52a9f0505aad862",
+      "bytes": 1872,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:33:21.481Z"
+    },
+    {
+      "path": "backend/internal/httpapi/routes_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\routes_test.go",
+      "hash": "2e7856e55e99afc88dac449efe6ddb7670fa59c72612017516e43c0f0815d195",
+      "bytes": 5492,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.337Z"
+    },
+    {
+      "path": "backend/internal/httpapi/calculations_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\calculations_test.go",
+      "hash": "7fc7b2e853b355bbb97cb23b4cfdde3f8e3d94b8ba1b5cbdaec570b3aa01a2a5",
+      "bytes": 4874,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:33:21.485Z"
+    },
+    {
+      "path": "backend/internal/httpapi/decode_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\decode_test.go",
+      "hash": "0af1581cf9aa0a1038ac1ba8d4a2869bb3085e960d86b5b3a8282e77c24512a2",
+      "bytes": 9296,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.336Z"
+    },
+    {
+      "path": "backend/internal/httpapi/middleware_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\middleware_test.go",
+      "hash": "e878143d8205eae5906c3938168bb0de47c8fbcb9fc951cde923ad23359a0ddf",
+      "bytes": 3616,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:57.339Z"
+    },
+    {
+      "path": "backend/internal/httpapi/contract_test.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\backend\\internal\\httpapi\\contract_test.go",
+      "hash": "19c7e34ca3f4367cd4069f64707ab120be7c494938422ec07030021f91f9a372",
+      "bytes": 3857,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:33:21.491Z"
+    },
+    {
+      "path": "deuda tecnica/Documentacion.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\Documentacion.md",
+      "hash": "40cea8f40e904d6a124662d99b149f3f8d2a23bf1f8272583fe837381d05efbb",
+      "bytes": 123,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:23.192Z"
+    },
+    {
+      "path": "deuda tecnica/Pruebas y confiabilidad.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\Pruebas y confiabilidad.md",
+      "hash": "9ae53194ef7d2fbf0535d590f173d23dcc9a7ecdfc4302ca6541582f9fdaa5cf",
+      "bytes": 127,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:23.194Z"
+    },
+    {
+      "path": "deuda tecnica/registros/doc-1d33fb61-5980-55dd-865f-2ad0755b5de4.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\registros\\doc-1d33fb61-5980-55dd-865f-2ad0755b5de4.json",
+      "hash": "b52b505bd04e447c24c18a6a72993eb51df3e380df8dbf946c35ea496f6298ba",
+      "bytes": 5592,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:23.199Z"
+    },
+    {
+      "path": "deuda tecnica/registros/test-c472d4d1-dacd-5a1d-8714-643250d3df81.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\registros\\test-c472d4d1-dacd-5a1d-8714-643250d3df81.json",
+      "hash": "b54766393f997e5f25a9be078f2824134dd8f37ff79da287f1e921d80da96c9d",
+      "bytes": 3397,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:23.201Z"
+    },
+    {
+      "path": "deuda tecnica/paginas/documentation/001.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\paginas\\documentation\\001.md",
+      "hash": "178ffc66bf16ca861b2c4340f22e3bac70f49736119dad3812ce42e501660ffd",
+      "bytes": 2825,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:31.791Z"
+    },
+    {
+      "path": "deuda tecnica/paginas/testing/001.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle.worktrees\\feat-backend-api\\deuda tecnica\\paginas\\testing\\001.md",
+      "hash": "40304c4205e3aefb5b31904b9a5a8dce1e2683a7f5481c8ac794d269e1787360",
+      "bytes": 1450,
+      "kind": "project",
+      "observedAt": "2026-10-13T19:55:31.795Z"
+    }
+  ],
+  "implementation": {
+    "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+    "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+    "observedAt": "2026-10-13T19:57:03.179Z"
+  },
+  "verification": [
+    {
+      "receiptId": "8202eb80-0c5a-4d92-8b9f-d5baefde4533",
+      "id": "gofmt",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T19:57:13.604Z",
+      "finishedAt": "2026-10-13T19:57:13.994Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "afterFingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "afterGraphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/backend-api/checks/gofmt.test.mjs",
+          "hash": "f510ca6b97e965868a1fd6424c639587d629a05aa1aa25101f002962a5470e65"
+        }
+      ],
+      "outputHash": "163ef015f94f7fe3cc82f84096e7a55a2f558c805c939304843e7cbdf30608ac",
+      "outputBytes": 175
+    },
+    {
+      "receiptId": "eb2188eb-c539-4e41-9182-d4e8a0caa9b3",
+      "id": "vet",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T19:57:14.489Z",
+      "finishedAt": "2026-10-13T19:57:17.652Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "afterFingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "afterGraphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/backend-api/checks/vet.test.mjs",
+          "hash": "ab89989028ca2e1826a5328cdb23eeb1ab5255e21a2d577188d02e06b9e1852f"
+        }
+      ],
+      "outputHash": "93306da4d956574750cf79eb7b3ce74a3480565138be5480298f5a4e713bdcd3",
+      "outputBytes": 176
+    },
+    {
+      "receiptId": "1dae5a48-b34d-4e05-ae6a-728f6808a304",
+      "id": "test",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T19:57:18.258Z",
+      "finishedAt": "2026-10-13T19:57:26.073Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "afterFingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "afterGraphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/backend-api/checks/gotest.test.mjs",
+          "hash": "fd14854d8b9b5dd28c2fbf7db2b6a332219eb088b27da6b5c6d1cfd25a61d585"
+        }
+      ],
+      "outputHash": "141b6b0bc2bb152e9a34b5f30e9215c41003813b3f2d16cb8d8b2c425b03deec",
+      "outputBytes": 425
+    },
+    {
+      "receiptId": "b4fd3b17-e19c-44e0-a6d6-72e2605fa186",
+      "id": "coverage",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T19:57:26.544Z",
+      "finishedAt": "2026-10-13T19:57:33.964Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "afterFingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "afterGraphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/backend-api/checks/coverage.test.mjs",
+          "hash": "ab73041216c8eb9baaad4866bcc244c9a68288ce6a502b2cb5cea08a543595d4"
+        }
+      ],
+      "outputHash": "05a5effcabedc76d02a8c54dfd8bd6da3b147802d99674c33ba773c3854ec396",
+      "outputBytes": 3584
+    },
+    {
+      "receiptId": "6f2872a4-4f98-4917-8ba3-8e4b3b38bff5",
+      "id": "line-cap",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T19:57:34.483Z",
+      "finishedAt": "2026-10-13T19:57:34.860Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "afterFingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "afterGraphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/backend-api/checks/line-cap.test.mjs",
+          "hash": "ea674e226739331c4eb396fb063dca0f50f2bfd4868e1e4b3ca0e3b7972f98b7"
+        }
+      ],
+      "outputHash": "304e052c2eb891eb5188c1b2e064deb9d6d3c1c1be4011f0344643256f44dee3",
+      "outputBytes": 925
+    },
+    {
+      "receiptId": "df1590ee-0793-457d-82a8-89629d96c48d",
+      "id": "fuzz",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T19:57:41.275Z",
+      "finishedAt": "2026-10-13T19:58:06.503Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "afterFingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "afterGraphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/backend-api/checks/fuzz.test.mjs",
+          "hash": "a4bc874083d66c00b8ba818961d9bcb455eaa13020098676534b62ec5207cca3"
+        }
+      ],
+      "outputHash": "2a7f3e507f052abb0e3a33e257c60f2f8edc9cb4ec50b3cb8649f22a354ad525",
+      "outputBytes": 1056
+    },
+    {
+      "receiptId": "e9f46f04-af59-409b-93de-cfe3787b39b4",
+      "id": "smoke",
+      "kind": "node-test",
+      "startedAt": "2026-10-13T19:58:06.915Z",
+      "finishedAt": "2026-10-13T19:58:13.776Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "afterFingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "afterGraphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/backend-api/checks/smoke.test.mjs",
+          "hash": "c1a7ba910316aaacaee0a1641e94e59019ea48724d23eed9bf79242b1fec044d"
+        }
+      ],
+      "outputHash": "cca2dfb8c4e99ac7e6f847e18b3d3785e147f5e7aee706ff256b37f40857565c",
+      "outputBytes": 1421
+    }
+  ],
+  "review": {
+    "summary": "Independent review by forge-sonnet-max over the full diff (report only): no critical, high or medium findings; contract conformance verified for statuses, codes, Content-Type, validation order, problem shape, -0 and numeric edges; all 17 fixtures pass; tests stable under -count=5 -shuffle=on -cpu 1,2,8. Resolved low findings: static directory listings (noListing FileSystem, RED->GREEN), validation-order tests, order/registry invariant test, hang-prone main_test (pipe close + client timeout) and recoverer test assertion, errors.Is for io.EOF, stale ADR 0004, overstated nosniff wording, README duration unit. Registered as debt: doc-1d33fb61 (contract silent on /api redirect, path-cleaning 307s, duplicate keys, operand underflow, Content-Type leniency) and test-c472d4d1 (percentage fallback false overflow within ~1 ulp of MaxFloat64, verified by coordinator probe). Accepted nits: generic DOMAIN_ERROR detail, unkeyed strategy literals, inline percentage closure, statusRecorder hides io.ReaderFrom, no CSP/X-Frame-Options, binding all interfaces. Remaining risk: -race not run on this host (no cgo); CI on Linux in task 4 must run it. Worker 3 (forge-haiku-high) ran native checks: gofmt, vet, tests, coverage, fuzz 20s (~7.9M execs), curl smoke a-g, line counts; -race failed as expected ('-race requires cgo'). The reviewer called forge_task_preflight once and got an unrelated taskId 6e0763ab (no workflow/git actions taken).",
+    "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+    "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+    "at": "2026-10-14T00:23:18.381Z",
+    "declaredJudgment": true
+  },
+  "delivery": {
+    "summary": "Task 2 delivered on feat/backend-api: stdlib-only Go service in backend/ implementing docs/api/openapi.yaml (GET /healthz, POST /api/v1/calculations with 7 operations, RFC 9457 problems in the contract's validation order, optional static files without listings), contract test over all 17 examples, docs updated (backend/README.md, docs/architecture.md, docs/spec.md, ADR 0004), two low debt entries. All 7 Forge checks passed; -race not runnable on this host.",
+    "architecture": {
+      "dataModel": "Sin cambios de persistencia: el servicio no guarda estado. El modelo numerico es float64 (ADR 0003): operandos finitos, resultado finito y -0 normalizado a 0, en internal/calculator.",
+      "dataStructures": "calculator.Operation (string con 7 constantes); strategy{arity int; eval func([]float64) (float64, error)} en un map registry mas el slice order (orden del contrato, invariante probada por test); httpapi.calculationRequest{operation, operands}; problem{Type, Title, Status, Detail, Code}, que es documento RFC 9457 y tipo error; calculationResponse{operation, operands, result}.",
+      "patterns": "Strategy (registry de operaciones); errores centinela comprobados con errors.Is; un unico punto de mapeo error -> status/code (writeError en calculations.go); cadena de middleware nosniff -> accessLog -> recoverer -> mux; FileSystem envolvente noListing para estaticos; TDD con tests table-driven, fuzz y test de contrato dirigido por fixtures.",
+      "flow": "POST /api/v1/calculations -> ServeMux -> decodeRequest (Content-Type 415, MaxBytesReader 4096 413, map con claves exactas y EOF INVALID_JSON, Arity UNSUPPORTED_OPERATION, conteo y *float64 por elemento INVALID_OPERANDS) -> calculator.Calculate (division por cero y 0^neg antes de calcular, normalize NaN/Inf/-0 -> 422) -> writeJSON 200 o writeError -> writeProblem. cmd/server: loadConfig(PORT, STATIC_DIR) -> run con timeouts -> apagado ordenado con signal.NotifyContext y 10 s.",
+      "contracts": "Implementa docs/api/openapi.yaml sin modificarlo (git diff main -- docs/api vacio). API publica Go: httpapi.NewHandler(logger, staticDir) http.Handler; calculator.Calculate, Arity, Operations y 5 centinelas. Silencios del contrato registrados en doc-1d33fb61 (redireccion /api, 307 por limpieza de rutas, claves duplicadas, underflow, laxitud de Content-Type).",
+      "state": "Sin estado entre peticiones; solo configuracion inmutable leida al arrancar (PORT, STATIC_DIR) y el logger slog JSON en stdout."
+    },
+    "fingerprint": "6e1a4051d6822720f193d8baca84c7f8be8f379ec54ba67c46b41cc561e5aa55",
+    "graphFingerprint": "66d6393b181c6846a963c0b0cd92f491258205728e1e4fd4dfa603cfbe57b265",
+    "at": "2026-10-14T00:23:35.989Z",
+    "declaredJudgment": true
+  },
+  "evidenceBoundary": "Read hashes and runner receipts are observed; goals and review prose are declared judgments."
+}

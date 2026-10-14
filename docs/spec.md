@@ -41,7 +41,7 @@ reporting errors consistently, and making both layers agree on that behavior whi
 
 | Layer | Choice |
 |-------|--------|
-| Backend | Go, standard library only: `net/http` with method patterns (Go 1.22+), `encoding/json`, `log/slog`, `math`. `go.mod` declares `go 1.22`; developed with Go 1.27. |
+| Backend | Go, standard library only: `net/http` with method patterns (Go 1.22+), `encoding/json`, `log/slog`, `math`. `go.mod` declares `go 1.27.0`, the toolchain it is developed and tested with. |
 | Frontend | React with TypeScript and Vite; Vitest, Testing Library and MSW for tests; npm. |
 | Contract | OpenAPI 3.1 plus executable JSON examples. |
 | Delivery | Multi-stage Dockerfile producing one image (task 4). |
@@ -81,7 +81,8 @@ reporting errors consistently, and making both layers agree on that behavior whi
   `log/slog`; a recovery middleware turns panics into that response.
 - `http.Server` with explicit `ReadHeaderTimeout`, `ReadTimeout`, `WriteTimeout` and `IdleTimeout`, and graceful
   shutdown on SIGINT/SIGTERM.
-- `X-Content-Type-Options: nosniff` on every response. No CORS headers: the browser only talks to its own origin.
+- `X-Content-Type-Options: nosniff` on every response the handler writes (net/http's own replies to malformed
+  requests never reach it). Static files are served without directory listings. No CORS headers: the browser only talks to its own origin.
 - No secrets exist; `.env` files are ignored anyway. No third-party Go modules.
 
 ## Deployment

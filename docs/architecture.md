@@ -47,7 +47,7 @@ sequenceDiagram
   participant F as CalculatorForm
   participant C as API client
   participant H as httpapi handler
-  participant D as calculator.Evaluate
+  participant D as calculator.Calculate
   U->>F: enters 10, chooses divide, enters 4, submits
   F->>F: parse operands (finite numbers, arity)
   alt invalid input
@@ -56,7 +56,7 @@ sequenceDiagram
     F->>C: calculate("divide", [10, 4])
     C->>H: POST /api/v1/calculations
     H->>H: Content-Type, 4096-byte limit, strict decode, operation, operands
-    H->>D: Evaluate("divide", [10, 4])
+    H->>D: Calculate("divide", [10, 4])
     alt domain error
       D-->>H: ErrDivisionByZero / ErrDomain / ErrOutOfRange
       H-->>C: 422 application/problem+json with code
@@ -81,24 +81,25 @@ sequenceDiagram
 | `internal/httpapi` | Transport: routes, `Content-Type` check, body limit, strict JSON decoding, operand parsing, mapping domain errors to status and `code`, problem documents, middleware. | Yes |
 | `cmd/server` | Configuration from the environment, logger, `http.Server` with timeouts, graceful shutdown. | Wiring only |
 
-Domain shape (guidance for task 2, names may differ):
+Domain API (`internal/calculator`):
 
 ```go
-// Strategy pattern: adding an operation is one registry entry plus its tests.
-type Operation struct {
-	Arity int
-	Apply func(operands []float64) (float64, error)
-}
+// Strategy pattern: adding an operation is one registry entry, its place in the contract order, and tests.
+type Operation string // Add, Subtract, Multiply, Divide, Power, Sqrt, Percentage
 
-var registry = map[string]Operation{
-	"add":    {Arity: 2, Apply: func(x []float64) (float64, error) { return x[0] + x[1], nil }},
-	"divide": {Arity: 2, Apply: divide}, // returns ErrDivisionByZero for 0 and -0
+var registry = map[Operation]strategy{ // strategy = {arity int; eval func([]float64) (float64, error)}
+	Add:    {2, func(o []float64) (float64, error) { return o[0] + o[1], nil }},
+	Divide: {2, divide}, // returns ErrDivisionByZero for 0 and -0 before dividing
 	// ...
 }
 
+func Operations() []Operation                                       // contract order
+func Arity(op Operation) (int, error)                               // ErrUnsupportedOperation
+func Calculate(op Operation, operands []float64) (float64, error)   // finite result, never -0
+
 var (
 	ErrUnsupportedOperation = errors.New("unsupported operation")
-	ErrArity                = errors.New("wrong number of operands")
+	ErrInvalidOperandCount  = errors.New("invalid operand count")
 	ErrDivisionByZero       = errors.New("division by zero")
 	ErrDomain               = errors.New("operation undefined for operands")
 	ErrOutOfRange           = errors.New("result out of float64 range")
@@ -106,17 +107,26 @@ var (
 ```
 
 `httpapi` maps errors with `errors.Is`: `ErrUnsupportedOperation` → 400 `UNSUPPORTED_OPERATION`,
-`ErrArity` → 400 `INVALID_OPERANDS`, `ErrDivisionByZero` → 422 `DIVISION_BY_ZERO`, `ErrDomain` → 422
+`ErrInvalidOperandCount` → 400 `INVALID_OPERANDS`, `ErrDivisionByZero` → 422 `DIVISION_BY_ZERO`, `ErrDomain` → 422
 `DOMAIN_ERROR`, `ErrOutOfRange` → 422 `RESULT_OUT_OF_RANGE`, anything else → 500 `INTERNAL_ERROR`.
 
-Transport notes for task 2:
+Transport (`internal/httpapi`, entry point `NewHandler(logger, staticDir) http.Handler`):
 
-- Decode `operands` as `[]json.RawMessage` and parse each element on its own, so `null`, strings and
-  out-of-range numbers (`1e400`) become `INVALID_OPERANDS` rather than a generic decode error.
-- After decoding the object, a second decode must hit `io.EOF`; anything else is `INVALID_JSON`.
+- The body is read whole through `http.MaxBytesReader` (4096 bytes) before parsing, so 413 always wins over
+  `INVALID_JSON`, as the validation order requires.
+- The object is decoded into `map[string]json.RawMessage` and its keys must be exactly `operation` and
+  `operands`. Struct decoding with `DisallowUnknownFields` is not enough: `encoding/json` matches keys
+  case-insensitively, so `{"OPERATION": ...}` would be accepted.
+- After the object, a second decode must hit `io.EOF`; anything else is `INVALID_JSON`.
+- `operation` is checked with `calculator.Arity` before any operand, so an unknown operation wins over bad operands.
+- `operands` is decoded as `[]json.RawMessage` and each element is parsed on its own into `*float64`, so `null`,
+  strings and out-of-range numbers (`1e400`) become `INVALID_OPERANDS` rather than a generic decode error.
 - Register `/api/v1/calculations` for all methods and answer anything but `POST` with 405 and `Allow: POST`.
   With Go 1.22 patterns, a `POST`-only route plus an `/api/` catch-all would turn a wrong method into a 404.
 - `/api/` (catch-all) returns 404 `NOT_FOUND` as a problem document. Outside `/api/`, Go's defaults apply.
+- Static files are registered on `/` without a method (a `GET /` pattern conflicts with `/api/`) and answer
+  methods other than `GET` and `HEAD` with a plain-text 405, like Go's default for `/healthz`. Directories
+  without an `index.html` answer 404 instead of a listing.
 
 ### Frontend (`frontend/`, React with TypeScript and Vite)
 
@@ -134,17 +144,17 @@ UI state is local React state. The request lifecycle is one discriminated union:
 
 ```text
 backend/
-  go.mod                        module, go 1.22, no require block
-  cmd/server/main.go            config, logger, server, shutdown
+  go.mod                        module, go 1.27.0, no require block
+  cmd/server/main.go            config, logger, server, shutdown (+ main_test.go)
   internal/calculator/
-    calculator.go               registry, Evaluate, normalization
-    errors.go                   sentinel errors
+    calculator.go               registry, sentinel errors, Calculate, normalization
     calculator_test.go          table-driven tests per operation and edge case
+    fuzz_test.go                FuzzCalculate: never NaN or ±Inf without an error
   internal/httpapi/
-    router.go                   NewHandler: routes, static files, middleware
-    calculations.go             POST handler
+    routes.go                   NewHandler: routes, static files, middleware
+    calculations.go             POST handler, error → status/code mapping (writeError)
     decode.go                   Content-Type, size limit, strict decoding, operand parsing
-    problem.go                  problem+json writer, error → status/code mapping
+    problem.go                  problem documents and the JSON writer
     middleware.go               recover, access log, nosniff
     *_test.go                   unit tests and contract_test.go over docs/api/examples
 frontend/
