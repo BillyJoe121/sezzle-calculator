@@ -36,5 +36,5 @@ The code is layered:
   per-operand parsing.
 - A few things a framework would give for free are written by hand: a problem+json 405 with `Allow` under
   `/api/` (the default mux 405 is plain text) and a small middleware chain. Each is a few lines and tested.
-- Needs Go 1.22 or newer for method patterns; `go.mod` declares `go 1.27.0`, the toolchain it is developed and
-  tested with.
+- Needs Go 1.22 or newer for method patterns; `go.mod` declares `go 1.27.2`, the first 1.27 release without
+  the `net/http` vulnerabilities `govulncheck` reported for 1.27.0.

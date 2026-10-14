@@ -5,7 +5,7 @@ Go REST service for the Sezzle Calculator. It implements the contract in
 
 ## Requirements
 
-- Go 1.27 or newer (`go.mod` declares `go 1.27.0`). No third-party modules.
+- Go 1.27.2 or newer (`go.mod` declares `go 1.27.2`; with the default `GOTOOLCHAIN=auto` an older Go downloads it). No third-party modules.
 
 ## Run
 
