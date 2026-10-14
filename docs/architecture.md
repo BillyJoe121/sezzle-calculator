@@ -132,13 +132,14 @@ Transport (`internal/httpapi`, entry point `NewHandler(logger, staticDir) http.H
 
 | Module | Responsibility |
 |--------|----------------|
-| `src/api/` | Contract types and `calculate(operation, operands)`, which calls `fetch` on a relative URL and returns the result or throws an `ApiError` carrying `code`. It also validates that the response has the expected shape. |
-| `src/calculator/` | Pure functions: the operation list (id, label, symbol, arity), `parseOperand`, `formatResult` and the `code` → message map. |
-| `src/components/` | `CalculatorForm` (inputs, operation selector, submit, field errors) and `ResultPanel` (result or error in an `aria-live` region). |
+| `src/api/` | Contract types and `calculate(request, signal)`, which POSTs to a relative URL with an 8 s timeout, validates the response shape and never throws: it returns `{ ok: true, value }` or `{ ok: false, error }`, where `error.kind` is `problem` (with the contract `code`), `network`, `timeout`, `unexpected` or `aborted`. |
+| `src/features/calculator/` | The feature: the operation catalog (id, label, symbol, arity, operand labels, expression), `parseOperand`, the `code` → message map, the `useCalculator` hook and the components `Calculator` (form), `OperationPicker` (radio group), `OperandField` and `ResultPanel` (result in a `role="status"` live region, errors in `role="alert"`). Components never call `fetch`. |
+| `src/lib/` | `formatNumber`, display formatting only (see Numeric model). |
 | `src/test/` | Test setup, fixture loading from `docs/api/examples/` and the MSW server. |
 
-UI state is local React state. The request lifecycle is one discriminated union:
-`idle | loading | success(result) | error(message)`.
+Form values are local React state in `Calculator`. The request lifecycle lives in `useCalculator` (`useReducer`) as
+one discriminated union: `idle | submitting | success(calculation) | error(error)`. A new submission aborts the
+previous request and unmounting aborts the pending one; results of aborted requests are discarded.
 
 ## Target folder structure
 
@@ -159,15 +160,16 @@ backend/
     *_test.go                   unit tests and contract_test.go over docs/api/examples
 frontend/
   index.html
-  package.json                  scripts: dev, build, preview, test, typecheck
+  package.json                  scripts: dev, build, preview, lint, test, typecheck; exact versions
   vite.config.ts                dev server :5173, proxy, Vitest config and coverage thresholds
   tsconfig.json
   src/
-    main.tsx, App.tsx, styles.css
-    api/types.ts, api/calculations.ts (+ tests)
-    calculator/operations.ts, parseOperand.ts, formatResult.ts, errorMessages.ts (+ tests)
-    components/CalculatorForm.tsx, ResultPanel.tsx (+ tests)
-    test/setup.ts, test/fixtures.ts, test/server.ts
+    main.tsx, App.tsx, index.css
+    api/types.ts, api/calculatorClient.ts (+ tests)
+    features/calculator/operations.ts, validation.ts, errorMessages.ts, useCalculator.ts (+ tests)
+    features/calculator/Calculator.tsx, OperationPicker.tsx, OperandField.tsx, ResultPanel.tsx (+ tests)
+    lib/formatNumber.ts (+ tests)
+    test/setup.ts, test/contractExamples.ts, test/server.ts
 ```
 
 Files stay under 500 lines; split by responsibility when one grows.
