@@ -1,0 +1,58 @@
+{
+  "category": "testing",
+  "title": "iOS decimal keypad may block negative numbers and comma-locale input",
+  "path": "frontend/src/features/calculator/OperandField.tsx",
+  "kind": "file",
+  "symbol": "OperandField",
+  "evidence": "Suspected, not verified on a device: inputMode=\"decimal\" (required by ADR 0005 and the task) shows the iOS decimal pad, which has no minus key, and in comma-decimal locales it offers ',' which parseOperand rejects by design. Reported by the task 3 reviewer from platform knowledge; no iPhone was available.",
+  "confidence": "suspected",
+  "impact": "Some iPhone users may be unable to type negative operands or decimals with the on-screen keypad.",
+  "connections": [
+    "frontend/src/features/calculator/validation.ts",
+    "docs/adr/0005-explicit-operand-form-ui.md",
+    "docs/spec.md"
+  ],
+  "precautions": "Verify on a real iOS device before changing anything; inputMode and the dot-only rule are spec decisions (ADR 0005, spec feature 4), so a change needs a spec or ADR update first.",
+  "verification": "",
+  "origin": {
+    "task": "Task 3 frontend (ac3c786e)",
+    "branch": "feat/frontend-ui"
+  },
+  "priority": "low",
+  "status": "open",
+  "id": "test-827d163b-4413-58c8-81db-9c3002ae5994",
+  "createdAt": "2026-10-14T01:51:24.015Z",
+  "updatedAt": "2026-10-14T01:51:24.015Z",
+  "history": [
+    {
+      "action": "created",
+      "at": "2026-10-14T01:51:24.015Z",
+      "snapshot": {
+        "category": "testing",
+        "title": "iOS decimal keypad may block negative numbers and comma-locale input",
+        "path": "frontend/src/features/calculator/OperandField.tsx",
+        "kind": "file",
+        "symbol": "OperandField",
+        "evidence": "Suspected, not verified on a device: inputMode=\"decimal\" (required by ADR 0005 and the task) shows the iOS decimal pad, which has no minus key, and in comma-decimal locales it offers ',' which parseOperand rejects by design. Reported by the task 3 reviewer from platform knowledge; no iPhone was available.",
+        "confidence": "suspected",
+        "impact": "Some iPhone users may be unable to type negative operands or decimals with the on-screen keypad.",
+        "connections": [
+          "frontend/src/features/calculator/validation.ts",
+          "docs/adr/0005-explicit-operand-form-ui.md",
+          "docs/spec.md"
+        ],
+        "precautions": "Verify on a real iOS device before changing anything; inputMode and the dot-only rule are spec decisions (ADR 0005, spec feature 4), so a change needs a spec or ADR update first.",
+        "verification": "",
+        "origin": {
+          "task": "Task 3 frontend (ac3c786e)",
+          "branch": "feat/frontend-ui"
+        },
+        "priority": "low",
+        "status": "open",
+        "id": "test-827d163b-4413-58c8-81db-9c3002ae5994",
+        "createdAt": "2026-10-14T01:51:24.015Z",
+        "updatedAt": "2026-10-14T01:51:24.015Z"
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 <!-- forge:technical-debt:view -->
 # Documentacion
 
-Hallazgos: 2 | Abiertos: 2
+Hallazgos: 3 | Abiertos: 3
 
 - [Pagina 1](paginas\documentation/001.md)

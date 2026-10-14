@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-13T19:55:16.750Z",
+  "updatedAt": "2026-10-14T01:51:24.950Z",
   "findings": [
     {
       "category": "documentation",
@@ -97,6 +97,68 @@
     },
     {
       "category": "documentation",
+      "title": "Shared docs still use the planned frontend names (CalculatorForm, ApiError, formatResult) instead of the built ones",
+      "path": "docs/architecture.md",
+      "kind": "file",
+      "symbol": null,
+      "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts. The Frontend section and folder tree of docs/architecture.md are already updated in this branch.",
+      "confidence": "verified",
+      "impact": "Low: readers of the diagrams and the TDD rule look for components and functions that do not exist; behavior is unaffected.",
+      "connections": [
+        "docs/architecture.md",
+        "AGENTS.md",
+        "frontend/src/features/calculator/Calculator.tsx",
+        "frontend/src/api/calculatorClient.ts",
+        "frontend/src/lib/formatNumber.ts"
+      ],
+      "precautions": "Shared files belong to task 4 (feat/delivery); the frontend branch's accepted spec only touches the Frontend section of docs/architecture.md. Rename only, keep the diagrams' structure.",
+      "verification": "grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing.",
+      "origin": {
+        "task": "Task 3 React frontend (ac3c786e)",
+        "branch": "feat/frontend-ui"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19",
+      "createdAt": "2026-10-14T00:41:38.037Z",
+      "updatedAt": "2026-10-14T00:41:38.037Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-14T00:41:38.037Z",
+          "snapshot": {
+            "category": "documentation",
+            "title": "Shared docs still use the planned frontend names (CalculatorForm, ApiError, formatResult) instead of the built ones",
+            "path": "docs/architecture.md",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts. The Frontend section and folder tree of docs/architecture.md are already updated in this branch.",
+            "confidence": "verified",
+            "impact": "Low: readers of the diagrams and the TDD rule look for components and functions that do not exist; behavior is unaffected.",
+            "connections": [
+              "docs/architecture.md",
+              "AGENTS.md",
+              "frontend/src/features/calculator/Calculator.tsx",
+              "frontend/src/api/calculatorClient.ts",
+              "frontend/src/lib/formatNumber.ts"
+            ],
+            "precautions": "Shared files belong to task 4 (feat/delivery); the frontend branch's accepted spec only touches the Frontend section of docs/architecture.md. Rename only, keep the diagrams' structure.",
+            "verification": "grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing.",
+            "origin": {
+              "task": "Task 3 React frontend (ac3c786e)",
+              "branch": "feat/frontend-ui"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19",
+            "createdAt": "2026-10-14T00:41:38.037Z",
+            "updatedAt": "2026-10-14T00:41:38.037Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "documentation",
       "title": "No project license chosen; OpenAPI info.license missing",
       "path": "docs/api/openapi.yaml",
       "kind": "file",
@@ -155,6 +217,64 @@
     },
     {
       "category": "testing",
+      "title": "iOS decimal keypad may block negative numbers and comma-locale input",
+      "path": "frontend/src/features/calculator/OperandField.tsx",
+      "kind": "file",
+      "symbol": "OperandField",
+      "evidence": "Suspected, not verified on a device: inputMode=\"decimal\" (required by ADR 0005 and the task) shows the iOS decimal pad, which has no minus key, and in comma-decimal locales it offers ',' which parseOperand rejects by design. Reported by the task 3 reviewer from platform knowledge; no iPhone was available.",
+      "confidence": "suspected",
+      "impact": "Some iPhone users may be unable to type negative operands or decimals with the on-screen keypad.",
+      "connections": [
+        "frontend/src/features/calculator/validation.ts",
+        "docs/adr/0005-explicit-operand-form-ui.md",
+        "docs/spec.md"
+      ],
+      "precautions": "Verify on a real iOS device before changing anything; inputMode and the dot-only rule are spec decisions (ADR 0005, spec feature 4), so a change needs a spec or ADR update first.",
+      "verification": "",
+      "origin": {
+        "task": "Task 3 frontend (ac3c786e)",
+        "branch": "feat/frontend-ui"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "test-827d163b-4413-58c8-81db-9c3002ae5994",
+      "createdAt": "2026-10-14T01:51:24.015Z",
+      "updatedAt": "2026-10-14T01:51:24.015Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-14T01:51:24.015Z",
+          "snapshot": {
+            "category": "testing",
+            "title": "iOS decimal keypad may block negative numbers and comma-locale input",
+            "path": "frontend/src/features/calculator/OperandField.tsx",
+            "kind": "file",
+            "symbol": "OperandField",
+            "evidence": "Suspected, not verified on a device: inputMode=\"decimal\" (required by ADR 0005 and the task) shows the iOS decimal pad, which has no minus key, and in comma-decimal locales it offers ',' which parseOperand rejects by design. Reported by the task 3 reviewer from platform knowledge; no iPhone was available.",
+            "confidence": "suspected",
+            "impact": "Some iPhone users may be unable to type negative operands or decimals with the on-screen keypad.",
+            "connections": [
+              "frontend/src/features/calculator/validation.ts",
+              "docs/adr/0005-explicit-operand-form-ui.md",
+              "docs/spec.md"
+            ],
+            "precautions": "Verify on a real iOS device before changing anything; inputMode and the dot-only rule are spec decisions (ADR 0005, spec feature 4), so a change needs a spec or ADR update first.",
+            "verification": "",
+            "origin": {
+              "task": "Task 3 frontend (ac3c786e)",
+              "branch": "feat/frontend-ui"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "test-827d163b-4413-58c8-81db-9c3002ae5994",
+            "createdAt": "2026-10-14T01:51:24.015Z",
+            "updatedAt": "2026-10-14T01:51:24.015Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "testing",
       "title": "Percentage overflow fallback can report RESULT_OUT_OF_RANGE for a result that rounds to MaxFloat64",
       "path": "backend/internal/calculator/calculator.go",
       "kind": "function",
@@ -207,6 +327,62 @@
             "id": "test-c472d4d1-dacd-5a1d-8714-643250d3df81",
             "createdAt": "2026-10-13T19:55:16.750Z",
             "updatedAt": "2026-10-13T19:55:16.750Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "testing",
+      "title": "Result panel can render below the fold on short phones after Calculate",
+      "path": "frontend/src/features/calculator/ResultPanel.tsx",
+      "kind": "file",
+      "symbol": "ResultPanel",
+      "evidence": "Verified by the task 3 reviewer in Chrome mobile emulation: at 360x640 and 390x664 the Calculate button bottom is y=627 and the result panel starts at y=668, outside the viewport; nothing scrolls it into view. At 360x740 and 412x800 it is fully visible. Screen reader users get the result through the role=status live region.",
+      "confidence": "verified",
+      "impact": "Sighted touch users on short screens see no outcome until they scroll.",
+      "connections": [
+        "frontend/src/index.css",
+        "frontend/src/features/calculator/Calculator.tsx"
+      ],
+      "precautions": "A fix such as scrollIntoView({ block: 'nearest' }) on status change needs a jsdom stub in src/test/setup.ts and must respect prefers-reduced-motion; do not move focus to the result.",
+      "verification": "",
+      "origin": {
+        "task": "Task 3 frontend (ac3c786e)",
+        "branch": "feat/frontend-ui"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "test-d12065fc-028e-5b3f-8969-5906e397f5e9",
+      "createdAt": "2026-10-14T01:51:24.950Z",
+      "updatedAt": "2026-10-14T01:51:24.950Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-14T01:51:24.950Z",
+          "snapshot": {
+            "category": "testing",
+            "title": "Result panel can render below the fold on short phones after Calculate",
+            "path": "frontend/src/features/calculator/ResultPanel.tsx",
+            "kind": "file",
+            "symbol": "ResultPanel",
+            "evidence": "Verified by the task 3 reviewer in Chrome mobile emulation: at 360x640 and 390x664 the Calculate button bottom is y=627 and the result panel starts at y=668, outside the viewport; nothing scrolls it into view. At 360x740 and 412x800 it is fully visible. Screen reader users get the result through the role=status live region.",
+            "confidence": "verified",
+            "impact": "Sighted touch users on short screens see no outcome until they scroll.",
+            "connections": [
+              "frontend/src/index.css",
+              "frontend/src/features/calculator/Calculator.tsx"
+            ],
+            "precautions": "A fix such as scrollIntoView({ block: 'nearest' }) on status change needs a jsdom stub in src/test/setup.ts and must respect prefers-reduced-motion; do not move focus to the result.",
+            "verification": "",
+            "origin": {
+              "task": "Task 3 frontend (ac3c786e)",
+              "branch": "feat/frontend-ui"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "test-d12065fc-028e-5b3f-8969-5906e397f5e9",
+            "createdAt": "2026-10-14T01:51:24.950Z",
+            "updatedAt": "2026-10-14T01:51:24.950Z"
           }
         }
       ]
