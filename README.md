@@ -93,8 +93,7 @@ on Linux.
 read-only permissions: a backend job (gofmt, vet, tests with `-race`, coverage targets of 95 % and 85 %), a
 frontend job (lint, type check, tests with coverage, build) and a Docker build once both pass. Coverage reports
 are uploaded as artifacts. Dependency scans are manual, not in CI: `govulncheck ./...` in `backend/` (clean on
-Go 1.27.2) and `npm audit --omit=dev` in `frontend/`. The workflow passed `actionlint` locally; it has not run on GitHub yet, so its first
-run happens on the first push.
+Go 1.27.2) and `npm audit --omit=dev` in `frontend/`. The workflow passed `actionlint` locally and its first run on GitHub (`main`, 2026-10-14) passed all three jobs.
 
 **End-to-end check (2026-10-14, manual, not part of CI).** With the backend on :8080 and Vite on :5173, all 17
 contract examples returned the expected status, content type and body both directly and through the Vite proxy.
