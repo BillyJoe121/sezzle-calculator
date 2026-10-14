@@ -1,0 +1,101 @@
+{
+  "category": "vulnerabilities",
+  "title": "Go 1.27.0 toolchain: 6 reachable net/http standard library vulnerabilities fixed in Go 1.27.2",
+  "path": "backend/go.mod",
+  "kind": "file",
+  "symbol": null,
+  "evidence": "Verified: govulncheck on backend/ with go1.27.0 (saved in .forge/tmp/delivery/review/govulncheck.txt) reports 6 vulnerabilities reachable from our code, all fixed in go1.27.2: GO-2026-6617 (HTTP/2 HPACK encoder race, server crash), GO-2026-6613 (HTTP/1 desync after 2xx CONNECT), GO-2026-6612 (HTTP/2 double flow-control refund), GO-2026-6611 (CPU from repeated HTTP/2 initial window changes), GO-2026-6609 (no limit on parsed Range headers, reached through http.FileServer in internal/httpapi/routes.go), GO-2026-6603 (HTTP/2 memory exhaustion via Trailer headers). Traces go through cmd/server/main.go (http.Server.Serve/Shutdown) and internal/httpapi (middleware, routes). go.mod declared go 1.27.0 and the Dockerfile built with golang:1.27.0-bookworm.",
+  "confidence": "verified",
+  "impact": "The shipped binary (Docker image and local builds) was exposed to denial of service (crash, CPU and memory exhaustion) and HTTP/1 desynchronization from untrusted clients.",
+  "connections": [
+    "Dockerfile",
+    "backend/cmd/server/main.go",
+    "backend/internal/httpapi/routes.go",
+    "backend/internal/httpapi/middleware.go",
+    ".github/workflows/ci.yml (setup-go reads go-version-file backend/go.mod)"
+  ],
+  "precautions": "Keep go.mod and the Dockerfile builder on the same patch release; rerun govulncheck (golang.org/x/vuln/cmd/govulncheck) before each release, since new standard library advisories appear often.",
+  "verification": "2026-10-14: backend/go.mod raised to go 1.27.2 and the Dockerfile to golang:1.27.2-bookworm. go version in backend/ reports go1.27.2; govulncheck v1.8.0 ./... prints 'No vulnerabilities found.' (.forge/tmp/delivery/review/govulncheck-1.27.2.txt); go test passes (calculator 100 %, httpapi 95.4 %).",
+  "origin": {
+    "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+    "branch": "feat/delivery"
+  },
+  "priority": "high",
+  "status": "resolved",
+  "id": "vul-4fdf6bb3-c7b2-5e90-802d-f16711065570",
+  "createdAt": "2026-10-14T07:31:10.733Z",
+  "updatedAt": "2026-10-14T07:38:46.327Z",
+  "history": [
+    {
+      "action": "created",
+      "at": "2026-10-14T07:31:10.733Z",
+      "snapshot": {
+        "category": "vulnerabilities",
+        "title": "Go 1.27.0 toolchain: 6 reachable net/http standard library vulnerabilities fixed in Go 1.27.2",
+        "path": "backend/go.mod",
+        "kind": "file",
+        "symbol": null,
+        "evidence": "Verified: govulncheck on backend/ with go1.27.0 (saved in .forge/tmp/delivery/review/govulncheck.txt) reports 6 vulnerabilities reachable from our code, all fixed in go1.27.2: GO-2026-6617 (HTTP/2 HPACK encoder race, server crash), GO-2026-6613 (HTTP/1 desync after 2xx CONNECT), GO-2026-6612 (HTTP/2 double flow-control refund), GO-2026-6611 (CPU from repeated HTTP/2 initial window changes), GO-2026-6609 (no limit on parsed Range headers, reached through http.FileServer in internal/httpapi/routes.go), GO-2026-6603 (HTTP/2 memory exhaustion via Trailer headers). Traces go through cmd/server/main.go (http.Server.Serve/Shutdown) and internal/httpapi (middleware, routes). go.mod declares go 1.27.0 and the Dockerfile builds with golang:1.27.0-bookworm.",
+        "confidence": "verified",
+        "impact": "The shipped binary (Docker image and local builds) is exposed to denial of service (crash, CPU and memory exhaustion) and HTTP/1 desynchronization from untrusted clients. No data at rest, but the service is the whole product.",
+        "connections": [
+          "Dockerfile",
+          "backend/cmd/server/main.go",
+          "backend/internal/httpapi/routes.go",
+          "backend/internal/httpapi/middleware.go",
+          ".github/workflows/ci.yml (setup-go reads go-version-file backend/go.mod)"
+        ],
+        "precautions": "Fix by raising go.mod to go 1.27.2 and the Dockerfile builder to golang:1.27.2-bookworm, update the docs that cite 1.27.0, then rerun go vet, go test, govulncheck and the Docker smoke. Do not add a toolchain directive or third-party modules.",
+        "verification": "",
+        "origin": {
+          "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+          "branch": "feat/delivery"
+        },
+        "priority": "high",
+        "status": "open",
+        "id": "vul-4fdf6bb3-c7b2-5e90-802d-f16711065570",
+        "createdAt": "2026-10-14T07:31:10.733Z",
+        "updatedAt": "2026-10-14T07:31:10.733Z"
+      }
+    },
+    {
+      "action": "updated",
+      "at": "2026-10-14T07:38:46.327Z",
+      "changedFields": [
+        "evidence",
+        "impact",
+        "precautions",
+        "verification",
+        "status"
+      ],
+      "snapshot": {
+        "category": "vulnerabilities",
+        "title": "Go 1.27.0 toolchain: 6 reachable net/http standard library vulnerabilities fixed in Go 1.27.2",
+        "path": "backend/go.mod",
+        "kind": "file",
+        "symbol": null,
+        "evidence": "Verified: govulncheck on backend/ with go1.27.0 (saved in .forge/tmp/delivery/review/govulncheck.txt) reports 6 vulnerabilities reachable from our code, all fixed in go1.27.2: GO-2026-6617 (HTTP/2 HPACK encoder race, server crash), GO-2026-6613 (HTTP/1 desync after 2xx CONNECT), GO-2026-6612 (HTTP/2 double flow-control refund), GO-2026-6611 (CPU from repeated HTTP/2 initial window changes), GO-2026-6609 (no limit on parsed Range headers, reached through http.FileServer in internal/httpapi/routes.go), GO-2026-6603 (HTTP/2 memory exhaustion via Trailer headers). Traces go through cmd/server/main.go (http.Server.Serve/Shutdown) and internal/httpapi (middleware, routes). go.mod declares go 1.27.0 and the Dockerfile builds with golang:1.27.0-bookworm.",
+        "confidence": "verified",
+        "impact": "The shipped binary (Docker image and local builds) is exposed to denial of service (crash, CPU and memory exhaustion) and HTTP/1 desynchronization from untrusted clients. No data at rest, but the service is the whole product.",
+        "connections": [
+          "Dockerfile",
+          "backend/cmd/server/main.go",
+          "backend/internal/httpapi/routes.go",
+          "backend/internal/httpapi/middleware.go",
+          ".github/workflows/ci.yml (setup-go reads go-version-file backend/go.mod)"
+        ],
+        "precautions": "Fix by raising go.mod to go 1.27.2 and the Dockerfile builder to golang:1.27.2-bookworm, update the docs that cite 1.27.0, then rerun go vet, go test, govulncheck and the Docker smoke. Do not add a toolchain directive or third-party modules.",
+        "verification": "",
+        "origin": {
+          "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+          "branch": "feat/delivery"
+        },
+        "priority": "high",
+        "status": "open",
+        "id": "vul-4fdf6bb3-c7b2-5e90-802d-f16711065570",
+        "createdAt": "2026-10-14T07:31:10.733Z",
+        "updatedAt": "2026-10-14T07:31:10.733Z"
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "category": "documentation",
+  "title": "sqrt-negative example and openapi.yaml show a detail text the server never returns",
+  "path": "docs/api/examples/sqrt-negative.json",
+  "kind": "file",
+  "symbol": null,
+  "evidence": "Verified 2026-10-14 by the task 4 E2E smoke (curl direct on :8080 and through the Vite proxy on :5173) replaying docs/api/examples/sqrt-negative.json: the server returns 422 DOMAIN_ERROR with detail \"The operation is undefined for these operands.\" while the example and openapi.yaml (line 331) show \"Square root of a negative number is undefined.\". Status, content type, code and every other member match. backend/internal/httpapi/contract_test.go only requires detail to be non-empty, and openapi.yaml says detail is not part of the contract, so no test fails. Task 2 kept a generic DOMAIN_ERROR detail on purpose (review nit left as is).",
+  "confidence": "verified",
+  "impact": "Low: clients branch on code only; a reader comparing the README or the examples with real responses sees a different sentence for this one case.",
+  "connections": [
+    "docs/api/openapi.yaml",
+    "backend/internal/httpapi/calculations.go",
+    "backend/internal/httpapi/contract_test.go",
+    "README.md"
+  ],
+  "precautions": "docs/api is changed only in its own contract branch. Either align the example and openapi.yaml with the generic detail, or make the backend detail operation-specific in a backend branch; do not patch one side alone.",
+  "verification": "After the fix, the task 4 E2E comparison reports no detail differences for the 17 examples.",
+  "origin": {
+    "task": "Task 4 integration and delivery (490b37cc)",
+    "branch": "feat/delivery"
+  },
+  "priority": "low",
+  "status": "open",
+  "id": "doc-cd1bf90f-871f-52c8-8e5d-e765f976014b",
+  "createdAt": "2026-10-14T06:07:15.296Z",
+  "updatedAt": "2026-10-14T06:07:15.296Z",
+  "history": [
+    {
+      "action": "created",
+      "at": "2026-10-14T06:07:15.296Z",
+      "snapshot": {
+        "category": "documentation",
+        "title": "sqrt-negative example and openapi.yaml show a detail text the server never returns",
+        "path": "docs/api/examples/sqrt-negative.json",
+        "kind": "file",
+        "symbol": null,
+        "evidence": "Verified 2026-10-14 by the task 4 E2E smoke (curl direct on :8080 and through the Vite proxy on :5173) replaying docs/api/examples/sqrt-negative.json: the server returns 422 DOMAIN_ERROR with detail \"The operation is undefined for these operands.\" while the example and openapi.yaml (line 331) show \"Square root of a negative number is undefined.\". Status, content type, code and every other member match. backend/internal/httpapi/contract_test.go only requires detail to be non-empty, and openapi.yaml says detail is not part of the contract, so no test fails. Task 2 kept a generic DOMAIN_ERROR detail on purpose (review nit left as is).",
+        "confidence": "verified",
+        "impact": "Low: clients branch on code only; a reader comparing the README or the examples with real responses sees a different sentence for this one case.",
+        "connections": [
+          "docs/api/openapi.yaml",
+          "backend/internal/httpapi/calculations.go",
+          "backend/internal/httpapi/contract_test.go",
+          "README.md"
+        ],
+        "precautions": "docs/api is changed only in its own contract branch. Either align the example and openapi.yaml with the generic detail, or make the backend detail operation-specific in a backend branch; do not patch one side alone.",
+        "verification": "After the fix, the task 4 E2E comparison reports no detail differences for the 17 examples.",
+        "origin": {
+          "task": "Task 4 integration and delivery (490b37cc)",
+          "branch": "feat/delivery"
+        },
+        "priority": "low",
+        "status": "open",
+        "id": "doc-cd1bf90f-871f-52c8-8e5d-e765f976014b",
+        "createdAt": "2026-10-14T06:07:15.296Z",
+        "updatedAt": "2026-10-14T06:07:15.296Z"
+      }
+    }
+  ]
+}

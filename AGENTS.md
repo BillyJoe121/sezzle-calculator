@@ -16,45 +16,47 @@ correctness, clarity, maintainability. No extra features.
 
 ```text
 .claude/skills/   vendored agent skills (do not edit; see its README)
-backend/          Go service, standard library only        (created in task 2)
-frontend/         React + TypeScript + Vite app            (created in task 3)
+.github/          CI workflow (backend, frontend and Docker build jobs)
+backend/          Go service, standard library only
+frontend/         React + TypeScript + Vite app
 docs/
   spec.md         product spec and acceptance criteria
-  architecture.md components, layers, numeric and error models, tests, branch plan
+  architecture.md components, layers, numeric and error models, tests, delivery, branch plan
   adr/            architecture decision records
   api/            OpenAPI 3.1 contract and executable examples (source of truth)
-  ai/             how the project was built with AI agents
-deuda tecnica/    technical debt register, maintained with forge_debt (created with the first finding)
+  coverage.md     observed coverage and how to regenerate it
+  ai/             how the project was built with AI agents, and the prompts used
+deuda tecnica/    technical debt register, maintained with forge_debt
 .forge/           Forge records; changes/ and workflow/ are versioned evidence
+Dockerfile        multi-stage image: Node build, Go build, distroless runtime on :8080
 ```
 
 ## Commands
 
-Available now:
-
 ```sh
 npx --yes @redocly/cli@2.54.2 lint docs/api/openapi.yaml   # validate the contract
-```
 
-Planned. These do not exist until the task in brackets lands; do not claim to have run them before that:
-
-```sh
-# backend/ [task 2]
+# backend/
 go run ./cmd/server                                          # serve on :8080 (PORT, STATIC_DIR)
 go test ./...                                                # unit and contract tests
 go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out
 go vet ./... && gofmt -l .
 
-# frontend/ [task 3]
+# frontend/ (Node 24.15+ or 22.22.2+)
 npm ci
 npm run dev                                                  # Vite on :5173, proxies /api and /healthz to :8080
 npm test                                                     # Vitest with coverage and thresholds
+npm run lint
 npm run typecheck
 npm run build
 
-# repository root [task 4]
+# repository root
 docker build -t sezzle-calculator . && docker run --rm -p 8080:8080 sezzle-calculator
 ```
+
+`go test -race` needs cgo; it runs in CI on Linux. CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs
+the Go and frontend checks above and a Docker build on every push and pull request; it does not run the contract
+lint, `govulncheck` or `npm audit`, which are manual.
 
 ## The contract is the source of truth
 
@@ -74,7 +76,7 @@ docker build -t sezzle-calculator . && docker run --rm -p 8080:8080 sezzle-calcu
   Never report a check you did not run.
 - **Ponytail.** Smallest coherent change. Prefer existing code, then the standard library, then the platform.
   Never remove validation, security controls, accessibility or error handling to make something shorter.
-- **TDD.** For domain logic, request decoding and validation, `parseOperand` and `formatResult`, write the
+- **TDD.** For domain logic, request decoding and validation, `parseOperand` and `formatNumber`, write the
   failing test first. Coverage targets: `internal/calculator` ≥ 95 %, `internal/httpapi` ≥ 85 %,
   frontend ≥ 85 % (lines).
 - **500 lines.** No hand-maintained file exceeds 500 physical lines (generated files, lockfiles, vendored skills

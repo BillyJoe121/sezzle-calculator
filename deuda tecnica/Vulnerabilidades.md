@@ -1,6 +1,6 @@
 <!-- forge:technical-debt:view -->
 # Vulnerabilidades
 
-Hallazgos: 0 | Abiertos: 0
+Hallazgos: 1 | Abiertos: 0
 
-Sin hallazgos registrados.
+- [Pagina 1](paginas\vulnerabilities/001.md)

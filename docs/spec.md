@@ -41,10 +41,10 @@ reporting errors consistently, and making both layers agree on that behavior whi
 
 | Layer | Choice |
 |-------|--------|
-| Backend | Go, standard library only: `net/http` with method patterns (Go 1.22+), `encoding/json`, `log/slog`, `math`. `go.mod` declares `go 1.27.0`, the toolchain it is developed and tested with. |
+| Backend | Go, standard library only: `net/http` with method patterns (Go 1.22+), `encoding/json`, `log/slog`, `math`. `go.mod` declares `go 1.27.2`, the first 1.27 release without the `net/http` vulnerabilities `govulncheck` reports for 1.27.0. |
 | Frontend | React with TypeScript and Vite; Vitest, Testing Library and MSW for tests; npm. |
 | Contract | OpenAPI 3.1 plus executable JSON examples. |
-| Delivery | Multi-stage Dockerfile producing one image (task 4). |
+| Delivery | Multi-stage Dockerfile producing one distroless, non-root image; GitHub Actions CI. |
 
 ## Features
 
@@ -89,8 +89,10 @@ reporting errors consistently, and making both layers agree on that behavior whi
 
 - Local development: backend on `:8080` (`PORT`), Vite dev server on `:5173` proxying `/api` and `/healthz` to
   `http://localhost:8080`.
-- Container (task 4): one image; the Go server serves the API and, through `STATIC_DIR`, the built frontend on
-  port 8080 from the same origin.
+- Container: one image; the Go server serves the API and, through `STATIC_DIR`, the built frontend on
+  port 8080 from the same origin (`docker build -t sezzle-calculator .`, `docker run --rm -p 8080:8080 sezzle-calculator`).
+- CI: GitHub Actions on every push and pull request runs the backend and frontend checks with coverage targets
+  and builds the image.
 
 ## Acceptance criteria
 
@@ -117,11 +119,11 @@ One verifiable criterion per requirement of the assessment.
 | AC17 | Clean, readable, idiomatic code | `gofmt -l` prints nothing, `go vet ./...` passes, `npm run typecheck` passes; review recorded in Forge. |
 | AC18 | Unit tests for key functionality in both layers | `go test ./...` and `npm test` pass. |
 | AC19 | Documentation of setup, API usage and design reasoning | README sections are complete; ADRs 0001–0006 exist; `docs/api/README.md` explains the contract. |
-| AC20 | Dockerfile (optional) | `docker build` succeeds and the container answers `GET /healthz` and serves the UI on port 8080 (task 4). |
+| AC20 | Dockerfile (optional) | `docker build` succeeds and the container answers `GET /healthz` and serves the UI on port 8080. |
 | AC21 | Git repository with frontend and backend | `backend/` and `frontend/` are merged into `main` with a history of one branch per task. |
 | AC22 | README with setup, running each part, API call examples, decisions and assumptions | Every README section is filled in; each `curl` example reproduces its file in `docs/api/examples/`. |
 | AC23 | Tests and coverage report | Coverage commands print the per-layer percentages and meet the targets in Quality. |
-| AC24 | Prompts used | The prompts for all four tasks are committed under `docs/ai/` (task 4). |
+| AC24 | Prompts used | The prompts for all four tasks are committed under `docs/ai/` (`PROMPTS.md` and the Word originals). |
 
 ## Assumptions
 
@@ -160,4 +162,5 @@ numeric response field; `power(0, 0) = 1`; underflow to zero is not an error; a 
 ## Open questions
 
 - Project license: none has been chosen, so `openapi.yaml` has no `info.license` (a known lint warning).
-- Coverage threshold enforcement for Go in CI (a script or `go tool cover` parsing) is decided in task 4.
+- Resolved in task 4: CI enforces the Go coverage targets per package by parsing the `go test -cover` output
+  (an `awk` step in `.github/workflows/ci.yml`); no extra tool or script file is needed.

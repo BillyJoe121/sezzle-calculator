@@ -1,0 +1,1575 @@
+{
+  "schemaVersion": 1,
+  "taskId": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d",
+  "level": "fullhouse",
+  "initialBase": {
+    "noGit": false,
+    "head": "90cc92fb6f424eb6d9d0627b6977693ec1c641c2",
+    "branch": "feat/delivery",
+    "intent": "Task 4: integration and delivery. Verify the already-merged backend and frontend end to end, add Dockerfile, .dockerignore, GitHub Actions CI, docs/coverage.md, final README, docs/ai/PROMPTS.md with the four original prompts, final docs/ai/WORKFLOW.md, and update shared docs (architecture, spec, AGENTS.md, ADRs) and documentation debt.",
+    "scope": [
+      "Dockerfile",
+      ".dockerignore",
+      ".github/workflows/ci.yml",
+      ".gitignore",
+      "README.md",
+      "AGENTS.md",
+      "docs/coverage.md",
+      "docs/spec.md",
+      "docs/architecture.md",
+      "docs/adr/0006-single-container-same-origin-no-cors.md",
+      "docs/ai/WORKFLOW.md",
+      "docs/ai/PROMPTS.md",
+      "backend/README.md",
+      "frontend/README.md",
+      "deuda tecnica/registry.json",
+      "deuda tecnica/index.md",
+      "deuda tecnica/Documentacion.md",
+      "deuda tecnica/registros/doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json"
+    ]
+  },
+  "mode": "simple",
+  "reads": [
+    {
+      "path": ".claude/skills/forge-core/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\forge-core\\SKILL.md",
+      "hash": "283b267f6d8eb96b93e365119fe29a318f269baa25e53bc352f859177b050d27",
+      "bytes": 7334,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.371Z"
+    },
+    {
+      "path": ".claude/skills/ci-cd-and-automation/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\ci-cd-and-automation\\SKILL.md",
+      "hash": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+      "bytes": 11332,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.373Z"
+    },
+    {
+      "path": ".claude/skills/security-and-hardening/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\security-and-hardening\\SKILL.md",
+      "hash": "73ef1f395ba2181cffae046c16186d8d1b1964c14b90d1060c9f37699227931d",
+      "bytes": 20583,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.375Z"
+    },
+    {
+      "path": ".claude/skills/documentation-and-adrs/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\documentation-and-adrs\\SKILL.md",
+      "hash": "b867bb80fb681257c7625ae59a0dfd849b1fc0f0a2f0338e7923f38030df9793",
+      "bytes": 9782,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.377Z"
+    },
+    {
+      "path": ".claude/skills/code-review-and-quality/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\code-review-and-quality\\SKILL.md",
+      "hash": "d131d279f40f849eeae8249e39ce54c5c669564e6baa74f278f52a2ad36f82c8",
+      "bytes": 20591,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.379Z"
+    },
+    {
+      "path": ".claude/skills/git-workflow-and-versioning/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\git-workflow-and-versioning\\SKILL.md",
+      "hash": "51677cf03845dd29d08ea4d3125665057b720aea3dccc572f25d8b172409ece6",
+      "bytes": 14000,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.381Z"
+    },
+    {
+      "path": ".claude/skills/ponytail/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\ponytail\\SKILL.md",
+      "hash": "3f7f0dfb83c330888cead5ae696495d5ed6fd814bd53800df80388364ab7ef6f",
+      "bytes": 1656,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.384Z"
+    },
+    {
+      "path": ".claude/skills/antislop/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.claude\\skills\\antislop\\SKILL.md",
+      "hash": "667db43ca4d4c3ce7eb7c0f3e9e81a7c9e881c3f517491aa1a55fb5fed6b9093",
+      "bytes": 1765,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.385Z"
+    },
+    {
+      "path": "AGENTS.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\AGENTS.md",
+      "hash": "36eecbaee6d91114698f7bb8952c15c34d3b19c779126168cd86d64ca3d43a49",
+      "bytes": 7055,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.588Z"
+    },
+    {
+      "path": "README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\README.md",
+      "hash": "a23cf9e14a22b018fdf861ad2ed9ef5bc02b44a9949bfc2aa86560681db5c89c",
+      "bytes": 13044,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:41:32.108Z"
+    },
+    {
+      "path": "docs/spec.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\spec.md",
+      "hash": "eab38c15cb690ad00b9f89eec3299400b06b43108eb89397556c9b05fe028895",
+      "bytes": 12610,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.593Z"
+    },
+    {
+      "path": "docs/architecture.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\architecture.md",
+      "hash": "40003b4b564f344477881625be2cffc2bef9a45e7f349fb208a8b3eddb3e9039",
+      "bytes": 15729,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.596Z"
+    },
+    {
+      "path": "docs/ai/WORKFLOW.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\ai\\WORKFLOW.md",
+      "hash": "f3e139b5fb4ca707a0b27c478c408ef62d3d57b4510ab916b2784a5fd9319b9e",
+      "bytes": 8094,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.602Z"
+    },
+    {
+      "path": "docs/adr/0006-single-container-same-origin-no-cors.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0006-single-container-same-origin-no-cors.md",
+      "hash": "5f48f56a01d6b4430402081d69683dc9c7ce0b082f6e682147b9e8fa5dfec7f8",
+      "bytes": 1913,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.396Z"
+    },
+    {
+      "path": "backend/README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\backend\\README.md",
+      "hash": "35c881aab3bf3dc4ea8c9d5d8935c2c061e7766b3b5056933db85407343e5e96",
+      "bytes": 2872,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.611Z"
+    },
+    {
+      "path": "frontend/README.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\frontend\\README.md",
+      "hash": "07b0ee85fcb4633694895a944badb641aa000942f82f632224d1aad6284e0544",
+      "bytes": 3161,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.072Z"
+    },
+    {
+      "path": "backend/cmd/server/main.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\backend\\cmd\\server\\main.go",
+      "hash": "b8f175fb06cdd0da3e43cfc93af2dd97b9e0099dd77d50992115e7711ac73866",
+      "bytes": 2598,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.404Z"
+    },
+    {
+      "path": "backend/internal/httpapi/routes.go",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\backend\\internal\\httpapi\\routes.go",
+      "hash": "bdec415b87b262c46ef3c11217f26afa09e0d781e952856e99780bba8c72742d",
+      "bytes": 2386,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.408Z"
+    },
+    {
+      "path": "backend/go.mod",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\backend\\go.mod",
+      "hash": "771c08ef430f9027869542f786e07bfbbde0ebefba5ea418bfa7491dc8c95bcd",
+      "bytes": 67,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.609Z"
+    },
+    {
+      "path": "frontend/package.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\frontend\\package.json",
+      "hash": "5a694c82fd10c87c4db91e17ba9efa60eb9130cab4d22b3471473cf5234cd081",
+      "bytes": 1031,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.412Z"
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\frontend\\vite.config.ts",
+      "hash": "1d81f7cdeb0219bd3c34084be882310b878a94570a2fdcf27888b184c65538d8",
+      "bytes": 721,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.414Z"
+    },
+    {
+      "path": ".gitignore",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.gitignore",
+      "hash": "83956950d6044010bd25307035b8991478ffbbe4bb89e27651cc959524368aad",
+      "bytes": 535,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.047Z"
+    },
+    {
+      "path": "deuda tecnica/registros/doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\registros\\doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json",
+      "hash": "04aee06547d631500aa289f6cd47e49f150a8892af1ac8ba100546b55b2cafbf",
+      "bytes": 6446,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.097Z"
+    },
+    {
+      "path": "deuda tecnica/registros/doc-b17a3c61-2e73-5427-8157-aa09c5f4f3dd.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\registros\\doc-b17a3c61-2e73-5427-8157-aa09c5f4f3dd.json",
+      "hash": "895e03ea9c37ad3aea77f37b5db2c52c82bd4e17bbb2523b55373ec010948c42",
+      "bytes": 2729,
+      "kind": "project",
+      "observedAt": "2026-10-14T05:30:42.419Z"
+    },
+    {
+      "path": "skills/forge-core/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\forge-core\\SKILL.md",
+      "hash": "283b267f6d8eb96b93e365119fe29a318f269baa25e53bc352f859177b050d27",
+      "bytes": 7334,
+      "kind": "skill",
+      "skill": "forge-core",
+      "observedAt": "2026-10-14T05:30:42.421Z"
+    },
+    {
+      "path": "skills/ci-cd-and-automation/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\ci-cd-and-automation\\SKILL.md",
+      "hash": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+      "bytes": 11332,
+      "kind": "skill",
+      "skill": "ci-cd-and-automation",
+      "observedAt": "2026-10-14T05:30:42.423Z"
+    },
+    {
+      "path": "skills/security-and-hardening/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\security-and-hardening\\SKILL.md",
+      "hash": "73ef1f395ba2181cffae046c16186d8d1b1964c14b90d1060c9f37699227931d",
+      "bytes": 20583,
+      "kind": "skill",
+      "skill": "security-and-hardening",
+      "observedAt": "2026-10-14T05:30:42.424Z"
+    },
+    {
+      "path": "skills/documentation-and-adrs/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\documentation-and-adrs\\SKILL.md",
+      "hash": "b867bb80fb681257c7625ae59a0dfd849b1fc0f0a2f0338e7923f38030df9793",
+      "bytes": 9782,
+      "kind": "skill",
+      "skill": "documentation-and-adrs",
+      "observedAt": "2026-10-14T05:30:42.426Z"
+    },
+    {
+      "path": "skills/code-review-and-quality/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\code-review-and-quality\\SKILL.md",
+      "hash": "d131d279f40f849eeae8249e39ce54c5c669564e6baa74f278f52a2ad36f82c8",
+      "bytes": 20591,
+      "kind": "skill",
+      "skill": "code-review-and-quality",
+      "observedAt": "2026-10-14T05:30:42.428Z"
+    },
+    {
+      "path": "skills/git-workflow-and-versioning/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\git-workflow-and-versioning\\SKILL.md",
+      "hash": "51677cf03845dd29d08ea4d3125665057b720aea3dccc572f25d8b172409ece6",
+      "bytes": 14000,
+      "kind": "skill",
+      "skill": "git-workflow-and-versioning",
+      "observedAt": "2026-10-14T05:30:42.431Z"
+    },
+    {
+      "path": "skills/ponytail/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\ponytail\\SKILL.md",
+      "hash": "3f7f0dfb83c330888cead5ae696495d5ed6fd814bd53800df80388364ab7ef6f",
+      "bytes": 1656,
+      "kind": "skill",
+      "skill": "ponytail",
+      "observedAt": "2026-10-14T05:30:42.432Z"
+    },
+    {
+      "path": "skills/antislop/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\antislop\\SKILL.md",
+      "hash": "667db43ca4d4c3ce7eb7c0f3e9e81a7c9e881c3f517491aa1a55fb5fed6b9093",
+      "bytes": 1765,
+      "kind": "skill",
+      "skill": "antislop",
+      "observedAt": "2026-10-14T05:30:42.434Z"
+    },
+    {
+      "path": "skills/using-agent-skills/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\using-agent-skills\\SKILL.md",
+      "hash": "bc7ea6c6f14780ffc81c2a37266b51744d0715d62e0770ba93258ec204c78dc7",
+      "bytes": 10318,
+      "kind": "skill",
+      "skill": "using-agent-skills",
+      "observedAt": "2026-10-14T05:34:30.849Z"
+    },
+    {
+      "path": "skills/core-project-workflow/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\core-project-workflow\\SKILL.md",
+      "hash": "9507ad077b433c50ae380b3a3d5245c8110d7cad16566ab3ba5886db89009d24",
+      "bytes": 3588,
+      "kind": "skill",
+      "skill": "core-project-workflow",
+      "observedAt": "2026-10-14T05:34:30.852Z"
+    },
+    {
+      "path": "skills/incremental-implementation/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\incremental-implementation\\SKILL.md",
+      "hash": "e24f8df714d6ce198a9efedb67cc9882f9d0ad8743017da3dc1b2de300137847",
+      "bytes": 9525,
+      "kind": "skill",
+      "skill": "incremental-implementation",
+      "observedAt": "2026-10-14T05:34:30.855Z"
+    },
+    {
+      "path": "skills/test-driven-development/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\test-driven-development\\SKILL.md",
+      "hash": "24f5f59f5c600038bcce011487fd6b57c276c59315aa0559d0fdfd5de7ef3f8d",
+      "bytes": 16501,
+      "kind": "skill",
+      "skill": "test-driven-development",
+      "observedAt": "2026-10-14T05:34:30.858Z"
+    },
+    {
+      "path": "skills/debugging-and-error-recovery/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\debugging-and-error-recovery\\SKILL.md",
+      "hash": "67ce2c9442da0c5a6e3515617fc9c4003cfe232ef7c7210da342f40f508f9958",
+      "bytes": 10837,
+      "kind": "skill",
+      "skill": "debugging-and-error-recovery",
+      "observedAt": "2026-10-14T05:34:30.861Z"
+    },
+    {
+      "path": "skills/design-systems-and-tokens/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\design-systems-and-tokens\\SKILL.md",
+      "hash": "19e9962d8cbc575acdc40395c947e95520ec31e3d842b839a43a8e44a7b045b0",
+      "bytes": 4257,
+      "kind": "skill",
+      "skill": "design-systems-and-tokens",
+      "observedAt": "2026-10-14T05:34:30.864Z"
+    },
+    {
+      "path": "skills/design-md/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\design-md\\SKILL.md",
+      "hash": "f7418890856c3fb2cae9310f9e615430ee0de1731b975a80041be2c4b99f4aeb",
+      "bytes": 3852,
+      "kind": "skill",
+      "skill": "design-md",
+      "observedAt": "2026-10-14T05:34:30.866Z"
+    },
+    {
+      "path": "skills/curate-interface-sources/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\curate-interface-sources\\SKILL.md",
+      "hash": "5604ad6e23e1ee8ea6741f61f341e636ea6025e8c7683be9da7ff6d2795be9d3",
+      "bytes": 2290,
+      "kind": "skill",
+      "skill": "curate-interface-sources",
+      "observedAt": "2026-10-14T05:34:30.868Z"
+    },
+    {
+      "path": "skills/design-taste-frontend/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\design-taste-frontend\\SKILL.md",
+      "hash": "2e064e92aca020b2e0bad69326fe7ea55d59005ed53d1a8cbce1bd135d44b8b3",
+      "bytes": 88459,
+      "kind": "skill",
+      "skill": "design-taste-frontend",
+      "observedAt": "2026-10-14T05:34:30.871Z"
+    },
+    {
+      "path": "skills/impeccable/SKILL.md",
+      "realPath": "C:\\Users\\joshe\\Downloads\\Proyectos\\MyConfig\\skills\\impeccable\\SKILL.md",
+      "hash": "a1a55ec5e176f5cabb27eadf7ac12eb17b013f7aa36088cba135d4fcd9e6395f",
+      "bytes": 10720,
+      "kind": "skill",
+      "skill": "impeccable",
+      "observedAt": "2026-10-14T05:34:30.874Z"
+    },
+    {
+      "path": "deuda tecnica/registry.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\registry.json",
+      "hash": "fd236bf9056709cc3146a9107b1744878d2af3a9d914d1becd3ed3f3ce0e8cb8",
+      "bytes": 45062,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.615Z"
+    },
+    {
+      "path": "deuda tecnica/index.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\index.md",
+      "hash": "4c6ab36d45589cd6dcbb23163df98673b0d660764b0806f7bef2be7600f22989",
+      "bytes": 800,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.619Z"
+    },
+    {
+      "path": "deuda tecnica/Documentacion.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\Documentacion.md",
+      "hash": "9be9cd8f348cf988dc8399889dd26536147abc2f76f456517313773a787a0172",
+      "bytes": 123,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.079Z"
+    },
+    {
+      "path": "deuda tecnica/paginas/documentation/001.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\paginas\\documentation\\001.md",
+      "hash": "ac4656bad42bc875a7183f74d4dd24d63b00d320c6f5f8812a7b4c105566ba1a",
+      "bytes": 6342,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.090Z"
+    },
+    {
+      "path": "Dockerfile",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\Dockerfile",
+      "hash": "ceea94e51c53e81a3772d3d7ae4435d1d0058da8e1902a87658c25920b5678b2",
+      "bytes": 1126,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.578Z"
+    },
+    {
+      "path": ".dockerignore",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.dockerignore",
+      "hash": "2b09af38891ca16d071398a955672e08dba95a9ebb6761a1f3a53608939f12c7",
+      "bytes": 238,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.580Z"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\.github\\workflows\\ci.yml",
+      "hash": "cb2df7969462804441e30806f734e35d5770f371e2227e5014c39bf6ae800f1f",
+      "bytes": 3830,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:31:15.780Z"
+    },
+    {
+      "path": "docs/adr/0004-go-standard-library-without-framework.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\adr\\0004-go-standard-library-without-framework.md",
+      "hash": "62495321a8c3ec4270d30e3fa967e4e0ec0fbcfa2a7c260e986aea7b24ffebb7",
+      "bytes": 2151,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.598Z"
+    },
+    {
+      "path": "docs/coverage.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\coverage.md",
+      "hash": "e65d23ad56c56b6bed2dbbab4384288b01ddb9b2a6e73b5bd57df3e177e311c9",
+      "bytes": 2746,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:41:32.110Z"
+    },
+    {
+      "path": "docs/ai/PROMPTS.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\ai\\PROMPTS.md",
+      "hash": "6e9dbe045fb396e8c4fc515e5bd4ba46c252d91f030633cb052e21d9322d4c95",
+      "bytes": 51332,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.057Z"
+    },
+    {
+      "path": "docs/ai/prompts/Prompt 1 - Fundacion, contrato y arquitectura.docx",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\ai\\prompts\\Prompt 1 - Fundacion, contrato y arquitectura.docx",
+      "hash": "6070769711041aecfff7c5257c9c04994d4cd6ce4c06b0d9d01a19f6a812c847",
+      "bytes": 18944,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.060Z"
+    },
+    {
+      "path": "docs/ai/prompts/Prompt 2 - Backend Go.docx",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\ai\\prompts\\Prompt 2 - Backend Go.docx",
+      "hash": "1a6fd1b1b07721eef6502f2ea546bcb9076566ae70c2f1d16d296d25c3c893ba",
+      "bytes": 15704,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.063Z"
+    },
+    {
+      "path": "docs/ai/prompts/Prompt 3 - Frontend React.docx",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\ai\\prompts\\Prompt 3 - Frontend React.docx",
+      "hash": "fd5d50d3d30a2ed2eeb26f98f07e18acc241d7ab912e36f399126961ed6a0aab",
+      "bytes": 16184,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.067Z"
+    },
+    {
+      "path": "docs/ai/prompts/Prompt 4 - Integracion y entrega.docx",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\docs\\ai\\prompts\\Prompt 4 - Integracion y entrega.docx",
+      "hash": "fb22894c293bc1050772a0faac1854a44e8b677389372f7c12835cf9a9f75ae7",
+      "bytes": 15885,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.069Z"
+    },
+    {
+      "path": "deuda tecnica/Pruebas y confiabilidad.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\Pruebas y confiabilidad.md",
+      "hash": "51afe3d0ba348cc8bd1133132746e742caadbb6a26c3d95045e1c06e04bbe88a",
+      "bytes": 127,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.083Z"
+    },
+    {
+      "path": "deuda tecnica/Vulnerabilidades.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\Vulnerabilidades.md",
+      "hash": "c2ca4eb9c0c8e69c762f1c032d478724695a01642eec233f1d7d3a3aa18f534f",
+      "bytes": 128,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.629Z"
+    },
+    {
+      "path": "deuda tecnica/Rendimiento.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\Rendimiento.md",
+      "hash": "3aad1ae3209862a5637e04024c2161eea35025c0036152abf87aca2eb2dc74a7",
+      "bytes": 119,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.631Z"
+    },
+    {
+      "path": "deuda tecnica/paginas/testing/001.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\paginas\\testing\\001.md",
+      "hash": "4383be289c9776408d0a671cf89a9e464ee79c6304caceb9472d1a2c35d0f8e0",
+      "bytes": 5313,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.093Z"
+    },
+    {
+      "path": "deuda tecnica/paginas/vulnerabilities/001.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\paginas\\vulnerabilities\\001.md",
+      "hash": "ee5586c07340ca53499f09c99c03cf87243f6210529e4e08a6057407ec207441",
+      "bytes": 2128,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.640Z"
+    },
+    {
+      "path": "deuda tecnica/registros/doc-cd1bf90f-871f-52c8-8e5d-e765f976014b.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\registros\\doc-cd1bf90f-871f-52c8-8e5d-e765f976014b.json",
+      "hash": "98e26e005c2612018e16f770bcb03f2334f7085533e2dedd9ff793bc45d04d8a",
+      "bytes": 4007,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.100Z"
+    },
+    {
+      "path": "deuda tecnica/registros/test-73515323-6808-55fc-8986-df71ccb1d429.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\registros\\test-73515323-6808-55fc-8986-df71ccb1d429.json",
+      "hash": "549db91d7a31fcac8077e0c1fa430dcfba130dfb4e09296bd4cddde0c271508a",
+      "bytes": 3869,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:33:07.104Z"
+    },
+    {
+      "path": "deuda tecnica/registros/vul-4fdf6bb3-c7b2-5e90-802d-f16711065570.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\registros\\vul-4fdf6bb3-c7b2-5e90-802d-f16711065570.json",
+      "hash": "dc2893f47b53d0d8712628496f36d1192954ca8053a7a907850f6361331bce4a",
+      "bytes": 7127,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.655Z"
+    },
+    {
+      "path": "deuda tecnica/paginas/performance/001.md",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\paginas\\performance\\001.md",
+      "hash": "1e6c9171d340ce913f5b8713bef6491203634aa97496bacc78d6e8cf66c3cfc6",
+      "bytes": 1318,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.659Z"
+    },
+    {
+      "path": "deuda tecnica/registros/perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d.json",
+      "realPath": "C:\\Users\\joshe\\Desktop\\AssessmentSezzle\\deuda tecnica\\registros\\perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d.json",
+      "hash": "346629e4769f2877986717525cd206e1b97d9944f22eeed0989acb842282d38a",
+      "bytes": 3189,
+      "kind": "project",
+      "observedAt": "2026-10-14T07:40:21.660Z"
+    }
+  ],
+  "checks": [
+    {
+      "receiptId": "0c551b70-7ed8-4074-b9d3-14eb37f65b64",
+      "id": "go-fmt",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:42:03.881Z",
+      "finishedAt": "2026-10-14T07:42:04.213Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/gofmt.test.mjs",
+          "hash": "c42e602ea77130ba82053edec40356ff60654de8dbfbad466b94d5eaf935895e"
+        }
+      ],
+      "outputHash": "fef72c8802396192b0252182df744aa0af4d83758c8783d32fd3ae5fe3dd7a17",
+      "outputBytes": 202
+    },
+    {
+      "receiptId": "5fedc438-9db1-49a5-b835-4fee524047a2",
+      "id": "go-vet",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:42:04.702Z",
+      "finishedAt": "2026-10-14T07:42:09.998Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/vet.test.mjs",
+          "hash": "25ff244678e9f862e8839b0557585decb81f372055a5f03e6fa16b7934d8731a"
+        }
+      ],
+      "outputHash": "9e22d77e932bca0008e53d895e4f0760866f0b694fe556e360180b553cf0a551",
+      "outputBytes": 428
+    },
+    {
+      "receiptId": "95b1e23b-41ff-4ad8-b242-f148857eb08e",
+      "id": "go-test",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:42:10.601Z",
+      "finishedAt": "2026-10-14T07:42:16.505Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/gotest.test.mjs",
+          "hash": "dbc536d4d7d559daf96bf8c1104dd4e20c479c59e271000e80e6158f52500bd2"
+        }
+      ],
+      "outputHash": "ad8229878b7b20beba057fa7a27326bef01c8fb76743cb973ee09663089b8464",
+      "outputBytes": 3656
+    },
+    {
+      "receiptId": "7d5c7698-2340-4f6d-b533-5fbbc542684d",
+      "id": "go-vuln",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:42:17.028Z",
+      "finishedAt": "2026-10-14T07:42:27.883Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/govulncheck.test.mjs",
+          "hash": "5cfdca648e951a5a891679823039d7e1bf906a2409a9562c137cdae3ab2a5ac0"
+        }
+      ],
+      "outputHash": "256df66e4b0f977cb9090af66d9c5e7a23ec687ae654d6e0967d5ba169f568d3",
+      "outputBytes": 390
+    },
+    {
+      "receiptId": "144bebb5-2303-4260-96c8-ed11286da7cb",
+      "id": "fe-lint",
+      "kind": "npm-script",
+      "startedAt": "2026-10-14T07:42:36.742Z",
+      "finishedAt": "2026-10-14T07:42:56.651Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": "frontend/package.json",
+          "hash": "5a694c82fd10c87c4db91e17ba9efa60eb9130cab4d22b3471473cf5234cd081"
+        }
+      ],
+      "outputHash": "0d4695f4da2780a75fa8d28ae5fabe88093b7de3774417c514e2ecd90774e01f",
+      "outputBytes": 35
+    },
+    {
+      "receiptId": "61856575-6a30-49a2-9e07-c74067aef934",
+      "id": "fe-typecheck",
+      "kind": "npm-script",
+      "startedAt": "2026-10-14T07:42:57.279Z",
+      "finishedAt": "2026-10-14T07:43:06.516Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": "frontend/package.json",
+          "hash": "5a694c82fd10c87c4db91e17ba9efa60eb9130cab4d22b3471473cf5234cd081"
+        }
+      ],
+      "outputHash": "aced8c0e50bd5e2cac0b3c911508abcf61993f710b5ffa84a75f369c906ae609",
+      "outputBytes": 38
+    },
+    {
+      "receiptId": "b3f46f66-0f50-467a-be0b-0c88a8a5df24",
+      "id": "fe-test-coverage",
+      "kind": "npm-script",
+      "startedAt": "2026-10-14T07:43:07.127Z",
+      "finishedAt": "2026-10-14T07:43:52.057Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": "frontend/package.json",
+          "hash": "5a694c82fd10c87c4db91e17ba9efa60eb9130cab4d22b3471473cf5234cd081"
+        }
+      ],
+      "outputHash": "37058a1923f2593acc90065fb514c912057df4cd20f2f6f12d0718c508124c0c",
+      "outputBytes": 6172
+    },
+    {
+      "receiptId": "afb62d20-2bb7-41be-99e9-8bb2de468458",
+      "id": "fe-build",
+      "kind": "npm-script",
+      "startedAt": "2026-10-14T07:43:52.594Z",
+      "finishedAt": "2026-10-14T07:43:56.493Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": "frontend/package.json",
+          "hash": "5a694c82fd10c87c4db91e17ba9efa60eb9130cab4d22b3471473cf5234cd081"
+        }
+      ],
+      "outputHash": "f8aed74a31fe0d06f8f06984784c6a39cde0e11ccc55e5c4aaa90e4ea0f108ae",
+      "outputBytes": 426
+    },
+    {
+      "receiptId": "e89b23e6-3a71-4d7b-be2c-f7908eea3df7",
+      "id": "e2e-smoke",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:44:00.928Z",
+      "finishedAt": "2026-10-14T07:46:00.957Z",
+      "exitCode": -1,
+      "timedOut": true,
+      "passed": false,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/e2e.test.mjs",
+          "hash": "58c68737aa32d817b87dee70928c8fac8c19fb5454270e126913f641b1d113e0"
+        }
+      ],
+      "outputHash": "456874e014ea705a5584a9d099714661a78c3373cbaccec82e9893d72ad55785",
+      "outputBytes": 9849
+    },
+    {
+      "receiptId": "2d77b1b6-8791-499d-8645-8f252bcb56c6",
+      "id": "e2e-smoke",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:46:39.927Z",
+      "finishedAt": "2026-10-14T07:47:06.014Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/e2e.test.mjs",
+          "hash": "58c68737aa32d817b87dee70928c8fac8c19fb5454270e126913f641b1d113e0"
+        }
+      ],
+      "outputHash": "1d4542dfcbbb917e2d8d121b0bfdb2f6a4f93fdba3ad9de7eb77403555030eae",
+      "outputBytes": 10152
+    },
+    {
+      "receiptId": "fb131e4a-7665-4065-9503-1565e9910387",
+      "id": "docker-smoke",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:49:03.519Z",
+      "finishedAt": "2026-10-14T07:50:33.369Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/docker.test.mjs",
+          "hash": "f3bb7176b8f937bd5e491d876cf68748e471fc64449c9d24a1689c4788431e34"
+        }
+      ],
+      "outputHash": "3f288329990fd342d6413a4be2e6676a8dc3f477fd9aaa75b433e1fbdb4e79a3",
+      "outputBytes": 4808
+    },
+    {
+      "receiptId": "7e670219-19fd-44e2-98cb-0f6c9b07a8b0",
+      "id": "ci-lint",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:50:33.935Z",
+      "finishedAt": "2026-10-14T07:50:34.404Z",
+      "exitCode": 1,
+      "timedOut": false,
+      "passed": false,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/actionlint.test.mjs",
+          "hash": "52e304efec39d8e293b6793c1770e1264d6d1199ce770166b5e9d993704aa89d"
+        }
+      ],
+      "outputHash": "c714214622bc428a4ea62836dbf0ffb4c68ad215906711fd5cdbbdbc877aa481",
+      "outputBytes": 1458
+    },
+    {
+      "receiptId": "59c7cad5-d72e-49a7-803d-e42c461da7a8",
+      "id": "line-limit",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:50:34.811Z",
+      "finishedAt": "2026-10-14T07:50:35.320Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/lines.test.mjs",
+          "hash": "e49d250b670b0a956177358790fc935c9426fab4b299163a87277d1ad20f8a79"
+        }
+      ],
+      "outputHash": "e5a05e364668dbd8f5c80e79b19e5c3671b0711a34d2de70456682b4a4b3ef2d",
+      "outputBytes": 645
+    },
+    {
+      "receiptId": "eeb12ead-04a4-40cc-935f-0e23acd349b1",
+      "id": "git-graph",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:50:35.685Z",
+      "finishedAt": "2026-10-14T07:50:36.335Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/gitgraph.test.mjs",
+          "hash": "f142698d32cb362ac66b45284b682c785c7c429b86a3b3588c7b5aa0d0d0fc50"
+        }
+      ],
+      "outputHash": "2d8a409c6b9c89895f8c630a85cecf9312d22d1387a580cbfec6bc317771fbb8",
+      "outputBytes": 1759
+    },
+    {
+      "receiptId": "f95563eb-d33b-4f33-95d8-d9dad2b77ada",
+      "id": "ci-lint",
+      "kind": "node-test",
+      "startedAt": "2026-10-14T07:50:45.182Z",
+      "finishedAt": "2026-10-14T07:50:54.176Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "passed": true,
+      "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "afterFingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+      "sourceChangedDuringCheck": false,
+      "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "afterGraphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+      "inventoryChangedDuringCheck": false,
+      "inputHashes": [
+        {
+          "path": ".forge/tmp/delivery/actionlint.test.mjs",
+          "hash": "52e304efec39d8e293b6793c1770e1264d6d1199ce770166b5e9d993704aa89d"
+        }
+      ],
+      "outputHash": "a51d007d09f705100f0d48c504cfa3ded0238a5bc47e34aaddf3982d8bcd3819",
+      "outputBytes": 742
+    }
+  ],
+  "history": [
+    {
+      "action": "start",
+      "at": "2026-10-14T05:30:15.938Z"
+    },
+    {
+      "action": "mode",
+      "at": "2026-10-14T05:30:19.937Z"
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T05:30:42.434Z",
+      "paths": [
+        ".claude/skills/forge-core/SKILL.md",
+        ".claude/skills/ci-cd-and-automation/SKILL.md",
+        ".claude/skills/security-and-hardening/SKILL.md",
+        ".claude/skills/documentation-and-adrs/SKILL.md",
+        ".claude/skills/code-review-and-quality/SKILL.md",
+        ".claude/skills/git-workflow-and-versioning/SKILL.md",
+        ".claude/skills/ponytail/SKILL.md",
+        ".claude/skills/antislop/SKILL.md",
+        "AGENTS.md",
+        "README.md",
+        "docs/spec.md",
+        "docs/architecture.md",
+        "docs/ai/WORKFLOW.md",
+        "docs/adr/0006-single-container-same-origin-no-cors.md",
+        "backend/README.md",
+        "frontend/README.md",
+        "backend/cmd/server/main.go",
+        "backend/internal/httpapi/routes.go",
+        "backend/go.mod",
+        "frontend/package.json",
+        "frontend/vite.config.ts",
+        ".gitignore",
+        "deuda tecnica/registros/doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json",
+        "deuda tecnica/registros/doc-b17a3c61-2e73-5427-8157-aa09c5f4f3dd.json",
+        "skills/forge-core/SKILL.md",
+        "skills/ci-cd-and-automation/SKILL.md",
+        "skills/security-and-hardening/SKILL.md",
+        "skills/documentation-and-adrs/SKILL.md",
+        "skills/code-review-and-quality/SKILL.md",
+        "skills/git-workflow-and-versioning/SKILL.md",
+        "skills/ponytail/SKILL.md",
+        "skills/antislop/SKILL.md"
+      ]
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T05:34:30.874Z",
+      "paths": [
+        "skills/using-agent-skills/SKILL.md",
+        "skills/core-project-workflow/SKILL.md",
+        "skills/incremental-implementation/SKILL.md",
+        "skills/test-driven-development/SKILL.md",
+        "skills/debugging-and-error-recovery/SKILL.md",
+        "skills/design-systems-and-tokens/SKILL.md",
+        "skills/design-md/SKILL.md",
+        "skills/curate-interface-sources/SKILL.md",
+        "skills/design-taste-frontend/SKILL.md",
+        "skills/impeccable/SKILL.md"
+      ]
+    },
+    {
+      "action": "spec",
+      "at": "2026-10-14T05:34:46.807Z"
+    },
+    {
+      "action": "plan",
+      "at": "2026-10-14T05:36:13.215Z"
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T05:37:00.713Z",
+      "paths": [
+        "deuda tecnica/registry.json",
+        "deuda tecnica/index.md",
+        "deuda tecnica/Documentacion.md"
+      ]
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T05:37:09.443Z",
+      "paths": [
+        "deuda tecnica/paginas/documentation/001.md"
+      ]
+    },
+    {
+      "action": "plan",
+      "at": "2026-10-14T05:37:23.354Z"
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T07:31:15.793Z",
+      "paths": [
+        "docs/spec.md",
+        "docs/architecture.md",
+        "README.md",
+        "Dockerfile",
+        ".dockerignore",
+        ".github/workflows/ci.yml",
+        "backend/go.mod",
+        "backend/README.md",
+        "docs/adr/0004-go-standard-library-without-framework.md",
+        "docs/coverage.md",
+        "docs/ai/WORKFLOW.md",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "action": "spec",
+      "at": "2026-10-14T07:31:42.898Z"
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T07:33:07.107Z",
+      "paths": [
+        ".gitignore",
+        "docs/adr/0006-single-container-same-origin-no-cors.md",
+        "docs/ai/PROMPTS.md",
+        "docs/ai/prompts/Prompt 1 - Fundacion, contrato y arquitectura.docx",
+        "docs/ai/prompts/Prompt 2 - Backend Go.docx",
+        "docs/ai/prompts/Prompt 3 - Frontend React.docx",
+        "docs/ai/prompts/Prompt 4 - Integracion y entrega.docx",
+        "frontend/README.md",
+        "deuda tecnica/registry.json",
+        "deuda tecnica/index.md",
+        "deuda tecnica/Documentacion.md",
+        "deuda tecnica/Pruebas y confiabilidad.md",
+        "deuda tecnica/Vulnerabilidades.md",
+        "deuda tecnica/Rendimiento.md",
+        "deuda tecnica/paginas/documentation/001.md",
+        "deuda tecnica/paginas/testing/001.md",
+        "deuda tecnica/paginas/vulnerabilities/001.md",
+        "deuda tecnica/registros/doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json",
+        "deuda tecnica/registros/doc-cd1bf90f-871f-52c8-8e5d-e765f976014b.json",
+        "deuda tecnica/registros/test-73515323-6808-55fc-8986-df71ccb1d429.json",
+        "deuda tecnica/registros/vul-4fdf6bb3-c7b2-5e90-802d-f16711065570.json"
+      ]
+    },
+    {
+      "action": "plan",
+      "at": "2026-10-14T07:33:23.045Z"
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T07:40:21.661Z",
+      "paths": [
+        "Dockerfile",
+        ".dockerignore",
+        ".github/workflows/ci.yml",
+        ".gitignore",
+        "README.md",
+        "AGENTS.md",
+        "docs/coverage.md",
+        "docs/spec.md",
+        "docs/architecture.md",
+        "docs/adr/0004-go-standard-library-without-framework.md",
+        "docs/adr/0006-single-container-same-origin-no-cors.md",
+        "docs/ai/WORKFLOW.md",
+        "docs/ai/PROMPTS.md",
+        "backend/go.mod",
+        "backend/README.md",
+        "frontend/README.md",
+        "deuda tecnica/registry.json",
+        "deuda tecnica/index.md",
+        "deuda tecnica/Documentacion.md",
+        "deuda tecnica/Pruebas y confiabilidad.md",
+        "deuda tecnica/Vulnerabilidades.md",
+        "deuda tecnica/Rendimiento.md",
+        "deuda tecnica/paginas/documentation/001.md",
+        "deuda tecnica/paginas/testing/001.md",
+        "deuda tecnica/paginas/vulnerabilities/001.md",
+        "deuda tecnica/registros/doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json",
+        "deuda tecnica/registros/doc-cd1bf90f-871f-52c8-8e5d-e765f976014b.json",
+        "deuda tecnica/registros/test-73515323-6808-55fc-8986-df71ccb1d429.json",
+        "deuda tecnica/registros/vul-4fdf6bb3-c7b2-5e90-802d-f16711065570.json",
+        "deuda tecnica/paginas/performance/001.md",
+        "deuda tecnica/registros/perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d.json"
+      ]
+    },
+    {
+      "action": "plan",
+      "at": "2026-10-14T07:40:37.694Z"
+    },
+    {
+      "action": "read",
+      "at": "2026-10-14T07:41:32.110Z",
+      "paths": [
+        "docs/spec.md",
+        "README.md",
+        "docs/coverage.md"
+      ]
+    },
+    {
+      "action": "spec",
+      "at": "2026-10-14T07:41:32.160Z"
+    },
+    {
+      "action": "plan",
+      "at": "2026-10-14T07:41:48.559Z"
+    },
+    {
+      "action": "implementation",
+      "at": "2026-10-14T07:41:55.105Z"
+    },
+    {
+      "action": "review",
+      "at": "2026-10-14T07:51:10.127Z"
+    },
+    {
+      "action": "delivery",
+      "at": "2026-10-14T07:51:19.050Z"
+    }
+  ],
+  "review": {
+    "summary": "Independent read-only review by forge-sonnet-max (previous chat): no Critical findings. R1 Go 1.27.0 stdlib vulnerabilities -> fixed (go 1.27.2, golang:1.27.2-bookworm; govulncheck v1.8.0 clean; vul-4fdf6bb3 resolved). R2 cd blocks failing from repo root -> fixed (cd ../frontend in README, coverage.md, architecture.md). R3 container on :8080 -> stopped with user approval. O1 fsevents install script -> wording fixed in Dockerfile and README. O2 CI does not run govulncheck/npm audit -> wording softened in README and AGENTS, both documented as manual (no new CI jobs so a future advisory does not break the delivered CI). O3 static caching/compression -> recorded as suspected performance debt perf-6385b81a. N1 duplicate push/PR runs -> kept on purpose. N2 .dockerignore -> **/.env and **/.env.*. N3, N4 WORKFLOW wording fixed. The coordinator reviewed the delta (go.mod directive, Dockerfile tag, docs) line by line. Residual risks: local vet ran with cmd/vet built from the 1.27.2 sources and local go test with -vet=off because Windows Application Control blocks the downloaded vet.exe; go test -race and the real GitHub Actions run are only verified after the push; the first e2e-smoke attempt timed out on a slow Edge start and passed on rerun (also passed locally in 21 s).",
+    "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+    "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+    "at": "2026-10-14T07:51:10.127Z",
+    "declaredJudgment": true
+  },
+  "delivery": {
+    "summary": "Task 4 delivery: Docker image, CI, coverage report, final README, PROMPTS.md with the 4 prompts, final WORKFLOW.md and updated shared docs; Go raised to 1.27.2 to remove 6 reachable net/http vulnerabilities (govulncheck clean); reviewer fixes applied; 13 checks passed (go-fmt, go-vet, go-test, go-vuln, fe-lint, fe-typecheck, fe-test-coverage, fe-build, e2e-smoke, docker-smoke, ci-lint, line-limit, git-graph). Debt: resolved doc-9c4f7945 and vul-4fdf6bb3; created doc-cd1bf90f, test-73515323 and perf-6385b81a (suspected).",
+    "architecture": {
+      "dataModel": "sin cambios.",
+      "dataStructures": "sin cambios.",
+      "patterns": "Multi-stage container build (Dockerfile: Node build -> Go static build -> distroless nonroot runtime) and a CI pipeline with SHA-pinned actions and fan-in (docker job needs backend and frontend) in .github/workflows/ci.yml.",
+      "flow": "Delivery flow: one image serves the SPA from STATIC_DIR=/app/web and the API on :8080 (same origin, ADR 0006). CI: backend (gofmt, vet, test -race, coverage gates) and frontend (lint, typecheck, test, build) in parallel, then docker build.",
+      "contracts": "sin cambios (docs/api untouched). Toolchain contract: backend/go.mod go 1.27.2 and golang:1.27.2-bookworm in the Dockerfile; setup-go reads go.mod.",
+      "state": "sin cambios: the service stays stateless; coverage reports are CI artifacts, not committed."
+    },
+    "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+    "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+    "at": "2026-10-14T07:51:19.050Z",
+    "declaredJudgment": true
+  },
+  "spec": {
+    "goal": "Make the repository ready to deliver: verify the merged tree end to end, add a Docker image, CI, a coverage report, the final README and the AI workflow documentation, fix the Go standard library vulnerabilities found in review by moving to Go 1.27.2, then commit and push.",
+    "risk": "medium",
+    "acceptanceCriteria": [
+      "Backend (gofmt -l, go vet, go test -count=1 -cover) and frontend (lint, typecheck, vitest run --coverage, build) checks pass on feat/delivery.",
+      "E2E smoke: backend on :8080 and Vite on :5173; curl directly and through the proxy; real outputs saved; all processes stopped afterwards.",
+      "Multi-stage Dockerfile (node:24.21.0-bookworm-slim, golang:1.27.2-bookworm, distroless static nonroot); .dockerignore excludes local state including **/.env and **/.env.*; Docker smoke builds, runs and curls /healthz, the API and /.",
+      "CI workflow (push and pull_request, contents read, concurrency, SHA-pinned actions, Go coverage thresholds, artifacts, docker build) passes actionlint; real CI is checked after the push.",
+      "backend/go.mod declares go 1.27.2 and the Dockerfile builds with golang:1.27.2-bookworm; govulncheck on backend/ reports no reachable vulnerability, or every remaining one is recorded as verified Vulnerabilidades debt. Debt vul-4fdf6bb3 is resolved when the scan is clean.",
+      "Docs cite Go 1.27.2 where they cite the exact version (spec.md, architecture.md, ADR 0004, backend/README.md) and coverage.md/README show the numbers observed with it.",
+      "Reviewer fixes: command blocks work when pasted from the repo root (README, coverage.md, architecture.md); the install-script claim mentions fsevents; README and AGENTS no longer say CI runs every check (govulncheck and npm audit are manual); WORKFLOW.md wording on parallel worktrees and STATIC_DIR listing corrected; missing static caching/compression recorded as suspected Rendimiento debt.",
+      "docs/coverage.md, final README, docs/ai/PROMPTS.md, final docs/ai/WORKFLOW.md and updated shared docs as approved before; no hand-maintained file exceeds 500 lines; git log --graph shows the foundation, the two parallel branches and their merges.",
+      "The work is committed on feat/delivery with Conventional Commits and pushed to origin (https://github.com/BillyJoe121/sezzle-calculator) after the user's explicit request."
+    ],
+    "preservedBehaviors": [
+      "docs/api/ is untouched.",
+      "No Go or TypeScript application code changes; in backend/ only the go directive in go.mod changes.",
+      "Debt doc-1d33fb61, doc-b17a3c61, test-827d163b, test-d12065fc and test-c472d4d1 stay open.",
+      "No force-push, rebase, reset, stash, branch or worktree deletion."
+    ],
+    "sourceDocuments": [
+      "docs/spec.md"
+    ],
+    "documentHashes": [
+      {
+        "path": "docs/spec.md",
+        "hash": "eab38c15cb690ad00b9f89eec3299400b06b43108eb89397556c9b05fe028895"
+      }
+    ],
+    "decisions": [
+      "User (2026-10-14): register the Go vulnerabilities, fix them with Go 1.27.2, stop the :8080 container, run the final checks, record remaining vulnerabilities as debt, apply the minor doc/config fixes, close in Forge, commit and push.",
+      "O2: soften the CI wording instead of adding govulncheck/npm audit jobs, so a future advisory does not turn the delivered CI red; both are documented as manual commands.",
+      "N1 (push and pull_request both trigger) kept: the evaluator sees CI on any pushed branch."
+    ],
+    "acceptedAt": "2026-10-14T07:41:32.160Z"
+  },
+  "plan": {
+    "scope": [
+      "Dockerfile",
+      ".dockerignore",
+      ".github/workflows/ci.yml",
+      ".gitignore",
+      "README.md",
+      "AGENTS.md",
+      "docs/coverage.md",
+      "docs/spec.md",
+      "docs/architecture.md",
+      "docs/adr/0004-go-standard-library-without-framework.md",
+      "docs/adr/0006-single-container-same-origin-no-cors.md",
+      "docs/ai/WORKFLOW.md",
+      "docs/ai/PROMPTS.md",
+      "docs/ai/prompts/Prompt 1 - Fundacion, contrato y arquitectura.docx",
+      "docs/ai/prompts/Prompt 2 - Backend Go.docx",
+      "docs/ai/prompts/Prompt 3 - Frontend React.docx",
+      "docs/ai/prompts/Prompt 4 - Integracion y entrega.docx",
+      "backend/go.mod",
+      "backend/README.md",
+      "frontend/README.md",
+      "deuda tecnica/registry.json",
+      "deuda tecnica/index.md",
+      "deuda tecnica/Documentacion.md",
+      "deuda tecnica/Pruebas y confiabilidad.md",
+      "deuda tecnica/Vulnerabilidades.md",
+      "deuda tecnica/Rendimiento.md",
+      "deuda tecnica/paginas/documentation/001.md",
+      "deuda tecnica/paginas/testing/001.md",
+      "deuda tecnica/paginas/vulnerabilities/001.md",
+      "deuda tecnica/paginas/performance/001.md",
+      "deuda tecnica/registros/doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json",
+      "deuda tecnica/registros/doc-cd1bf90f-871f-52c8-8e5d-e765f976014b.json",
+      "deuda tecnica/registros/test-73515323-6808-55fc-8986-df71ccb1d429.json",
+      "deuda tecnica/registros/vul-4fdf6bb3-c7b2-5e90-802d-f16711065570.json",
+      "deuda tecnica/registros/perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d.json"
+    ],
+    "steps": [
+      {
+        "id": "s1-go-bump",
+        "title": "Raise backend/go.mod and the Dockerfile builder to Go 1.27.2, update the version in the docs, rerun vet, tests and govulncheck; resolve vul-4fdf6bb3 or record what remains",
+        "checks": [
+          "go-fmt",
+          "go-vet",
+          "go-test",
+          "go-vuln"
+        ]
+      },
+      {
+        "id": "s2-review-fixes",
+        "title": "Apply the reviewer's doc and config fixes (R2, O1, O2 wording, N2, N3, N4) and record O3 as suspected performance debt",
+        "checks": [
+          "ci-lint",
+          "line-limit"
+        ]
+      },
+      {
+        "id": "s3-final-checks",
+        "title": "Stop the :8080 container (user approved) and rerun every check: frontend, E2E, Docker, CI lint, git graph",
+        "checks": [
+          "fe-lint",
+          "fe-typecheck",
+          "fe-test-coverage",
+          "fe-build",
+          "e2e-smoke",
+          "docker-smoke",
+          "git-graph"
+        ]
+      },
+      {
+        "id": "s4-close",
+        "title": "Review, delivery, development check, ready, delivery question, commit, add origin and push",
+        "checks": [
+          "git-graph"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "id": "go-fmt",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/gofmt.test.mjs"
+        ]
+      },
+      {
+        "id": "go-vet",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/vet.test.mjs"
+        ]
+      },
+      {
+        "id": "go-test",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/gotest.test.mjs"
+        ]
+      },
+      {
+        "id": "go-vuln",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/govulncheck.test.mjs"
+        ]
+      },
+      {
+        "id": "fe-lint",
+        "kind": "npm-script",
+        "cwd": "frontend",
+        "script": "lint"
+      },
+      {
+        "id": "fe-typecheck",
+        "kind": "npm-script",
+        "cwd": "frontend",
+        "script": "typecheck"
+      },
+      {
+        "id": "fe-test-coverage",
+        "kind": "npm-script",
+        "cwd": "frontend",
+        "script": "test"
+      },
+      {
+        "id": "fe-build",
+        "kind": "npm-script",
+        "cwd": "frontend",
+        "script": "build"
+      },
+      {
+        "id": "e2e-smoke",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/e2e.test.mjs"
+        ]
+      },
+      {
+        "id": "docker-smoke",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/docker.test.mjs"
+        ]
+      },
+      {
+        "id": "ci-lint",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/actionlint.test.mjs"
+        ]
+      },
+      {
+        "id": "line-limit",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/lines.test.mjs"
+        ]
+      },
+      {
+        "id": "git-graph",
+        "kind": "node-test",
+        "cwd": null,
+        "paths": [
+          ".forge/tmp/delivery/gitgraph.test.mjs"
+        ]
+      }
+    ],
+    "beforeImages": [
+      {
+        "path": "Dockerfile",
+        "hash": "ceea94e51c53e81a3772d3d7ae4435d1d0058da8e1902a87658c25920b5678b2",
+        "absent": false
+      },
+      {
+        "path": ".dockerignore",
+        "hash": "2b09af38891ca16d071398a955672e08dba95a9ebb6761a1f3a53608939f12c7",
+        "absent": false
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "hash": "cb2df7969462804441e30806f734e35d5770f371e2227e5014c39bf6ae800f1f",
+        "absent": false
+      },
+      {
+        "path": ".gitignore",
+        "hash": "83956950d6044010bd25307035b8991478ffbbe4bb89e27651cc959524368aad",
+        "absent": false
+      },
+      {
+        "path": "README.md",
+        "hash": "a23cf9e14a22b018fdf861ad2ed9ef5bc02b44a9949bfc2aa86560681db5c89c",
+        "absent": false
+      },
+      {
+        "path": "AGENTS.md",
+        "hash": "36eecbaee6d91114698f7bb8952c15c34d3b19c779126168cd86d64ca3d43a49",
+        "absent": false
+      },
+      {
+        "path": "docs/coverage.md",
+        "hash": "e65d23ad56c56b6bed2dbbab4384288b01ddb9b2a6e73b5bd57df3e177e311c9",
+        "absent": false
+      },
+      {
+        "path": "docs/spec.md",
+        "hash": "eab38c15cb690ad00b9f89eec3299400b06b43108eb89397556c9b05fe028895",
+        "absent": false
+      },
+      {
+        "path": "docs/architecture.md",
+        "hash": "40003b4b564f344477881625be2cffc2bef9a45e7f349fb208a8b3eddb3e9039",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0004-go-standard-library-without-framework.md",
+        "hash": "62495321a8c3ec4270d30e3fa967e4e0ec0fbcfa2a7c260e986aea7b24ffebb7",
+        "absent": false
+      },
+      {
+        "path": "docs/adr/0006-single-container-same-origin-no-cors.md",
+        "hash": "5f48f56a01d6b4430402081d69683dc9c7ce0b082f6e682147b9e8fa5dfec7f8",
+        "absent": false
+      },
+      {
+        "path": "docs/ai/WORKFLOW.md",
+        "hash": "f3e139b5fb4ca707a0b27c478c408ef62d3d57b4510ab916b2784a5fd9319b9e",
+        "absent": false
+      },
+      {
+        "path": "docs/ai/PROMPTS.md",
+        "hash": "6e9dbe045fb396e8c4fc515e5bd4ba46c252d91f030633cb052e21d9322d4c95",
+        "absent": false
+      },
+      {
+        "path": "docs/ai/prompts/Prompt 1 - Fundacion, contrato y arquitectura.docx",
+        "hash": "6070769711041aecfff7c5257c9c04994d4cd6ce4c06b0d9d01a19f6a812c847",
+        "absent": false
+      },
+      {
+        "path": "docs/ai/prompts/Prompt 2 - Backend Go.docx",
+        "hash": "1a6fd1b1b07721eef6502f2ea546bcb9076566ae70c2f1d16d296d25c3c893ba",
+        "absent": false
+      },
+      {
+        "path": "docs/ai/prompts/Prompt 3 - Frontend React.docx",
+        "hash": "fd5d50d3d30a2ed2eeb26f98f07e18acc241d7ab912e36f399126961ed6a0aab",
+        "absent": false
+      },
+      {
+        "path": "docs/ai/prompts/Prompt 4 - Integracion y entrega.docx",
+        "hash": "fb22894c293bc1050772a0faac1854a44e8b677389372f7c12835cf9a9f75ae7",
+        "absent": false
+      },
+      {
+        "path": "backend/go.mod",
+        "hash": "771c08ef430f9027869542f786e07bfbbde0ebefba5ea418bfa7491dc8c95bcd",
+        "absent": false
+      },
+      {
+        "path": "backend/README.md",
+        "hash": "35c881aab3bf3dc4ea8c9d5d8935c2c061e7766b3b5056933db85407343e5e96",
+        "absent": false
+      },
+      {
+        "path": "frontend/README.md",
+        "hash": "07b0ee85fcb4633694895a944badb641aa000942f82f632224d1aad6284e0544",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registry.json",
+        "hash": "fd236bf9056709cc3146a9107b1744878d2af3a9d914d1becd3ed3f3ce0e8cb8",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/index.md",
+        "hash": "4c6ab36d45589cd6dcbb23163df98673b0d660764b0806f7bef2be7600f22989",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/Documentacion.md",
+        "hash": "9be9cd8f348cf988dc8399889dd26536147abc2f76f456517313773a787a0172",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/Pruebas y confiabilidad.md",
+        "hash": "51afe3d0ba348cc8bd1133132746e742caadbb6a26c3d95045e1c06e04bbe88a",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/Vulnerabilidades.md",
+        "hash": "c2ca4eb9c0c8e69c762f1c032d478724695a01642eec233f1d7d3a3aa18f534f",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/Rendimiento.md",
+        "hash": "3aad1ae3209862a5637e04024c2161eea35025c0036152abf87aca2eb2dc74a7",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/paginas/documentation/001.md",
+        "hash": "ac4656bad42bc875a7183f74d4dd24d63b00d320c6f5f8812a7b4c105566ba1a",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/paginas/testing/001.md",
+        "hash": "4383be289c9776408d0a671cf89a9e464ee79c6304caceb9472d1a2c35d0f8e0",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/paginas/vulnerabilities/001.md",
+        "hash": "ee5586c07340ca53499f09c99c03cf87243f6210529e4e08a6057407ec207441",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/paginas/performance/001.md",
+        "hash": "1e6c9171d340ce913f5b8713bef6491203634aa97496bacc78d6e8cf66c3cfc6",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registros/doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19.json",
+        "hash": "04aee06547d631500aa289f6cd47e49f150a8892af1ac8ba100546b55b2cafbf",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registros/doc-cd1bf90f-871f-52c8-8e5d-e765f976014b.json",
+        "hash": "98e26e005c2612018e16f770bcb03f2334f7085533e2dedd9ff793bc45d04d8a",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registros/test-73515323-6808-55fc-8986-df71ccb1d429.json",
+        "hash": "549db91d7a31fcac8077e0c1fa430dcfba130dfb4e09296bd4cddde0c271508a",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registros/vul-4fdf6bb3-c7b2-5e90-802d-f16711065570.json",
+        "hash": "dc2893f47b53d0d8712628496f36d1192954ca8053a7a907850f6361331bce4a",
+        "absent": false
+      },
+      {
+        "path": "deuda tecnica/registros/perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d.json",
+        "hash": "346629e4769f2877986717525cd206e1b97d9944f22eeed0989acb842282d38a",
+        "absent": false
+      }
+    ],
+    "acceptedAt": "2026-10-14T07:41:48.559Z"
+  },
+  "implementation": {
+    "fingerprint": "6121b18d1d4fba75b29d9d664a385351cf22885489835fdd74388151148039ca",
+    "graphFingerprint": "417760f98de053f5ddbaac063b5a2d3ed98ae3a3b30aff186947e72a73e73e4b",
+    "observedAt": "2026-10-14T07:41:55.105Z"
+  }
+}

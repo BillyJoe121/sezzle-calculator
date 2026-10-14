@@ -1,0 +1,14 @@
+# Only backend/ and frontend/ sources are copied; keep the build context small and free of local state.
+**/node_modules
+**/dist
+**/coverage
+**/coverage.out
+**/coverage.html
+.git
+.github
+.forge
+.claude
+deuda tecnica
+docs
+**/.env
+**/.env.*

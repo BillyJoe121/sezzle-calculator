@@ -16,7 +16,7 @@ that each layer has one job, so every rule lives in exactly one place:
 flowchart LR
   user([User]) --> ui
   subgraph browser[Browser]
-    ui[React UI<br/>CalculatorForm and ResultPanel]
+    ui[React UI<br/>Calculator and ResultPanel]
     client[API client<br/>calculate]
     ui --> client
   end
@@ -44,7 +44,7 @@ flowchart LR
 ```mermaid
 sequenceDiagram
   actor U as User
-  participant F as CalculatorForm
+  participant F as Calculator
   participant C as API client
   participant H as httpapi handler
   participant D as calculator.Calculate
@@ -60,12 +60,12 @@ sequenceDiagram
     alt domain error
       D-->>H: ErrDivisionByZero / ErrDomain / ErrOutOfRange
       H-->>C: 422 application/problem+json with code
-      C-->>F: ApiError(code)
+      C-->>F: { ok: false, error: { kind: problem, code } }
       F-->>U: message mapped from code
     else success
       D-->>H: 2.5
       H-->>C: 200 {"operation","operands","result":2.5}
-      C-->>F: result
+      C-->>F: { ok: true, value }
       F-->>U: "10 ÷ 4 = 2.5" in an aria-live region
     end
   end
@@ -143,11 +143,11 @@ unmounting abort the pending request; results of aborted requests are discarded.
 Calculate is `aria-disabled` and `aria-busy` rather than natively `disabled`, so keyboard focus stays on it, and
 the form ignores further submissions.
 
-## Target folder structure
+## Folder structure
 
 ```text
 backend/
-  go.mod                        module, go 1.27.0, no require block
+  go.mod                        module, go 1.27.2, no require block
   cmd/server/main.go            config, logger, server, shutdown (+ main_test.go)
   internal/calculator/
     calculator.go               registry, sentinel errors, Calculate, normalization
@@ -183,9 +183,22 @@ Files stay under 500 lines; split by responsibility when one grows.
 | `PORT` | `8080` | backend | TCP port the server listens on. |
 | `STATIC_DIR` | unset | backend | When set, must be an existing directory; its files (the frontend build) are served at `/`. When unset, only the API and `/healthz` are served. |
 | Vite dev server | `5173` | frontend | `npm run dev`; proxies `/api` and `/healthz` to `http://localhost:8080`. |
-| Container | `8080` | Docker | One image: Go serves the SPA (`STATIC_DIR`) and the API from the same origin (task 4). |
+| Container | `8080` | Docker | One image: Go serves the SPA (`STATIC_DIR=/app/web`) and the API from the same origin (see Delivery). |
 
 The frontend has no environment variables: it always calls relative URLs.
+
+## Delivery
+
+- **Image** ([`Dockerfile`](../Dockerfile)): stage 1 `node:24.21.0-bookworm-slim` runs `npm ci --ignore-scripts`
+  and `npm run build`; stage 2 `golang:1.27.2-bookworm` builds `./cmd/server` with `CGO_ENABLED=0`, `-trimpath`
+  and `-ldflags "-s -w"`; the runtime is `gcr.io/distroless/static-debian12:nonroot` with the binary at
+  `/app/server`, the build at `/app/web`, `PORT=8080`, `STATIC_DIR=/app/web` and the `nonroot` user. The build
+  context only needs `backend/` and `frontend/` ([`.dockerignore`](../.dockerignore) drops the rest).
+- **CI** ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)): on every push and pull request, with
+  `contents: read` and in-progress runs cancelled per ref. The backend job checks `gofmt`, runs `go vet` and
+  `go test -race` with a coverage profile, fails if `internal/calculator` < 95 % or `internal/httpapi` < 85 %, and
+  uploads the reports. The frontend job runs lint, type check, tests with coverage and the build, and uploads the
+  coverage report. A Docker job builds the image after both pass. Actions are pinned to commit SHAs.
 
 ## Error model
 
@@ -220,16 +233,18 @@ The frontend branches on `code` only and shows its own English message for each;
 | `internal/calculator` | `go test`, table-driven | Every operation; `-0` divisor; negative `sqrt`; `power` domain rules and overflow; `percentage` fallback; normalization of `-0`, NaN and ±Inf. | ≥ 95 % |
 | `internal/httpapi` | `go test`, `net/http/httptest` | Contract test over every example; 413 at 4097 bytes; `charset` variants; trailing JSON; 404 and 405 with `Allow`; panic → 500 without details. | ≥ 85 % |
 | `cmd/server` | `go test` where logic exists | Configuration parsing (`PORT`, `STATIC_DIR`). | Reported, no target |
-| `frontend` | Vitest, Testing Library, MSW, jsdom | `formatResult`, `parseOperand`, error mapping; form behavior for every example; network failure; unary operation hides operand B. | ≥ 85 % |
+| `frontend` | Vitest, Testing Library, MSW, jsdom | `formatNumber`, `parseOperand`, error mapping; form behavior for every example; network failure; unary operation hides operand B. | ≥ 85 % |
 
-Planned commands (they exist once tasks 2 and 3 land):
+Commands (observed numbers and how to regenerate the reports: [`coverage.md`](coverage.md)):
 
 ```sh
 cd backend && go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out
-cd frontend && npm test          # vitest run --coverage, fails under the thresholds
+cd ../frontend && npm test          # vitest run --coverage, fails under the thresholds
 ```
 
-TDD applies to the domain, the decoding and validation rules, `parseOperand` and `formatResult`: write the
+CI enforces the same targets on every push (see Delivery).
+
+TDD applies to the domain, the decoding and validation rules, `parseOperand` and `formatNumber`: write the
 failing test first, then the code.
 
 ## Branches and worktrees
@@ -241,7 +256,7 @@ One short-lived branch per task. Parallel tasks get their own worktree, so two a
 | 1 | `feat/foundation` | `C:\Users\joshe\Desktop\AssessmentSezzle` | — | Spec, contract, architecture, ADRs, agent rules, skills. Merged into `main` before tasks 2 and 3 start. |
 | 2 | `feat/backend-api` | `C:\Users\joshe\Desktop\AssessmentSezzle.worktrees\feat-backend-api` | Task 1 merged | `backend/` only. |
 | 3 | `feat/frontend-ui` | `C:\Users\joshe\Desktop\AssessmentSezzle.worktrees\feat-frontend-ui` | Task 1 merged | `frontend/` only. Runs in parallel with task 2. |
-| 4 | `feat/delivery` | `C:\Users\joshe\Desktop\AssessmentSezzle` | Tasks 2 and 3 done | Integrates both branches with `forge_integration`, then Dockerfile, CI, coverage report, final README and AI workflow docs. |
+| 4 | `feat/delivery` | `C:\Users\joshe\Desktop\AssessmentSezzle` | Tasks 2 and 3 done | End-to-end verification of the merged tree, Dockerfile, CI, coverage report, final README and AI workflow docs. |
 
 Worktrees are created from the main folder, on `main`, after task 1 is merged:
 
@@ -253,3 +268,7 @@ git worktree add ../AssessmentSezzle.worktrees/feat-frontend-ui -b feat/frontend
 Tasks 2 and 3 touch disjoint folders (`backend/` and `frontend/`) and never edit `docs/api/`, so their merge
 is conflict-free by construction. Shared files they might both want to change (README, `.gitignore`) are left
 to task 4.
+
+As it happened, each feature branch was merged into `main` from its own chat (`ea24883`, then `90cc92f` after
+`forge_integration` verified the merged tree), so task 4 had nothing left to merge and verified the result end to
+end instead. Details: [`ai/WORKFLOW.md`](ai/WORKFLOW.md).
