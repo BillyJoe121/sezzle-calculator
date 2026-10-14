@@ -1,0 +1,64 @@
+{
+  "category": "testing",
+  "title": "frontend/package.json engines (>=22.12) is looser than the dev toolchain requires (jsdom: ^22.22.2 || ^24.15.0 || >=26)",
+  "path": "frontend/package.json",
+  "kind": "file",
+  "symbol": "engines",
+  "evidence": "Verified 2026-10-14: npm ci on Node v24.14.0 / npm 11.9.0 prints EBADENGINE for jsdom@30.1.2, @asamuzakjp/css-color@7.1.5, @asamuzakjp/dom-selector@9.2.4 and w3c-xmlserializer@6.0.0, each requiring node '^22.22.2 || ^24.15.0 || >=26.0.0'; frontend/package.json declares \"engines\": { \"node\": \">=22.12\" }. All checks still pass on 24.14.0 (lint, typecheck, 187 tests, build). CI and the Dockerfile pin Node 24.21.0, which satisfies the range.",
+  "confidence": "verified",
+  "impact": "Low: a contributor on Node 22.12-22.22.1 or 24.0-24.14 gets warnings and possibly test-tooling failures that the declared engines range says should not happen. Runtime and build output are unaffected.",
+  "connections": [
+    "frontend/package.json",
+    "frontend/package-lock.json",
+    "frontend/README.md",
+    "README.md",
+    ".github/workflows/ci.yml",
+    "Dockerfile"
+  ],
+  "precautions": "Changing engines is a frontend change for a frontend branch; the READMEs already state the real range. Do not add engine-strict without checking the CI and Docker Node versions.",
+  "verification": "Set engines.node to '^22.22.2 || ^24.15.0 || >=26' (or the range the toolchain then requires) and run npm ci on the minimum version without EBADENGINE warnings.",
+  "origin": {
+    "task": "Task 4 integration and delivery (490b37cc)",
+    "branch": "feat/delivery"
+  },
+  "priority": "low",
+  "status": "open",
+  "id": "test-73515323-6808-55fc-8986-df71ccb1d429",
+  "createdAt": "2026-10-14T06:06:58.183Z",
+  "updatedAt": "2026-10-14T06:06:58.183Z",
+  "history": [
+    {
+      "action": "created",
+      "at": "2026-10-14T06:06:58.183Z",
+      "snapshot": {
+        "category": "testing",
+        "title": "frontend/package.json engines (>=22.12) is looser than the dev toolchain requires (jsdom: ^22.22.2 || ^24.15.0 || >=26)",
+        "path": "frontend/package.json",
+        "kind": "file",
+        "symbol": "engines",
+        "evidence": "Verified 2026-10-14: npm ci on Node v24.14.0 / npm 11.9.0 prints EBADENGINE for jsdom@30.1.2, @asamuzakjp/css-color@7.1.5, @asamuzakjp/dom-selector@9.2.4 and w3c-xmlserializer@6.0.0, each requiring node '^22.22.2 || ^24.15.0 || >=26.0.0'; frontend/package.json declares \"engines\": { \"node\": \">=22.12\" }. All checks still pass on 24.14.0 (lint, typecheck, 187 tests, build). CI and the Dockerfile pin Node 24.21.0, which satisfies the range.",
+        "confidence": "verified",
+        "impact": "Low: a contributor on Node 22.12-22.22.1 or 24.0-24.14 gets warnings and possibly test-tooling failures that the declared engines range says should not happen. Runtime and build output are unaffected.",
+        "connections": [
+          "frontend/package.json",
+          "frontend/package-lock.json",
+          "frontend/README.md",
+          "README.md",
+          ".github/workflows/ci.yml",
+          "Dockerfile"
+        ],
+        "precautions": "Changing engines is a frontend change for a frontend branch; the READMEs already state the real range. Do not add engine-strict without checking the CI and Docker Node versions.",
+        "verification": "Set engines.node to '^22.22.2 || ^24.15.0 || >=26' (or the range the toolchain then requires) and run npm ci on the minimum version without EBADENGINE warnings.",
+        "origin": {
+          "task": "Task 4 integration and delivery (490b37cc)",
+          "branch": "feat/delivery"
+        },
+        "priority": "low",
+        "status": "open",
+        "id": "test-73515323-6808-55fc-8986-df71ccb1d429",
+        "createdAt": "2026-10-14T06:06:58.183Z",
+        "updatedAt": "2026-10-14T06:06:58.183Z"
+      }
+    }
+  ]
+}

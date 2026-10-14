@@ -1,0 +1,58 @@
+{
+  "category": "performance",
+  "title": "Static SPA serving has no Cache-Control for hashed assets and no compression",
+  "path": "backend/internal/httpapi/routes.go",
+  "kind": "file",
+  "symbol": null,
+  "evidence": "Suspected (code reading in the task 4 review, not measured): STATIC_DIR is served with http.FileServer behind noListing; no Cache-Control header is set, so the content-hashed files in /assets/ are revalidated instead of cached as immutable, and responses are not gzip/brotli compressed. No load test or Lighthouse run was done.",
+  "confidence": "suspected",
+  "impact": "Slower repeat and first loads over slow networks; negligible for a local assessment demo with one small bundle.",
+  "connections": [
+    "Dockerfile (STATIC_DIR=/app/web)",
+    "docs/adr/0006-single-container-same-origin-no-cors.md",
+    "frontend/vite.config.ts (hashed asset names)"
+  ],
+  "precautions": "Measure first. If needed, add Cache-Control: public, max-age=31536000, immutable only for /assets/*, keep index.html no-cache, and prefer precompressed files or a reverse proxy over a third-party module (standard library only).",
+  "verification": "",
+  "origin": {
+    "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+    "branch": "feat/delivery"
+  },
+  "priority": "low",
+  "status": "open",
+  "id": "perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d",
+  "createdAt": "2026-10-14T07:39:36.216Z",
+  "updatedAt": "2026-10-14T07:39:36.216Z",
+  "history": [
+    {
+      "action": "created",
+      "at": "2026-10-14T07:39:36.216Z",
+      "snapshot": {
+        "category": "performance",
+        "title": "Static SPA serving has no Cache-Control for hashed assets and no compression",
+        "path": "backend/internal/httpapi/routes.go",
+        "kind": "file",
+        "symbol": null,
+        "evidence": "Suspected (code reading in the task 4 review, not measured): STATIC_DIR is served with http.FileServer behind noListing; no Cache-Control header is set, so the content-hashed files in /assets/ are revalidated instead of cached as immutable, and responses are not gzip/brotli compressed. No load test or Lighthouse run was done.",
+        "confidence": "suspected",
+        "impact": "Slower repeat and first loads over slow networks; negligible for a local assessment demo with one small bundle.",
+        "connections": [
+          "Dockerfile (STATIC_DIR=/app/web)",
+          "docs/adr/0006-single-container-same-origin-no-cors.md",
+          "frontend/vite.config.ts (hashed asset names)"
+        ],
+        "precautions": "Measure first. If needed, add Cache-Control: public, max-age=31536000, immutable only for /assets/*, keep index.html no-cache, and prefer precompressed files or a reverse proxy over a third-party module (standard library only).",
+        "verification": "",
+        "origin": {
+          "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+          "branch": "feat/delivery"
+        },
+        "priority": "low",
+        "status": "open",
+        "id": "perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d",
+        "createdAt": "2026-10-14T07:39:36.216Z",
+        "updatedAt": "2026-10-14T07:39:36.216Z"
+      }
+    }
+  ]
+}

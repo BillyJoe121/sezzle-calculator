@@ -4,7 +4,7 @@
   "path": "docs/architecture.md",
   "kind": "file",
   "symbol": null,
-  "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts. The Frontend section and folder tree of docs/architecture.md are already updated in this branch.",
+  "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts.",
   "confidence": "verified",
   "impact": "Low: readers of the diagrams and the TDD rule look for components and functions that do not exist; behavior is unaffected.",
   "connections": [
@@ -15,20 +15,57 @@
     "frontend/src/lib/formatNumber.ts"
   ],
   "precautions": "Shared files belong to task 4 (feat/delivery); the frontend branch's accepted spec only touches the Frontend section of docs/architecture.md. Rename only, keep the diagrams' structure.",
-  "verification": "grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing.",
+  "verification": "Resolved on feat/delivery (task 4, 490b37cc) on 2026-10-14: architecture.md diagrams now name Calculator and the client results { ok: true, value } / { ok: false, error: { kind: problem, code } }; the test strategy and the TDD rule (architecture.md and AGENTS.md) name formatNumber. grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing (exit 1).",
   "origin": {
     "task": "Task 3 React frontend (ac3c786e)",
     "branch": "feat/frontend-ui"
   },
   "priority": "low",
-  "status": "open",
+  "status": "resolved",
   "id": "doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19",
   "createdAt": "2026-10-14T00:41:38.037Z",
-  "updatedAt": "2026-10-14T00:41:38.037Z",
+  "updatedAt": "2026-10-14T06:07:14.534Z",
   "history": [
     {
       "action": "created",
       "at": "2026-10-14T00:41:38.037Z",
+      "snapshot": {
+        "category": "documentation",
+        "title": "Shared docs still use the planned frontend names (CalculatorForm, ApiError, formatResult) instead of the built ones",
+        "path": "docs/architecture.md",
+        "kind": "file",
+        "symbol": null,
+        "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts. The Frontend section and folder tree of docs/architecture.md are already updated in this branch.",
+        "confidence": "verified",
+        "impact": "Low: readers of the diagrams and the TDD rule look for components and functions that do not exist; behavior is unaffected.",
+        "connections": [
+          "docs/architecture.md",
+          "AGENTS.md",
+          "frontend/src/features/calculator/Calculator.tsx",
+          "frontend/src/api/calculatorClient.ts",
+          "frontend/src/lib/formatNumber.ts"
+        ],
+        "precautions": "Shared files belong to task 4 (feat/delivery); the frontend branch's accepted spec only touches the Frontend section of docs/architecture.md. Rename only, keep the diagrams' structure.",
+        "verification": "grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing.",
+        "origin": {
+          "task": "Task 3 React frontend (ac3c786e)",
+          "branch": "feat/frontend-ui"
+        },
+        "priority": "low",
+        "status": "open",
+        "id": "doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19",
+        "createdAt": "2026-10-14T00:41:38.037Z",
+        "updatedAt": "2026-10-14T00:41:38.037Z"
+      }
+    },
+    {
+      "action": "updated",
+      "at": "2026-10-14T06:07:14.534Z",
+      "changedFields": [
+        "evidence",
+        "verification",
+        "status"
+      ],
       "snapshot": {
         "category": "documentation",
         "title": "Shared docs still use the planned frontend names (CalculatorForm, ApiError, formatResult) instead of the built ones",

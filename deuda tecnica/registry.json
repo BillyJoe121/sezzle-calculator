@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-14T01:51:24.950Z",
+  "updatedAt": "2026-10-14T07:39:36.216Z",
   "findings": [
     {
       "category": "documentation",
@@ -101,7 +101,7 @@
       "path": "docs/architecture.md",
       "kind": "file",
       "symbol": null,
-      "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts. The Frontend section and folder tree of docs/architecture.md are already updated in this branch.",
+      "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts.",
       "confidence": "verified",
       "impact": "Low: readers of the diagrams and the TDD rule look for components and functions that do not exist; behavior is unaffected.",
       "connections": [
@@ -112,20 +112,57 @@
         "frontend/src/lib/formatNumber.ts"
       ],
       "precautions": "Shared files belong to task 4 (feat/delivery); the frontend branch's accepted spec only touches the Frontend section of docs/architecture.md. Rename only, keep the diagrams' structure.",
-      "verification": "grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing.",
+      "verification": "Resolved on feat/delivery (task 4, 490b37cc) on 2026-10-14: architecture.md diagrams now name Calculator and the client results { ok: true, value } / { ok: false, error: { kind: problem, code } }; the test strategy and the TDD rule (architecture.md and AGENTS.md) name formatNumber. grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing (exit 1).",
       "origin": {
         "task": "Task 3 React frontend (ac3c786e)",
         "branch": "feat/frontend-ui"
       },
       "priority": "low",
-      "status": "open",
+      "status": "resolved",
       "id": "doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19",
       "createdAt": "2026-10-14T00:41:38.037Z",
-      "updatedAt": "2026-10-14T00:41:38.037Z",
+      "updatedAt": "2026-10-14T06:07:14.534Z",
       "history": [
         {
           "action": "created",
           "at": "2026-10-14T00:41:38.037Z",
+          "snapshot": {
+            "category": "documentation",
+            "title": "Shared docs still use the planned frontend names (CalculatorForm, ApiError, formatResult) instead of the built ones",
+            "path": "docs/architecture.md",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Verified 2026-10-13 with grep on feat/frontend-ui: docs/architecture.md:19 (component diagram 'CalculatorForm and ResultPanel'), :47 (sequence participant 'CalculatorForm'), :63 ('C-->>F: ApiError(code)'), :221 and :230 (test strategy and TDD list name 'formatResult'); AGENTS.md:77 (TDD rule names 'formatResult'). The frontend as built has Calculator, OperationPicker, OperandField and ResultPanel; calculate() never throws and returns { ok: false, error } with error.kind/code; the display formatter is formatNumber in src/lib/formatNumber.ts. The Frontend section and folder tree of docs/architecture.md are already updated in this branch.",
+            "confidence": "verified",
+            "impact": "Low: readers of the diagrams and the TDD rule look for components and functions that do not exist; behavior is unaffected.",
+            "connections": [
+              "docs/architecture.md",
+              "AGENTS.md",
+              "frontend/src/features/calculator/Calculator.tsx",
+              "frontend/src/api/calculatorClient.ts",
+              "frontend/src/lib/formatNumber.ts"
+            ],
+            "precautions": "Shared files belong to task 4 (feat/delivery); the frontend branch's accepted spec only touches the Frontend section of docs/architecture.md. Rename only, keep the diagrams' structure.",
+            "verification": "grep -n 'CalculatorForm\\|ApiError\\|formatResult' docs/architecture.md AGENTS.md prints nothing.",
+            "origin": {
+              "task": "Task 3 React frontend (ac3c786e)",
+              "branch": "feat/frontend-ui"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "doc-9c4f7945-58ca-5ad6-8c93-37ec297aaf19",
+            "createdAt": "2026-10-14T00:41:38.037Z",
+            "updatedAt": "2026-10-14T00:41:38.037Z"
+          }
+        },
+        {
+          "action": "updated",
+          "at": "2026-10-14T06:07:14.534Z",
+          "changedFields": [
+            "evidence",
+            "verification",
+            "status"
+          ],
           "snapshot": {
             "category": "documentation",
             "title": "Shared docs still use the planned frontend names (CalculatorForm, ApiError, formatResult) instead of the built ones",
@@ -211,6 +248,130 @@
             "id": "doc-b17a3c61-2e73-5427-8157-aa09c5f4f3dd",
             "createdAt": "2026-10-13T17:06:28.190Z",
             "updatedAt": "2026-10-13T17:06:28.190Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "documentation",
+      "title": "sqrt-negative example and openapi.yaml show a detail text the server never returns",
+      "path": "docs/api/examples/sqrt-negative.json",
+      "kind": "file",
+      "symbol": null,
+      "evidence": "Verified 2026-10-14 by the task 4 E2E smoke (curl direct on :8080 and through the Vite proxy on :5173) replaying docs/api/examples/sqrt-negative.json: the server returns 422 DOMAIN_ERROR with detail \"The operation is undefined for these operands.\" while the example and openapi.yaml (line 331) show \"Square root of a negative number is undefined.\". Status, content type, code and every other member match. backend/internal/httpapi/contract_test.go only requires detail to be non-empty, and openapi.yaml says detail is not part of the contract, so no test fails. Task 2 kept a generic DOMAIN_ERROR detail on purpose (review nit left as is).",
+      "confidence": "verified",
+      "impact": "Low: clients branch on code only; a reader comparing the README or the examples with real responses sees a different sentence for this one case.",
+      "connections": [
+        "docs/api/openapi.yaml",
+        "backend/internal/httpapi/calculations.go",
+        "backend/internal/httpapi/contract_test.go",
+        "README.md"
+      ],
+      "precautions": "docs/api is changed only in its own contract branch. Either align the example and openapi.yaml with the generic detail, or make the backend detail operation-specific in a backend branch; do not patch one side alone.",
+      "verification": "After the fix, the task 4 E2E comparison reports no detail differences for the 17 examples.",
+      "origin": {
+        "task": "Task 4 integration and delivery (490b37cc)",
+        "branch": "feat/delivery"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "doc-cd1bf90f-871f-52c8-8e5d-e765f976014b",
+      "createdAt": "2026-10-14T06:07:15.296Z",
+      "updatedAt": "2026-10-14T06:07:15.296Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-14T06:07:15.296Z",
+          "snapshot": {
+            "category": "documentation",
+            "title": "sqrt-negative example and openapi.yaml show a detail text the server never returns",
+            "path": "docs/api/examples/sqrt-negative.json",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Verified 2026-10-14 by the task 4 E2E smoke (curl direct on :8080 and through the Vite proxy on :5173) replaying docs/api/examples/sqrt-negative.json: the server returns 422 DOMAIN_ERROR with detail \"The operation is undefined for these operands.\" while the example and openapi.yaml (line 331) show \"Square root of a negative number is undefined.\". Status, content type, code and every other member match. backend/internal/httpapi/contract_test.go only requires detail to be non-empty, and openapi.yaml says detail is not part of the contract, so no test fails. Task 2 kept a generic DOMAIN_ERROR detail on purpose (review nit left as is).",
+            "confidence": "verified",
+            "impact": "Low: clients branch on code only; a reader comparing the README or the examples with real responses sees a different sentence for this one case.",
+            "connections": [
+              "docs/api/openapi.yaml",
+              "backend/internal/httpapi/calculations.go",
+              "backend/internal/httpapi/contract_test.go",
+              "README.md"
+            ],
+            "precautions": "docs/api is changed only in its own contract branch. Either align the example and openapi.yaml with the generic detail, or make the backend detail operation-specific in a backend branch; do not patch one side alone.",
+            "verification": "After the fix, the task 4 E2E comparison reports no detail differences for the 17 examples.",
+            "origin": {
+              "task": "Task 4 integration and delivery (490b37cc)",
+              "branch": "feat/delivery"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "doc-cd1bf90f-871f-52c8-8e5d-e765f976014b",
+            "createdAt": "2026-10-14T06:07:15.296Z",
+            "updatedAt": "2026-10-14T06:07:15.296Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "testing",
+      "title": "frontend/package.json engines (>=22.12) is looser than the dev toolchain requires (jsdom: ^22.22.2 || ^24.15.0 || >=26)",
+      "path": "frontend/package.json",
+      "kind": "file",
+      "symbol": "engines",
+      "evidence": "Verified 2026-10-14: npm ci on Node v24.14.0 / npm 11.9.0 prints EBADENGINE for jsdom@30.1.2, @asamuzakjp/css-color@7.1.5, @asamuzakjp/dom-selector@9.2.4 and w3c-xmlserializer@6.0.0, each requiring node '^22.22.2 || ^24.15.0 || >=26.0.0'; frontend/package.json declares \"engines\": { \"node\": \">=22.12\" }. All checks still pass on 24.14.0 (lint, typecheck, 187 tests, build). CI and the Dockerfile pin Node 24.21.0, which satisfies the range.",
+      "confidence": "verified",
+      "impact": "Low: a contributor on Node 22.12-22.22.1 or 24.0-24.14 gets warnings and possibly test-tooling failures that the declared engines range says should not happen. Runtime and build output are unaffected.",
+      "connections": [
+        "frontend/package.json",
+        "frontend/package-lock.json",
+        "frontend/README.md",
+        "README.md",
+        ".github/workflows/ci.yml",
+        "Dockerfile"
+      ],
+      "precautions": "Changing engines is a frontend change for a frontend branch; the READMEs already state the real range. Do not add engine-strict without checking the CI and Docker Node versions.",
+      "verification": "Set engines.node to '^22.22.2 || ^24.15.0 || >=26' (or the range the toolchain then requires) and run npm ci on the minimum version without EBADENGINE warnings.",
+      "origin": {
+        "task": "Task 4 integration and delivery (490b37cc)",
+        "branch": "feat/delivery"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "test-73515323-6808-55fc-8986-df71ccb1d429",
+      "createdAt": "2026-10-14T06:06:58.183Z",
+      "updatedAt": "2026-10-14T06:06:58.183Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-14T06:06:58.183Z",
+          "snapshot": {
+            "category": "testing",
+            "title": "frontend/package.json engines (>=22.12) is looser than the dev toolchain requires (jsdom: ^22.22.2 || ^24.15.0 || >=26)",
+            "path": "frontend/package.json",
+            "kind": "file",
+            "symbol": "engines",
+            "evidence": "Verified 2026-10-14: npm ci on Node v24.14.0 / npm 11.9.0 prints EBADENGINE for jsdom@30.1.2, @asamuzakjp/css-color@7.1.5, @asamuzakjp/dom-selector@9.2.4 and w3c-xmlserializer@6.0.0, each requiring node '^22.22.2 || ^24.15.0 || >=26.0.0'; frontend/package.json declares \"engines\": { \"node\": \">=22.12\" }. All checks still pass on 24.14.0 (lint, typecheck, 187 tests, build). CI and the Dockerfile pin Node 24.21.0, which satisfies the range.",
+            "confidence": "verified",
+            "impact": "Low: a contributor on Node 22.12-22.22.1 or 24.0-24.14 gets warnings and possibly test-tooling failures that the declared engines range says should not happen. Runtime and build output are unaffected.",
+            "connections": [
+              "frontend/package.json",
+              "frontend/package-lock.json",
+              "frontend/README.md",
+              "README.md",
+              ".github/workflows/ci.yml",
+              "Dockerfile"
+            ],
+            "precautions": "Changing engines is a frontend change for a frontend branch; the READMEs already state the real range. Do not add engine-strict without checking the CI and Docker Node versions.",
+            "verification": "Set engines.node to '^22.22.2 || ^24.15.0 || >=26' (or the range the toolchain then requires) and run npm ci on the minimum version without EBADENGINE warnings.",
+            "origin": {
+              "task": "Task 4 integration and delivery (490b37cc)",
+              "branch": "feat/delivery"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "test-73515323-6808-55fc-8986-df71ccb1d429",
+            "createdAt": "2026-10-14T06:06:58.183Z",
+            "updatedAt": "2026-10-14T06:06:58.183Z"
           }
         }
       ]
@@ -383,6 +544,165 @@
             "id": "test-d12065fc-028e-5b3f-8969-5906e397f5e9",
             "createdAt": "2026-10-14T01:51:24.950Z",
             "updatedAt": "2026-10-14T01:51:24.950Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "vulnerabilities",
+      "title": "Go 1.27.0 toolchain: 6 reachable net/http standard library vulnerabilities fixed in Go 1.27.2",
+      "path": "backend/go.mod",
+      "kind": "file",
+      "symbol": null,
+      "evidence": "Verified: govulncheck on backend/ with go1.27.0 (saved in .forge/tmp/delivery/review/govulncheck.txt) reports 6 vulnerabilities reachable from our code, all fixed in go1.27.2: GO-2026-6617 (HTTP/2 HPACK encoder race, server crash), GO-2026-6613 (HTTP/1 desync after 2xx CONNECT), GO-2026-6612 (HTTP/2 double flow-control refund), GO-2026-6611 (CPU from repeated HTTP/2 initial window changes), GO-2026-6609 (no limit on parsed Range headers, reached through http.FileServer in internal/httpapi/routes.go), GO-2026-6603 (HTTP/2 memory exhaustion via Trailer headers). Traces go through cmd/server/main.go (http.Server.Serve/Shutdown) and internal/httpapi (middleware, routes). go.mod declared go 1.27.0 and the Dockerfile built with golang:1.27.0-bookworm.",
+      "confidence": "verified",
+      "impact": "The shipped binary (Docker image and local builds) was exposed to denial of service (crash, CPU and memory exhaustion) and HTTP/1 desynchronization from untrusted clients.",
+      "connections": [
+        "Dockerfile",
+        "backend/cmd/server/main.go",
+        "backend/internal/httpapi/routes.go",
+        "backend/internal/httpapi/middleware.go",
+        ".github/workflows/ci.yml (setup-go reads go-version-file backend/go.mod)"
+      ],
+      "precautions": "Keep go.mod and the Dockerfile builder on the same patch release; rerun govulncheck (golang.org/x/vuln/cmd/govulncheck) before each release, since new standard library advisories appear often.",
+      "verification": "2026-10-14: backend/go.mod raised to go 1.27.2 and the Dockerfile to golang:1.27.2-bookworm. go version in backend/ reports go1.27.2; govulncheck v1.8.0 ./... prints 'No vulnerabilities found.' (.forge/tmp/delivery/review/govulncheck-1.27.2.txt); go test passes (calculator 100 %, httpapi 95.4 %).",
+      "origin": {
+        "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+        "branch": "feat/delivery"
+      },
+      "priority": "high",
+      "status": "resolved",
+      "id": "vul-4fdf6bb3-c7b2-5e90-802d-f16711065570",
+      "createdAt": "2026-10-14T07:31:10.733Z",
+      "updatedAt": "2026-10-14T07:38:46.327Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-14T07:31:10.733Z",
+          "snapshot": {
+            "category": "vulnerabilities",
+            "title": "Go 1.27.0 toolchain: 6 reachable net/http standard library vulnerabilities fixed in Go 1.27.2",
+            "path": "backend/go.mod",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Verified: govulncheck on backend/ with go1.27.0 (saved in .forge/tmp/delivery/review/govulncheck.txt) reports 6 vulnerabilities reachable from our code, all fixed in go1.27.2: GO-2026-6617 (HTTP/2 HPACK encoder race, server crash), GO-2026-6613 (HTTP/1 desync after 2xx CONNECT), GO-2026-6612 (HTTP/2 double flow-control refund), GO-2026-6611 (CPU from repeated HTTP/2 initial window changes), GO-2026-6609 (no limit on parsed Range headers, reached through http.FileServer in internal/httpapi/routes.go), GO-2026-6603 (HTTP/2 memory exhaustion via Trailer headers). Traces go through cmd/server/main.go (http.Server.Serve/Shutdown) and internal/httpapi (middleware, routes). go.mod declares go 1.27.0 and the Dockerfile builds with golang:1.27.0-bookworm.",
+            "confidence": "verified",
+            "impact": "The shipped binary (Docker image and local builds) is exposed to denial of service (crash, CPU and memory exhaustion) and HTTP/1 desynchronization from untrusted clients. No data at rest, but the service is the whole product.",
+            "connections": [
+              "Dockerfile",
+              "backend/cmd/server/main.go",
+              "backend/internal/httpapi/routes.go",
+              "backend/internal/httpapi/middleware.go",
+              ".github/workflows/ci.yml (setup-go reads go-version-file backend/go.mod)"
+            ],
+            "precautions": "Fix by raising go.mod to go 1.27.2 and the Dockerfile builder to golang:1.27.2-bookworm, update the docs that cite 1.27.0, then rerun go vet, go test, govulncheck and the Docker smoke. Do not add a toolchain directive or third-party modules.",
+            "verification": "",
+            "origin": {
+              "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+              "branch": "feat/delivery"
+            },
+            "priority": "high",
+            "status": "open",
+            "id": "vul-4fdf6bb3-c7b2-5e90-802d-f16711065570",
+            "createdAt": "2026-10-14T07:31:10.733Z",
+            "updatedAt": "2026-10-14T07:31:10.733Z"
+          }
+        },
+        {
+          "action": "updated",
+          "at": "2026-10-14T07:38:46.327Z",
+          "changedFields": [
+            "evidence",
+            "impact",
+            "precautions",
+            "verification",
+            "status"
+          ],
+          "snapshot": {
+            "category": "vulnerabilities",
+            "title": "Go 1.27.0 toolchain: 6 reachable net/http standard library vulnerabilities fixed in Go 1.27.2",
+            "path": "backend/go.mod",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Verified: govulncheck on backend/ with go1.27.0 (saved in .forge/tmp/delivery/review/govulncheck.txt) reports 6 vulnerabilities reachable from our code, all fixed in go1.27.2: GO-2026-6617 (HTTP/2 HPACK encoder race, server crash), GO-2026-6613 (HTTP/1 desync after 2xx CONNECT), GO-2026-6612 (HTTP/2 double flow-control refund), GO-2026-6611 (CPU from repeated HTTP/2 initial window changes), GO-2026-6609 (no limit on parsed Range headers, reached through http.FileServer in internal/httpapi/routes.go), GO-2026-6603 (HTTP/2 memory exhaustion via Trailer headers). Traces go through cmd/server/main.go (http.Server.Serve/Shutdown) and internal/httpapi (middleware, routes). go.mod declares go 1.27.0 and the Dockerfile builds with golang:1.27.0-bookworm.",
+            "confidence": "verified",
+            "impact": "The shipped binary (Docker image and local builds) is exposed to denial of service (crash, CPU and memory exhaustion) and HTTP/1 desynchronization from untrusted clients. No data at rest, but the service is the whole product.",
+            "connections": [
+              "Dockerfile",
+              "backend/cmd/server/main.go",
+              "backend/internal/httpapi/routes.go",
+              "backend/internal/httpapi/middleware.go",
+              ".github/workflows/ci.yml (setup-go reads go-version-file backend/go.mod)"
+            ],
+            "precautions": "Fix by raising go.mod to go 1.27.2 and the Dockerfile builder to golang:1.27.2-bookworm, update the docs that cite 1.27.0, then rerun go vet, go test, govulncheck and the Docker smoke. Do not add a toolchain directive or third-party modules.",
+            "verification": "",
+            "origin": {
+              "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+              "branch": "feat/delivery"
+            },
+            "priority": "high",
+            "status": "open",
+            "id": "vul-4fdf6bb3-c7b2-5e90-802d-f16711065570",
+            "createdAt": "2026-10-14T07:31:10.733Z",
+            "updatedAt": "2026-10-14T07:31:10.733Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "performance",
+      "title": "Static SPA serving has no Cache-Control for hashed assets and no compression",
+      "path": "backend/internal/httpapi/routes.go",
+      "kind": "file",
+      "symbol": null,
+      "evidence": "Suspected (code reading in the task 4 review, not measured): STATIC_DIR is served with http.FileServer behind noListing; no Cache-Control header is set, so the content-hashed files in /assets/ are revalidated instead of cached as immutable, and responses are not gzip/brotli compressed. No load test or Lighthouse run was done.",
+      "confidence": "suspected",
+      "impact": "Slower repeat and first loads over slow networks; negligible for a local assessment demo with one small bundle.",
+      "connections": [
+        "Dockerfile (STATIC_DIR=/app/web)",
+        "docs/adr/0006-single-container-same-origin-no-cors.md",
+        "frontend/vite.config.ts (hashed asset names)"
+      ],
+      "precautions": "Measure first. If needed, add Cache-Control: public, max-age=31536000, immutable only for /assets/*, keep index.html no-cache, and prefer precompressed files or a reverse proxy over a third-party module (standard library only).",
+      "verification": "",
+      "origin": {
+        "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+        "branch": "feat/delivery"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d",
+      "createdAt": "2026-10-14T07:39:36.216Z",
+      "updatedAt": "2026-10-14T07:39:36.216Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-14T07:39:36.216Z",
+          "snapshot": {
+            "category": "performance",
+            "title": "Static SPA serving has no Cache-Control for hashed assets and no compression",
+            "path": "backend/internal/httpapi/routes.go",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Suspected (code reading in the task 4 review, not measured): STATIC_DIR is served with http.FileServer behind noListing; no Cache-Control header is set, so the content-hashed files in /assets/ are revalidated instead of cached as immutable, and responses are not gzip/brotli compressed. No load test or Lighthouse run was done.",
+            "confidence": "suspected",
+            "impact": "Slower repeat and first loads over slow networks; negligible for a local assessment demo with one small bundle.",
+            "connections": [
+              "Dockerfile (STATIC_DIR=/app/web)",
+              "docs/adr/0006-single-container-same-origin-no-cors.md",
+              "frontend/vite.config.ts (hashed asset names)"
+            ],
+            "precautions": "Measure first. If needed, add Cache-Control: public, max-age=31536000, immutable only for /assets/*, keep index.html no-cache, and prefer precompressed files or a reverse proxy over a third-party module (standard library only).",
+            "verification": "",
+            "origin": {
+              "task": "490b37cc-99c0-443c-a3ff-a8c8629b3a1d (task 4, delivery review)",
+              "branch": "feat/delivery"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "perf-6385b81a-e08a-554a-8d9e-8ba0f07de33d",
+            "createdAt": "2026-10-14T07:39:36.216Z",
+            "updatedAt": "2026-10-14T07:39:36.216Z"
           }
         }
       ]
