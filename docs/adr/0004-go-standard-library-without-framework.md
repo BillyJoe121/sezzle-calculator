@@ -31,7 +31,10 @@ The code is layered:
 ## Consequences
 
 - Zero supply-chain surface on the backend and a fast, reproducible build.
-- Strict JSON handling is explicit: `DisallowUnknownFields`, a trailing-data check and per-operand parsing.
+- Strict JSON handling is explicit: an exact key allowlist (decoding into a map, because `encoding/json` matches
+  struct fields case-insensitively, which `DisallowUnknownFields` does not prevent), a trailing-data check and
+  per-operand parsing.
 - A few things a framework would give for free are written by hand: a problem+json 405 with `Allow` under
   `/api/` (the default mux 405 is plain text) and a small middleware chain. Each is a few lines and tested.
-- Requires Go 1.22 or newer.
+- Needs Go 1.22 or newer for method patterns; `go.mod` declares `go 1.27.0`, the toolchain it is developed and
+  tested with.
