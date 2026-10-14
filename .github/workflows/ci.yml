@@ -1,0 +1,117 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Actions are pinned to full commit SHAs; the comment names the release.
+jobs:
+  backend:
+    name: Backend (Go)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/go.mod
+          cache: false # standard library only: there is no go.sum to key a cache on
+      - name: gofmt
+        run: |
+          unformatted="$(gofmt -l .)"
+          if [ -n "$unformatted" ]; then
+            echo "Files not formatted with gofmt:"
+            echo "$unformatted"
+            exit 1
+          fi
+      - name: go vet
+        run: go vet ./...
+      - name: go test (race detector, coverage)
+        run: go test -race -count=1 -covermode=atomic -coverprofile=coverage.out ./... | tee test-output.txt
+      - name: Coverage targets (calculator >= 95 %, httpapi >= 85 %)
+        run: |
+          awk '
+            BEGIN { min["internal/calculator"] = 95; min["internal/httpapi"] = 85 }
+            /coverage: [0-9.]+% of statements/ {
+              for (p in min) if ($2 ~ ("/" p "$")) {
+                match($0, /coverage: [0-9.]+%/)
+                pct = substr($0, RSTART + 10, RLENGTH - 11) + 0
+                seen[p] = 1
+                printf "%s: %.1f%% (target %d%%)\n", p, pct, min[p]
+                if (pct < min[p]) fail = 1
+              }
+            }
+            END {
+              for (p in min) if (!(p in seen)) { print "no coverage line for " p; fail = 1 }
+              exit fail
+            }
+          ' test-output.txt
+      - name: Coverage report
+        run: |
+          go tool cover -func=coverage.out | tee coverage.txt
+          go tool cover -html=coverage.out -o coverage.html
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: backend-coverage
+          path: |
+            backend/coverage.out
+            backend/coverage.txt
+            backend/coverage.html
+          if-no-files-found: error
+
+  frontend:
+    name: Frontend (React)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.21.0 # same as the Dockerfile
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install (lockfile only, no install scripts)
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: Test with coverage (fails below 85 % lines)
+        run: npm test
+      - name: Build
+        run: npm run build
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
+          if-no-files-found: error
+
+  docker:
+    name: Docker image (build only)
+    needs: [backend, frontend]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: docker build
+        run: docker build -t sezzle-calculator:ci .

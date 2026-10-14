@@ -2,9 +2,10 @@
 node_modules/
 dist/
 
-# Coverage reports
+# Coverage reports (CI publishes them as artifacts)
 coverage/
 coverage.out
+coverage.html
 
 # Go binaries
 /backend/bin/
@@ -26,3 +27,6 @@ coverage.out
 .forge/git-workflow/
 .forge/graph-evidence.json
 .forge/graphify-out/
+.forge/handoff/
+.forge/integration/
+.forge/metrics/

@@ -5,7 +5,8 @@ React + TypeScript single-page app that evaluates one operation through the Go A
 
 ## Requirements
 
-- Node.js 22.12 or newer (developed with Node 24.14 and npm 11.9).
+- Node.js 24.15+ or 22.22.2+, the range the test tooling (`jsdom`) declares. It was developed with Node 24.14 and
+  npm 11.9, where `npm ci` prints `EBADENGINE` warnings but every check passes; CI and the Docker image use 24.21.0.
 - For real calculations, the backend running on `http://localhost:8080` (see the root README). Tests do not need it.
 
 ## Run
