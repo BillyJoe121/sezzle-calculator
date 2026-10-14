@@ -1,7 +1,100 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-13T17:06:28.190Z",
+  "updatedAt": "2026-10-13T19:55:16.750Z",
   "findings": [
+    {
+      "category": "documentation",
+      "title": "Contract is silent on several request edge cases the backend now fixes implicitly (mux redirects, duplicate keys, underflow, Content-Type leniency)",
+      "path": "docs/api/openapi.yaml",
+      "kind": "file",
+      "symbol": null,
+      "evidence": "Verified 2026-10-13. (1) Coordinator smoke on :8080: GET /api -> 307 Temporary Redirect, Location: /api/, text/html body; GET /api/ -> 404 problem+json NOT_FOUND. openapi.yaml line 45 only defines 404 NOT_FOUND for 'No route under /api/'. Reviewer probes (httptest, run by the review worker): POST //api/v1/calculations, /api/v1/./calculations and /api/x/../v1/calculations -> 307 with empty body (net/http ServeMux path cleaning). (2) Reviewer probes: duplicate keys, last wins ({\"operation\":\"add\",\"operation\":\"subtract\",\"operands\":[5,3]} -> 200 subtract = 2); operand 1e-400 underflows to 0, so divide [1,1e-400] -> 422 DIVISION_BY_ZERO; Content-Type 'application/json;', 'charset=\"utf-8\"', a trailing tab and a repeated identical charset are accepted by mime.ParseMediaType.",
+      "confidence": "verified",
+      "impact": "Low: none of these affect valid calculations or the frontend; clients hitting them get a redirect or a lenient interpretation the contract does not document.",
+      "connections": [
+        "backend/internal/httpapi/routes.go",
+        "backend/internal/httpapi/decode.go",
+        "docs/api/openapi.yaml"
+      ],
+      "precautions": "Decide in a contract branch (docs/api is read-only for backend/frontend branches): document the current behavior or tighten it with examples; then align httpapi (e.g. an exact '/api' route) in a backend branch.",
+      "verification": "",
+      "origin": {
+        "task": "Task 2 Go backend (54a148d4)",
+        "branch": "feat/backend-api"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "doc-1d33fb61-5980-55dd-865f-2ad0755b5de4",
+      "createdAt": "2026-10-13T19:36:01.024Z",
+      "updatedAt": "2026-10-13T19:55:15.747Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-13T19:36:01.024Z",
+          "snapshot": {
+            "category": "documentation",
+            "title": "Contract is silent about /api without a trailing slash (Go mux answers 307 HTML redirect)",
+            "path": "docs/api/openapi.yaml",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Verified on 2026-10-13 against the built server on :8080: GET /api -> 307 Temporary Redirect, Location: /api/, Content-Type text/html; charset=utf-8, body '<a href=\"/api/\">Temporary Redirect</a>.'; GET /api/ -> 404 application/problem+json NOT_FOUND. openapi.yaml line 45 only defines 404 NOT_FOUND for 'No route under /api/'. The redirect comes from net/http ServeMux subtree handling of the '/api/' pattern in backend/internal/httpapi/routes.go.",
+            "confidence": "verified",
+            "impact": "Low: a client calling /api gets an HTML redirect instead of a problem document; no calculation path is affected and the frontend never calls /api.",
+            "connections": [
+              "backend/internal/httpapi/routes.go",
+              "docs/api/openapi.yaml"
+            ],
+            "precautions": "Decide in a contract branch (docs/api is read-only for backend/frontend branches): either document that /api redirects to /api/, or require a 404 problem for /api and add an example; then register an exact '/api' route in httpapi.",
+            "verification": "",
+            "origin": {
+              "task": "Task 2 Go backend (54a148d4)",
+              "branch": "feat/backend-api"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "doc-1d33fb61-5980-55dd-865f-2ad0755b5de4",
+            "createdAt": "2026-10-13T19:36:01.024Z",
+            "updatedAt": "2026-10-13T19:36:01.024Z"
+          }
+        },
+        {
+          "action": "updated",
+          "at": "2026-10-13T19:55:15.747Z",
+          "changedFields": [
+            "title",
+            "evidence",
+            "impact",
+            "connections",
+            "precautions"
+          ],
+          "snapshot": {
+            "category": "documentation",
+            "title": "Contract is silent about /api without a trailing slash (Go mux answers 307 HTML redirect)",
+            "path": "docs/api/openapi.yaml",
+            "kind": "file",
+            "symbol": null,
+            "evidence": "Verified on 2026-10-13 against the built server on :8080: GET /api -> 307 Temporary Redirect, Location: /api/, Content-Type text/html; charset=utf-8, body '<a href=\"/api/\">Temporary Redirect</a>.'; GET /api/ -> 404 application/problem+json NOT_FOUND. openapi.yaml line 45 only defines 404 NOT_FOUND for 'No route under /api/'. The redirect comes from net/http ServeMux subtree handling of the '/api/' pattern in backend/internal/httpapi/routes.go.",
+            "confidence": "verified",
+            "impact": "Low: a client calling /api gets an HTML redirect instead of a problem document; no calculation path is affected and the frontend never calls /api.",
+            "connections": [
+              "backend/internal/httpapi/routes.go",
+              "docs/api/openapi.yaml"
+            ],
+            "precautions": "Decide in a contract branch (docs/api is read-only for backend/frontend branches): either document that /api redirects to /api/, or require a 404 problem for /api and add an example; then register an exact '/api' route in httpapi.",
+            "verification": "",
+            "origin": {
+              "task": "Task 2 Go backend (54a148d4)",
+              "branch": "feat/backend-api"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "doc-1d33fb61-5980-55dd-865f-2ad0755b5de4",
+            "createdAt": "2026-10-13T19:36:01.024Z",
+            "updatedAt": "2026-10-13T19:36:01.024Z"
+          }
+        }
+      ]
+    },
     {
       "category": "documentation",
       "title": "No project license chosen; OpenAPI info.license missing",
@@ -56,6 +149,64 @@
             "id": "doc-b17a3c61-2e73-5427-8157-aa09c5f4f3dd",
             "createdAt": "2026-10-13T17:06:28.190Z",
             "updatedAt": "2026-10-13T17:06:28.190Z"
+          }
+        }
+      ]
+    },
+    {
+      "category": "testing",
+      "title": "Percentage overflow fallback can report RESULT_OUT_OF_RANGE for a result that rounds to MaxFloat64",
+      "path": "backend/internal/calculator/calculator.go",
+      "kind": "function",
+      "symbol": "registry[Percentage]",
+      "evidence": "Verified 2026-10-13 with a scratch probe (.forge/tmp/backend-api/probe): a=2.632632520997171e+287, b=6.82850006799049e+22; a*b/100 = +Inf and the fallback a/100*b = +Inf, while the exact value (big.Float, 200 bits) is 1.797693134862315679e+308 <= MaxFloat64 1.7976931348623157e+308. The review worker's random search found 161 of 146,719 fallback cases within 1e-15 below MaxFloat64 behaving this way. The code follows the contract's formula ((a/100)*b fallback) literally.",
+      "confidence": "verified",
+      "impact": "Negligible in practice: only results within ~1 ulp of MaxFloat64 are affected; they return 422 instead of MaxFloat64.",
+      "connections": [
+        "backend/internal/calculator/calculator.go",
+        "docs/api/openapi.yaml",
+        "docs/adr/0003-float64-numeric-model-with-client-formatting.md"
+      ],
+      "precautions": "Only fix together with a contract note: e.g. scale with math.Frexp/Ldexp, and add the probe case to TestCalculate. Keep the fuzz invariant (never NaN/Inf with nil error).",
+      "verification": "",
+      "origin": {
+        "task": "Task 2 Go backend (54a148d4)",
+        "branch": "feat/backend-api"
+      },
+      "priority": "low",
+      "status": "open",
+      "id": "test-c472d4d1-dacd-5a1d-8714-643250d3df81",
+      "createdAt": "2026-10-13T19:55:16.750Z",
+      "updatedAt": "2026-10-13T19:55:16.750Z",
+      "history": [
+        {
+          "action": "created",
+          "at": "2026-10-13T19:55:16.750Z",
+          "snapshot": {
+            "category": "testing",
+            "title": "Percentage overflow fallback can report RESULT_OUT_OF_RANGE for a result that rounds to MaxFloat64",
+            "path": "backend/internal/calculator/calculator.go",
+            "kind": "function",
+            "symbol": "registry[Percentage]",
+            "evidence": "Verified 2026-10-13 with a scratch probe (.forge/tmp/backend-api/probe): a=2.632632520997171e+287, b=6.82850006799049e+22; a*b/100 = +Inf and the fallback a/100*b = +Inf, while the exact value (big.Float, 200 bits) is 1.797693134862315679e+308 <= MaxFloat64 1.7976931348623157e+308. The review worker's random search found 161 of 146,719 fallback cases within 1e-15 below MaxFloat64 behaving this way. The code follows the contract's formula ((a/100)*b fallback) literally.",
+            "confidence": "verified",
+            "impact": "Negligible in practice: only results within ~1 ulp of MaxFloat64 are affected; they return 422 instead of MaxFloat64.",
+            "connections": [
+              "backend/internal/calculator/calculator.go",
+              "docs/api/openapi.yaml",
+              "docs/adr/0003-float64-numeric-model-with-client-formatting.md"
+            ],
+            "precautions": "Only fix together with a contract note: e.g. scale with math.Frexp/Ldexp, and add the probe case to TestCalculate. Keep the fuzz invariant (never NaN/Inf with nil error).",
+            "verification": "",
+            "origin": {
+              "task": "Task 2 Go backend (54a148d4)",
+              "branch": "feat/backend-api"
+            },
+            "priority": "low",
+            "status": "open",
+            "id": "test-c472d4d1-dacd-5a1d-8714-643250d3df81",
+            "createdAt": "2026-10-13T19:55:16.750Z",
+            "updatedAt": "2026-10-13T19:55:16.750Z"
           }
         }
       ]
