@@ -21,8 +21,8 @@ describe('parseOperand', () => {
     ['an empty string', '', 'Enter a number.'],
     ['only whitespace', '   ', 'Enter a number.'],
     ['more than 32 characters', '1'.repeat(MAX_OPERAND_LENGTH + 1), 'Use 32 characters or fewer.'],
-    ['a decimal comma', '2,5', 'Use a dot for decimals, for example 2.5.'],
-    ['a thousands comma', '1,000', 'Use a dot for decimals, for example 2.5.'],
+    ['a decimal comma', '2,5', 'Remove commas and use a dot for decimals, for example 2.5.'],
+    ['a thousands comma', '1,000', 'Remove commas and use a dot for decimals, for example 2.5.'],
     ['letters', 'abc', 'Enter a number such as 42, -2.5 or 1e3.'],
     ['Infinity', 'Infinity', 'Enter a number such as 42, -2.5 or 1e3.'],
     ['NaN', 'NaN', 'Enter a number such as 42, -2.5 or 1e3.'],
@@ -31,8 +31,8 @@ describe('parseOperand', () => {
     ['a lone sign', '-', 'Enter a number such as 42, -2.5 or 1e3.'],
     ['a hexadecimal literal', '0x10', 'Enter a number such as 42, -2.5 or 1e3.'],
     ['an exponent without digits', '1e', 'Enter a number such as 42, -2.5 or 1e3.'],
-    ['a number beyond double range', '1e400', 'This number is too large to calculate with.'],
-    ['a negative number beyond double range', '-1e400', 'This number is too large to calculate with.'],
+    ['a number beyond double range', '1e400', 'This number is too large to calculate with. Use a smaller number.'],
+    ['a negative number beyond double range', '-1e400', 'This number is too large to calculate with. Use a smaller number.'],
   ])('rejects %s', (_name, raw, message) => {
     expect(parseOperand(raw)).toEqual({ ok: false, message })
   })

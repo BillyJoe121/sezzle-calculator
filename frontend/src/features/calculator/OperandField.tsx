@@ -27,7 +27,8 @@ export function OperandField({ id, label, value, error, onChange, ref }: Operand
         onChange={(event) => onChange(event.target.value)}
       />
       {error && (
-        <p id={errorId} className="field-error">
+        // role="alert" announces the error even when focus is already in this field (Enter to submit).
+        <p id={errorId} className="field-error" role="alert">
           {error}
         </p>
       )}

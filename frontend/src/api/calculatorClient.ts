@@ -51,10 +51,15 @@ function parseJson(text: string): unknown {
   }
 }
 
-function interpret(status: number, text: string): CalculateResult {
+// The response must describe the calculation that was sent, or the UI would render a mismatched expression.
+function answers(request: CalculationRequest, body: CalculationResponse): boolean {
+  return body.operation === request.operation && body.operands.length === request.operands.length
+}
+
+function interpret(request: CalculationRequest, status: number, text: string): CalculateResult {
   const body = parseJson(text)
   if (status >= 200 && status < 300) {
-    return isCalculationResponse(body)
+    return isCalculationResponse(body) && answers(request, body)
       ? { ok: true, value: body }
       : fail('unexpected', `HTTP ${status} with an unrecognised body`)
   }
@@ -87,7 +92,7 @@ export async function calculate(request: CalculationRequest, signal?: AbortSigna
       body: JSON.stringify({ operation: request.operation, operands: request.operands }),
       signal: controller.signal,
     })
-    return interpret(response.status, await response.text())
+    return interpret(request, response.status, await response.text())
   } catch (error) {
     if (timedOut) return fail('timeout', `No response within ${REQUEST_TIMEOUT_MS} ms`)
     if (signal?.aborted) return fail('aborted', 'Request cancelled')

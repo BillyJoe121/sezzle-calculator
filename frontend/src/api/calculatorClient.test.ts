@@ -17,15 +17,9 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-// The client only ever sends `operation` and `operands`, so a fixture with extra fields (unknown-field)
-// is a server-side case the typed client cannot reproduce.
-const reproducible = clientExamples.filter(
-  (example) => Object.keys(example.request.body as object).join() === 'operation,operands',
-)
-
 describe('calculate against the contract examples', () => {
-  const successes = reproducible.filter((example) => example.response.status < 300)
-  const problems = reproducible.filter((example) => example.response.status >= 300)
+  const successes = clientExamples.filter((example) => example.response.status < 300)
+  const problems = clientExamples.filter((example) => example.response.status >= 300)
 
   it.each(successes.map((example) => [example.id, example] as const))('returns the value for %s', async (_id, example) => {
     const result = await calculate(example.request.body as CalculationRequest)
@@ -103,6 +97,20 @@ describe('calculate failures', () => {
   ])('reports an unexpected error for a 200 with %s', async (_name, body) => {
     server.use(http.post(URL, () => HttpResponse.json(body)))
     expect(failure(await calculate(request)).kind).toBe('unexpected')
+  })
+
+  it('describes a response for other operands as unexpected', async () => {
+    server.use(http.post(URL, () => HttpResponse.json({ operation: 'add', operands: [1], result: 1 })))
+    expect(failure(await calculate(request)).kind).toBe('unexpected')
+  })
+
+  it('describes a response for another operation as unexpected', async () => {
+    server.use(http.post(URL, () => HttpResponse.json({ operation: 'multiply', operands: [1, 2], result: 2 })))
+    expect(failure(await calculate(request)).kind).toBe('unexpected')
+  })
+
+  it('times out after 8 seconds', async () => {
+    expect(REQUEST_TIMEOUT_MS).toBe(8000)
   })
 
   it('reports a timeout when the server never answers', async () => {

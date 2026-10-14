@@ -21,7 +21,6 @@
   --color-error: #b0261d;
 
   /* Space scale */
-  --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
@@ -230,7 +229,7 @@ h1 {
   background: var(--color-accent);
 }
 
-.button-primary:hover:not(:disabled) {
+.button-primary:hover:not([aria-disabled='true']) {
   filter: brightness(0.92);
 }
 
@@ -240,11 +239,12 @@ h1 {
   border-color: var(--color-border);
 }
 
-.button-secondary:hover:not(:disabled) {
+.button-secondary:hover {
   background: var(--color-accent-soft);
 }
 
-.button:disabled {
+/* aria-disabled instead of disabled: the button keeps focus while a request is pending. */
+.button[aria-disabled='true'] {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -262,13 +262,11 @@ h1 {
 }
 
 .result-expression {
-  margin: 0 0 var(--space-1);
   color: var(--color-text-muted);
   font-size: var(--font-size-base);
 }
 
 .result-value {
-  margin: 0;
   font-size: var(--font-size-result);
   font-weight: 650;
   line-height: 1.2;
@@ -281,7 +279,7 @@ h1 {
 }
 
 .result-hint {
-  margin: var(--space-2) 0 0;
+  margin: 0;
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
 }
@@ -295,6 +293,15 @@ h1 {
 
 .operation-option input:focus-visible {
   outline: none; /* the label draws the ring through :has() */
+}
+
+/* Forced colors flatten tints and custom borders: keep the selected operation distinguishable. */
+@media (forced-colors: active) {
+  .operation-option:has(:checked) {
+    border-width: 4px;
+    border-color: Highlight;
+    padding: calc(var(--space-2) - 2px) calc(var(--space-3) - 2px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

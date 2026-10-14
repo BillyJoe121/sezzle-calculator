@@ -15,7 +15,8 @@ npm ci
 npm run dev        # http://localhost:5173, proxies /api and /healthz to http://localhost:8080
 ```
 
-Without the backend the page loads and validates input; submitting shows the "could not reach" message.
+Without the backend the page loads and validates input. Submitting then gets a `502` from the Vite proxy, which the
+app reports as a response it could not read.
 
 ## Test
 

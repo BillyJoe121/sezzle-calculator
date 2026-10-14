@@ -138,8 +138,10 @@ Transport (`internal/httpapi`, entry point `NewHandler(logger, staticDir) http.H
 | `src/test/` | Test setup, fixture loading from `docs/api/examples/` and the MSW server. |
 
 Form values are local React state in `Calculator`. The request lifecycle lives in `useCalculator` (`useReducer`) as
-one discriminated union: `idle | submitting | success(calculation) | error(error)`. A new submission aborts the
-previous request and unmounting aborts the pending one; results of aborted requests are discarded.
+one discriminated union: `idle | submitting | success(calculation) | error(error)`. A new submission, Clear and
+unmounting abort the pending request; results of aborted requests are discarded. While a request is pending,
+Calculate is `aria-disabled` and `aria-busy` rather than natively `disabled`, so keyboard focus stays on it, and
+the form ignores further submissions.
 
 ## Target folder structure
 
