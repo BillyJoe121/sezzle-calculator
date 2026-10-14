@@ -1,0 +1,56 @@
+{
+  "category": "testing",
+  "title": "Result panel can render below the fold on short phones after Calculate",
+  "path": "frontend/src/features/calculator/ResultPanel.tsx",
+  "kind": "file",
+  "symbol": "ResultPanel",
+  "evidence": "Verified by the task 3 reviewer in Chrome mobile emulation: at 360x640 and 390x664 the Calculate button bottom is y=627 and the result panel starts at y=668, outside the viewport; nothing scrolls it into view. At 360x740 and 412x800 it is fully visible. Screen reader users get the result through the role=status live region.",
+  "confidence": "verified",
+  "impact": "Sighted touch users on short screens see no outcome until they scroll.",
+  "connections": [
+    "frontend/src/index.css",
+    "frontend/src/features/calculator/Calculator.tsx"
+  ],
+  "precautions": "A fix such as scrollIntoView({ block: 'nearest' }) on status change needs a jsdom stub in src/test/setup.ts and must respect prefers-reduced-motion; do not move focus to the result.",
+  "verification": "",
+  "origin": {
+    "task": "Task 3 frontend (ac3c786e)",
+    "branch": "feat/frontend-ui"
+  },
+  "priority": "low",
+  "status": "open",
+  "id": "test-d12065fc-028e-5b3f-8969-5906e397f5e9",
+  "createdAt": "2026-10-14T01:51:24.950Z",
+  "updatedAt": "2026-10-14T01:51:24.950Z",
+  "history": [
+    {
+      "action": "created",
+      "at": "2026-10-14T01:51:24.950Z",
+      "snapshot": {
+        "category": "testing",
+        "title": "Result panel can render below the fold on short phones after Calculate",
+        "path": "frontend/src/features/calculator/ResultPanel.tsx",
+        "kind": "file",
+        "symbol": "ResultPanel",
+        "evidence": "Verified by the task 3 reviewer in Chrome mobile emulation: at 360x640 and 390x664 the Calculate button bottom is y=627 and the result panel starts at y=668, outside the viewport; nothing scrolls it into view. At 360x740 and 412x800 it is fully visible. Screen reader users get the result through the role=status live region.",
+        "confidence": "verified",
+        "impact": "Sighted touch users on short screens see no outcome until they scroll.",
+        "connections": [
+          "frontend/src/index.css",
+          "frontend/src/features/calculator/Calculator.tsx"
+        ],
+        "precautions": "A fix such as scrollIntoView({ block: 'nearest' }) on status change needs a jsdom stub in src/test/setup.ts and must respect prefers-reduced-motion; do not move focus to the result.",
+        "verification": "",
+        "origin": {
+          "task": "Task 3 frontend (ac3c786e)",
+          "branch": "feat/frontend-ui"
+        },
+        "priority": "low",
+        "status": "open",
+        "id": "test-d12065fc-028e-5b3f-8969-5906e397f5e9",
+        "createdAt": "2026-10-14T01:51:24.950Z",
+        "updatedAt": "2026-10-14T01:51:24.950Z"
+      }
+    }
+  ]
+}
